@@ -1,22 +1,32 @@
 import base64
 from collections import Counter
+from datetime import date
 from html import escape
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+SCHEDULE_DATE = "2026-10-03"
+schedule_day = date.fromisoformat(SCHEDULE_DATE)
+assert schedule_day.weekday() == 5, "대포클럽 일정은 토요일이어야 합니다"
+date_label = f"{schedule_day.year}년 {schedule_day.month}월 {schedule_day.day}일 토요일"
 
-MEN = ("서명렬", "김영진", "나창은", "박세준", "이재원", "정상현", "안홍익")
-WOMEN = ("정가영", "조아라", "성주은", "박정민", "권태경")
+FIXED_MEN = ("서명렬", "김영진", "나창은", "박세준", "이재원")
+GUEST_MEN = ("정상현", "안홍익")
+FIXED_WOMEN = ("조아라", "성주은", "박정민")
+GUEST_WOMEN = ("권태경", "여게스트")
+MEN = FIXED_MEN + GUEST_MEN
+WOMEN = FIXED_WOMEN + GUEST_WOMEN
+FIXED_MEMBERS = set(FIXED_MEN + FIXED_WOMEN)
 PEOPLE = set(MEN + WOMEN)
 
 # Each tuple: first-floor team A, first-floor team B, second-floor team A, second-floor team B.
 ROUNDS = [
-    (("박세준", "조아라"), ("이재원", "박정민"), ("정상현", "권태경"), ("안홍익", "정가영")),
+    (("박세준", "조아라"), ("이재원", "박정민"), ("정상현", "권태경"), ("서명렬", "여게스트")),
     (("박세준", "박정민"), ("서명렬", "성주은"), ("김영진", "나창은"), ("안홍익", "정상현")),
-    (("박세준", "이재원"), ("서명렬", "정상현"), ("성주은", "권태경"), ("정가영", "조아라")),
+    (("박세준", "정상현"), ("이재원", "안홍익"), ("성주은", "권태경"), ("여게스트", "조아라")),
     (("서명렬", "박정민"), ("안홍익", "성주은"), ("김영진", "권태경"), ("나창은", "조아라")),
-    (("박세준", "서명렬"), ("이재원", "정상현"), ("김영진", "조아라"), ("나창은", "정가영")),
-    (("정가영", "권태경"), ("성주은", "박정민"), ("김영진", "이재원"), ("나창은", "안홍익")),
+    (("박세준", "서명렬"), ("이재원", "정상현"), ("김영진", "조아라"), ("나창은", "여게스트")),
+    (("여게스트", "권태경"), ("성주은", "박정민"), ("김영진", "이재원"), ("나창은", "안홍익")),
 ]
 
 def match_type(a, b):
@@ -54,6 +64,9 @@ for i, round_ in enumerate(ROUNDS):
                 opposed[frozenset((p,q))] += 1
 
 assert len(ROUNDS) == 6 and all(games[p] == 4 for p in PEOPLE)
+for p in PEOPLE:
+    pattern = "".join("G" if any(p in team for team in round_) else "-" for round_ in ROUNDS)
+    assert "GGGG" not in pattern, (p, pattern)
 assert all(n == 1 for n in partners.values())
 assert types == {"남복":4, "여복":2, "혼복":6}
 assert partners[frozenset(("성주은", "권태경"))] == 1
@@ -63,13 +76,12 @@ assert "조아라" not in rests[4] and "조아라" in rests[5]
 def active_span(p):
     active_rounds = [i for i, round_ in enumerate(ROUNDS) if any(p in team for team in round_)]
     return min(active_rounds), max(active_rounds)
-assert active_span("이재원") == active_span("정가영")
 assert active_span("성주은") == active_span("나창은")
 floor_changes = {}
 for p in PEOPLE:
     floors = [floor for round_ in ROUNDS for floor in range(2) if p in round_[floor*2] + round_[floor*2+1]]
     floor_changes[p] = sum(a != b for a,b in zip(floors,floors[1:]))
-assert sum(floor_changes.values()) == 9 and max(floor_changes.values()) == 2
+assert sum(floor_changes.values()) <= 10 and max(floor_changes.values()) == 2
 
 CSS = r"""
 :root{--ink:#132825;--muted:#60736e;--green:#0b5645;--green2:#0e715a;--lime:#d7f16c;--paper:#f3f6f1;--line:#dce6df;--white:#fff;--gold:#e5ae55}
@@ -138,6 +150,7 @@ h1{font-weight:900;text-shadow:0 3px 24px rgba(0,0,0,.26)}h1 .accent{color:#ffd6
 .footer{border-color:#393b4d;color:#999daf}.footer strong{color:#f77a93}
 .lookup{padding:24px;border:1px solid #654153;border-radius:22px;background:linear-gradient(130deg,#221b2c,#191a27);box-shadow:0 12px 36px rgba(0,0,0,.18)}.hero{margin-top:16px}
 .lookup-head{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-bottom:15px}.lookup h2{margin:0;color:#fff;font-size:24px;letter-spacing:-.04em}.lookup p{margin:4px 0 0;color:#b7b3c5;font-size:13px}
+.archive-back{color:#a8f7ec;font-size:13px;font-weight:800;text-decoration:none;white-space:nowrap}.archive-back:hover,.archive-back:focus-visible{text-decoration:underline}
 .lookup-input-wrap{display:flex;align-items:center;gap:11px;padding:4px 15px;border:1px solid #8d596b;border-radius:14px;background:#10121c;transition:border-color .15s,box-shadow .15s}.lookup-input-wrap:focus-within{border-color:#a8f7ec;box-shadow:0 0 0 3px rgba(168,247,236,.14)}.lookup-icon{color:#ff8ea5;font-size:20px;line-height:1}.lookup input{width:100%;height:47px;border:0;outline:0;background:transparent;color:#fff;font-size:17px;font-weight:700}.lookup input::placeholder{color:#858596;font-weight:500}
 .lookup-results{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px}.lookup-results button,.all-button{border:1px solid #634253;border-radius:11px;background:#342334;color:#ffe1e8;padding:9px 13px;font-size:14px;font-weight:800;cursor:pointer}.lookup-results button:hover,.lookup-results button:focus-visible,.all-button:hover,.all-button:focus-visible{background:#66304a;border-color:#f47d98;outline:none}.lookup-empty{color:#bbb7c7;font-size:13px}
 .personal-head{display:flex;align-items:end;justify-content:space-between;gap:16px;margin:31px 2px 15px}.personal-head h2{margin:0;color:#fff;font-size:27px;letter-spacing:-.05em}.personal-head p{margin:5px 0 0;color:#b1aec0;font-size:13px}.personal-meta{display:flex;gap:7px;flex-wrap:wrap;margin:0 2px 17px}.personal-meta span{padding:6px 10px;border:1px solid #544456;border-radius:999px;background:#2b2332;color:#e7d7e1;font-size:12px;font-weight:750}
@@ -177,7 +190,7 @@ def round_html(i, round_):
 rounds_html = "\n".join(round_html(i, r) for i, r in enumerate(ROUNDS))
 
 def flow_row(p, index):
-    role = ("고정" if p in MEN[:5] or p in WOMEN[:4] else "게스트") + (" · 남" if p in MEN else " · 여")
+    role = ("고정" if p in FIXED_MEMBERS else "게스트") + (" · 남" if p in MEN else " · 여")
     cells = []
     for i, round_ in enumerate(ROUNDS):
         found = next((floor for floor in range(2) if p in round_[floor*2] + round_[floor*2+1]), None)
@@ -186,7 +199,8 @@ def flow_row(p, index):
         else:
             typ = match_type(round_[found*2],round_[found*2+1])
             cells.append(f'<td class="play-{found+1}">{found+1}층<small>{typ}</small></td>')
-    group_start = ' class="group-start"' if index in (5,7,11) else ''
+    group_start_indexes = (len(FIXED_MEN), len(MEN), len(MEN) + len(FIXED_WOMEN))
+    group_start = ' class="group-start"' if index in group_start_indexes else ''
     return f'<tr{group_start}><th scope="row">{escape(p)}<small>{role}</small></th>{"".join(cells)}</tr>'
 
 flow_headers = "".join(f'<th scope="col">{8+i//2:02d}:{(i%2)*30:02d}<small>{8+(i+1)//2:02d}:{((i+1)%2)*30:02d}까지</small></th>' for i in range(6))
@@ -215,7 +229,7 @@ def personal_round_html(player, i, round_):
     return f'<div class="personal-round" aria-label="{i+1}타임">{time}{card}</div>'
 
 def personal_html(player):
-    role = "게스트" if player in MEN[5:] or player in WOMEN[4:] else "고정멤버"
+    role = "고정멤버" if player in FIXED_MEMBERS else "게스트"
     rounds = "\n".join(personal_round_html(player, i, r) for i, r in enumerate(ROUNDS))
     return f'''<section class="personal-schedule" data-personal="{escape(player)}" aria-label="{escape(player)} 개인 대진표" hidden>
       <div class="personal-head"><div><h2>{escape(player)} 대진표</h2><p>08:00–11:00 · 경기 4회 / 휴식 2회</p></div><button class="all-button" type="button" data-show-all>전체 대진표 보기</button></div>
@@ -234,13 +248,13 @@ html = f'''<!doctype html>
   <meta name="theme-color" content="#141420">
   <meta name="robots" content="noindex,nofollow">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23141420'/%3E%3Ccircle cx='32' cy='32' r='18' fill='%23f85b79'/%3E%3Cpath d='M18 20q23 11 28 28M21 48q17-20 23-31' fill='none' stroke='%23ffe9ef' stroke-width='3'/%3E%3C/svg%3E">
-  <title>대포클럽 토요일 대진표</title>
+  <title>대포클럽 {date_label} 대진표</title>
   <style>{CSS}</style>
 </head>
 <body>
 <div class="shell">
   <section class="lookup" aria-label="내 대진 찾기">
-    <div class="lookup-head"><div><h2>대포클럽 · 내 대진 찾기</h2><p>이름 입력 후 선택하면 내 경기와 휴식만 표시됩니다.</p></div></div>
+    <div class="lookup-head"><div><h2>대포클럽 · 내 대진 찾기</h2><p>{date_label} · 이름 입력 후 선택하면 내 경기와 휴식만 표시됩니다.</p></div><a class="archive-back" href="../">← 날짜별 목록</a></div>
     <label class="lookup-input-wrap" for="player-search"><span class="lookup-icon" aria-hidden="true">⌕</span><input id="player-search" type="search" aria-label="선수 이름 검색" placeholder="이름 검색 · 예: 서명렬" autocomplete="off" aria-controls="player-results"></label>
     <div class="lookup-results" id="player-results" aria-live="polite" hidden>{lookup_buttons}</div>
     <p class="lookup-empty" id="player-empty" role="status" hidden>일치하는 이름이 없습니다.</p>
@@ -248,9 +262,9 @@ html = f'''<!doctype html>
   <header class="hero">
     <div class="topline"><div class="eyebrow">領域展開 // DAEPO COURT DOMAIN</div><button class="print" type="button" onclick="window.print()">인쇄 / PDF 저장</button></div>
     <h1>대포클럽<br><span class="accent">토요일 대진표</span></h1>
-    <p class="subtitle">08:00 — 11:00 &nbsp;·&nbsp; 1층 / 2층 코트</p>
+    <p class="subtitle">{date_label} &nbsp;·&nbsp; 08:00 — 11:00 &nbsp;·&nbsp; 1층 / 2층 코트</p>
     <div class="hero-bottom"><div class="hero-notes">
-      <span class="hero-note">전원 4경기</span><span class="hero-note">연속 휴식 없음</span><span class="hero-note">층 이동 최대 2회</span><span class="hero-note">김영진 08:30 시작</span><span class="hero-note">조아라 10:30 종료</span>
+      <span class="hero-note">전원 4경기</span><span class="hero-note">연속 휴식 없음</span><span class="hero-note">연속 4경기 없음</span><span class="hero-note">층 이동 최대 2회</span><span class="hero-note">김영진 08:30 시작</span><span class="hero-note">조아라 10:30 종료</span>
       <span class="hero-note">성주은·권태경 페어 1회</span><span class="hero-note">서명렬 ↔ 성주은 맞대결 1회</span>
     </div><div class="metrics"><div class="metric"><strong>12</strong><span>참가 인원</span></div><div class="metric"><strong>6</strong><span>타임</span></div><div class="metric"><strong>12</strong><span>경기</span></div></div></div>
     <img class="hero-art" src="data:image/webp;base64,{hero_image_data}" alt="푸른 기운에 둘러싸여 테니스 라켓을 든 고죠 사토루">
@@ -264,7 +278,7 @@ html = f'''<!doctype html>
     </section>
   </main>
   <main id="personal-schedules" hidden>{personal_sections}</main>
-  <footer class="footer"><span><strong>대포클럽</strong> · 토요일 복식 대진표</span><span>각 타임 30분 · 1층 / 2층 동시 진행</span></footer>
+  <footer class="footer"><span><strong>대포클럽</strong> · {date_label} 복식 대진표</span><span>각 타임 30분 · 1층 / 2층 동시 진행</span></footer>
 </div>
 <script>
 (() => {{
@@ -338,8 +352,39 @@ html = f'''<!doctype html>
 </body>
 </html>
 '''
-target = ROOT / "index.html"
-target.parent.mkdir(parents=True, exist_ok=True)
-target.write_text(html, encoding="utf-8")
-print(target.resolve())
+dated_target = ROOT / SCHEDULE_DATE / "index.html"
+dated_target.parent.mkdir(parents=True, exist_ok=True)
+dated_target.write_text(html, encoding="utf-8")
+
+archive_dates = {SCHEDULE_DATE}
+for directory in ROOT.iterdir():
+    if not directory.is_dir() or not (directory / "index.html").is_file():
+        continue
+    try:
+        archived_day = date.fromisoformat(directory.name)
+    except ValueError:
+        continue
+    if archived_day.weekday() == 5:
+        archive_dates.add(directory.name)
+
+cards = []
+for index, day_string in enumerate(sorted(archive_dates, reverse=True)):
+    day = date.fromisoformat(day_string)
+    label = f"{day.year}년 {day.month}월 {day.day}일 토요일"
+    badge = '<span class="badge">최신 대진</span>' if index == 0 else ''
+    cards.append(f'''<a class="date-card" href="./{day_string}/" aria-label="{label} 대진표 보기">
+      <span class="date-info"><span class="date-label">{label}</span>{badge}<span class="date-sub">08:00–11:00 · 1층 / 2층</span></span><span class="arrow" aria-hidden="true">↗</span>
+    </a>''')
+
+HUB_CSS = r"""
+:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;min-height:100vh;color:#f5f2f8;background:radial-gradient(circle at 83% 0%,#3a172a,transparent 36%),#0b0c14;font-family:Inter,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}a{color:inherit}.shell{max-width:1080px;margin:auto;padding:24px 24px 65px}.hero{position:relative;overflow:hidden;min-height:350px;padding:46px 46px 44px;border:1px solid #77344e;border-radius:27px;background:linear-gradient(110deg,#191522,#321725);box-shadow:0 20px 50px #0005}.eyebrow{position:relative;z-index:2;color:#ff7d98;font-size:12px;font-weight:900;letter-spacing:.17em}.hero h1{position:relative;z-index:2;margin:27px 0 10px;font-size:clamp(34px,5.5vw,57px);line-height:1.12;letter-spacing:-.06em}.hero h1 em{color:#ffd7df;font-style:normal}.hero p{position:relative;z-index:2;margin:0;color:#d3cbd7;font-size:16px}.hero img{position:absolute;right:-15px;bottom:-80px;height:440px;filter:drop-shadow(-18px 8px 25px #0008);pointer-events:none}.hero:after{content:"呪";position:absolute;right:190px;top:-75px;color:transparent;-webkit-text-stroke:2px #f85b7935;font-size:330px;font-weight:900}.list-head{display:flex;justify-content:space-between;align-items:end;gap:15px;margin:35px 2px 15px}.list-head h2{margin:0;font-size:25px;letter-spacing:-.04em}.list-head p{margin:0;color:#a9a4b5;font-size:13px}.date-list{display:grid;gap:11px}.date-card{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:22px 24px;border:1px solid #514053;border-left:4px solid #f35b7a;border-radius:17px;background:#1b1c29;text-decoration:none;transition:transform .15s,border-color .15s}.date-card:hover,.date-card:focus-visible{transform:translateY(-2px);border-color:#ff8ca4;outline:none}.date-info{display:flex;align-items:center;gap:11px;flex-wrap:wrap}.date-label{font-size:20px;font-weight:850;letter-spacing:-.04em}.date-sub{flex-basis:100%;color:#ada9ba;font-size:12px}.badge{padding:5px 9px;border-radius:999px;background:#4a2639;color:#ffb5c5;font-size:11px;font-weight:850}.arrow{color:#a8f7ec;font-size:25px;font-weight:700}.footer{margin-top:27px;color:#8e8d9d;font-size:12px}@media(max-width:700px){.shell{padding:12px 12px 42px}.hero{min-height:530px;padding:29px 24px;border-radius:20px}.hero h1{margin-top:20px;font-size:37px}.hero img{height:320px;right:-20px;bottom:-55px}.hero:after{right:-15px;top:210px;font-size:250px}.list-head{display:block;margin-top:27px}.list-head p{margin-top:5px}.date-card{padding:18px}.date-label{font-size:17px}}
+"""
+hub = f'''<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#141420"><meta name="robots" content="noindex,nofollow"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23141420'/%3E%3Ccircle cx='32' cy='32' r='18' fill='%23f85b79'/%3E%3Cpath d='M18 20q23 11 28 28M21 48q17-20 23-31' fill='none' stroke='%23ffe9ef' stroke-width='3'/%3E%3C/svg%3E"><title>대포클럽 날짜별 대진표</title><style>{HUB_CSS}</style></head>
+<body><main class="shell"><header class="hero"><div class="eyebrow">領域展開 // DAEPO COURT DOMAIN</div><h1>대포클럽<br><em>토요일 대진표</em></h1><p>날짜를 선택해 대진과 개인 일정을 확인하세요.</p><img src="data:image/webp;base64,{hero_image_data}" alt="테니스 라켓을 든 고죠 사토루"></header>
+<section aria-label="날짜별 대진표"><div class="list-head"><h2>날짜별 대진표</h2><p>최신 날짜부터 표시</p></div><div class="date-list">{''.join(cards)}</div></section><footer class="footer">대포클럽 · 토요일 복식 대진표</footer></main></body></html>'''
+hub_target = ROOT / "index.html"
+hub_target.write_text(hub, encoding="utf-8")
+print("dated schedule:", dated_target.resolve())
+print("archive index:", hub_target.resolve())
 print("validated:", dict(types), "12 players × 4 matches; no consecutive rests or repeat partners; special pairs met;", sum(floor_changes.values()), "floor changes total")
