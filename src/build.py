@@ -136,8 +136,17 @@ h1{font-weight:900;text-shadow:0 3px 24px rgba(0,0,0,.26)}h1 .accent{color:#ffd6
 .flow tbody th{background:#1a1b29;color:#f3f1fa}.flow tbody th small{color:#a8a7b8}.flow tbody tr.group-start>*{border-top-color:#6d3956}
 .flow td.play-1{color:#ffa3b7;background:#3a2535}.flow td.play-2{color:#91f2eb;background:#1e3940}.flow td.rest{color:#7f8395;background:#171822}
 .footer{border-color:#393b4d;color:#999daf}.footer strong{color:#f77a93}
+.lookup{padding:24px;border:1px solid #654153;border-radius:22px;background:linear-gradient(130deg,#221b2c,#191a27);box-shadow:0 12px 36px rgba(0,0,0,.18)}.hero{margin-top:16px}
+.lookup-head{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-bottom:15px}.lookup h2{margin:0;color:#fff;font-size:24px;letter-spacing:-.04em}.lookup p{margin:4px 0 0;color:#b7b3c5;font-size:13px}
+.lookup-input-wrap{display:flex;align-items:center;gap:11px;padding:4px 15px;border:1px solid #8d596b;border-radius:14px;background:#10121c;transition:border-color .15s,box-shadow .15s}.lookup-input-wrap:focus-within{border-color:#a8f7ec;box-shadow:0 0 0 3px rgba(168,247,236,.14)}.lookup-icon{color:#ff8ea5;font-size:20px;line-height:1}.lookup input{width:100%;height:47px;border:0;outline:0;background:transparent;color:#fff;font-size:17px;font-weight:700}.lookup input::placeholder{color:#858596;font-weight:500}
+.lookup-results{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px}.lookup-results button,.all-button{border:1px solid #634253;border-radius:11px;background:#342334;color:#ffe1e8;padding:9px 13px;font-size:14px;font-weight:800;cursor:pointer}.lookup-results button:hover,.lookup-results button:focus-visible,.all-button:hover,.all-button:focus-visible{background:#66304a;border-color:#f47d98;outline:none}.lookup-empty{color:#bbb7c7;font-size:13px}
+.personal-head{display:flex;align-items:end;justify-content:space-between;gap:16px;margin:31px 2px 15px}.personal-head h2{margin:0;color:#fff;font-size:27px;letter-spacing:-.05em}.personal-head p{margin:5px 0 0;color:#b1aec0;font-size:13px}.personal-meta{display:flex;gap:7px;flex-wrap:wrap;margin:0 2px 17px}.personal-meta span{padding:6px 10px;border:1px solid #544456;border-radius:999px;background:#2b2332;color:#e7d7e1;font-size:12px;font-weight:750}
+.personal-round{display:grid;grid-template-columns:112px minmax(0,1fr);gap:12px;margin-bottom:10px}.personal-time{display:flex;flex-direction:column;justify-content:center;padding:14px 15px;border:1px solid #484055;border-radius:15px;background:#1c1b29}.personal-time strong{color:#fff;font-size:19px}.personal-time span{color:#a8a7b8;font-size:12px}.personal-card{min-width:0;padding:14px 18px;border:1px solid #454054;border-radius:15px;background:#1b1d2a}.personal-card.floor-1{border-left:4px solid #f35b7a}.personal-card.floor-2{border-left:4px solid #64e3dc}.personal-card.rest-card{display:flex;align-items:center;gap:11px;border-left:4px solid #727688;background:#171923;color:#b7b7c5}.personal-card.rest-card strong{color:#e2e1eb}.personal-card-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:7px}.personal-card-top .floor{font-size:12px}.personal-versus{display:flex;align-items:center;gap:9px;flex-wrap:wrap;line-height:1.5}.personal-versus .own{color:#fff;font-size:17px;font-weight:850}.personal-versus .opponent{color:#d2cddd;font-size:16px;font-weight:700}.personal-versus .vs{color:#f97894;font-size:11px;font-weight:900;letter-spacing:.1em}.personal-versus .plus{color:#a9a7b8;font-weight:500}
+[hidden]{display:none!important}
 @media(max-width:1000px){.hero{padding-right:290px}.hero-art{height:410px;right:-65px;bottom:-48px}.hero-note{font-size:11px}}
 @media(max-width:700px){.hero{min-height:0;padding-right:24px}.hero-art{position:relative;right:auto;bottom:auto;display:block;height:280px;max-width:100%;margin:2px auto -42px}.hero:before{font-size:240px;right:-15px;top:170px}.hero:after{top:245px;right:-70px}.metrics{justify-content:flex-start}.metric{text-align:left}}
+@media(max-width:700px){.lookup{padding:18px;border-radius:17px}.lookup-head{display:block}.lookup h2{font-size:21px}.lookup input{font-size:16px}.personal-head{display:block}.all-button{margin-top:12px}.personal-round{grid-template-columns:1fr;gap:5px;margin-bottom:13px}.personal-time{display:flex;flex-direction:row;justify-content:flex-start;align-items:baseline;gap:10px;padding:8px 12px}.personal-time strong{font-size:16px}.personal-card{padding:13px 14px}.personal-versus .own{font-size:16px}.personal-versus .opponent{font-size:15px}}
+@media print{.lookup{display:none}.personal-head{margin-top:18px}.personal-round{break-inside:avoid}.personal-card,.personal-time{box-shadow:none}}
 @media print{@page{size:A4 portrait;margin:10mm}body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}.shell{max-width:none;padding:0}.hero{min-height:0;box-shadow:none;border-radius:0;padding:18px 230px 18px 22px}.hero-art{height:275px;right:3px;bottom:-26px}.hero:before,.hero:after{display:none}.print{display:none}h1{font-size:32px;margin:9px 0 6px}.hero-bottom{margin-top:13px}.hero-note{font-size:10px;padding:3px 7px}.metrics{gap:13px}.metric strong{font-size:19px}.section-head{margin:20px 0 11px}.section-head h2{font-size:19px;color:#1a1b29}.round{grid-template-columns:112px 1fr 1fr;gap:8px;margin-bottom:5px;break-inside:avoid}.round-time{min-height:107px;border-radius:9px;padding:10px}.round-num{margin-bottom:6px}.clock{font-size:17px}.clock-end{font-size:14px}.match{padding:8px 11px;border-radius:9px;box-shadow:none}.match-head{margin-bottom:4px}.team-row{padding:2px 0}.team-name{font-size:12px}.versus{padding:1px 0}.round-rest{font-size:10px;padding-bottom:0;margin-top:-3px}.rest-name{padding:1px 5px}.flow-section{break-before:page;margin-top:0}.flow-scroll{box-shadow:none;border-radius:0}.flow{min-width:0}.flow th,.flow td{padding:8px 5px}.flow thead th:first-child,.flow tbody th{padding-left:9px}.flow tbody th{font-size:11px}.flow td{font-size:11px}.footer{margin-top:8px;padding-top:7px;font-size:10px}}
 """
 
@@ -182,6 +191,39 @@ def flow_row(p, index):
 
 flow_headers = "".join(f'<th scope="col">{8+i//2:02d}:{(i%2)*30:02d}<small>{8+(i+1)//2:02d}:{((i+1)%2)*30:02d}까지</small></th>' for i in range(6))
 flow_rows = "\n".join(flow_row(p, i) for i,p in enumerate(MEN+WOMEN))
+
+def personal_round_html(player, i, round_):
+    start = 8*60 + i*30
+    end = start + 30
+    time = f'<div class="personal-time"><strong>{start//60:02d}:{start%60:02d}</strong><span>— {end//60:02d}:{end%60:02d}</span></div>'
+    for floor in range(2):
+        a, b = round_[floor*2:floor*2+2]
+        if player not in a+b:
+            continue
+        own, other = (a,b) if player in a else (b,a)
+        partner = next(p for p in own if p != player)
+        typ = match_type(a,b)
+        klass = {"남복":"men", "여복":"women", "혼복":"mixed"}[typ]
+        card = f'''<div class="personal-card floor-{floor+1}">
+          <div class="personal-card-top"><span class="floor"><span class="floor-dot"></span>{floor+1}층 코트</span><span class="tag tag-{klass}">{typ}</span></div>
+          <div class="personal-versus"><span class="own">{escape(player)} <span class="plus">＋</span> {escape(partner)}</span><span class="vs">VS</span><span class="opponent">{escape(other[0])} · {escape(other[1])}</span></div>
+        </div>'''
+        break
+    else:
+        card = '<div class="personal-card rest-card"><strong>휴식</strong><span>다음 경기를 준비하세요</span></div>'
+    return f'<div class="personal-round" aria-label="{i+1}타임">{time}{card}</div>'
+
+def personal_html(player):
+    role = "게스트" if player in MEN[5:] or player in WOMEN[4:] else "고정멤버"
+    rounds = "\n".join(personal_round_html(player, i, r) for i, r in enumerate(ROUNDS))
+    return f'''<section class="personal-schedule" data-personal="{escape(player)}" aria-label="{escape(player)} 개인 대진표" hidden>
+      <div class="personal-head"><div><h2>{escape(player)} 대진표</h2><p>08:00–11:00 · 경기 4회 / 휴식 2회</p></div><button class="all-button" type="button" data-show-all>전체 대진표 보기</button></div>
+      <div class="personal-meta"><span>{role}</span><span>층 이동 {floor_changes[player]}회</span><span>30분 × 6타임</span></div>
+      {rounds}
+    </section>'''
+
+personal_sections = "\n".join(personal_html(p) for p in MEN+WOMEN)
+lookup_buttons = "\n".join(f'<button type="button" data-select-player="{escape(p)}">{escape(p)}</button>' for p in MEN+WOMEN)
 hero_image_data = base64.b64encode((ROOT / "src/gojo.webp").read_bytes()).decode("ascii")
 html = f'''<!doctype html>
 <html lang="ko">
@@ -196,6 +238,12 @@ html = f'''<!doctype html>
 </head>
 <body>
 <div class="shell">
+  <section class="lookup" aria-label="내 대진 찾기">
+    <div class="lookup-head"><div><h2>대포클럽 · 내 대진 찾기</h2><p>이름 입력 후 선택하면 내 경기와 휴식만 표시됩니다.</p></div></div>
+    <label class="lookup-input-wrap" for="player-search"><span class="lookup-icon" aria-hidden="true">⌕</span><input id="player-search" type="search" aria-label="선수 이름 검색" placeholder="이름 검색 · 예: 서명렬" autocomplete="off" aria-controls="player-results"></label>
+    <div class="lookup-results" id="player-results" aria-live="polite" hidden>{lookup_buttons}</div>
+    <p class="lookup-empty" id="player-empty" role="status" hidden>일치하는 이름이 없습니다.</p>
+  </section>
   <header class="hero">
     <div class="topline"><div class="eyebrow">領域展開 // DAEPO COURT DOMAIN</div><button class="print" type="button" onclick="window.print()">인쇄 / PDF 저장</button></div>
     <h1>대포클럽<br><span class="accent">토요일 대진표</span></h1>
@@ -206,7 +254,7 @@ html = f'''<!doctype html>
     </div><div class="metrics"><div class="metric"><strong>12</strong><span>참가 인원</span></div><div class="metric"><strong>6</strong><span>타임</span></div><div class="metric"><strong>12</strong><span>경기</span></div></div></div>
     <img class="hero-art" src="data:image/webp;base64,{hero_image_data}" alt="푸른 기운에 둘러싸여 테니스 라켓을 든 고죠 사토루">
   </header>
-  <main>
+  <main id="full-schedule">
     <div class="section-head"><div><h2>경기 일정</h2><p>타임별 코트와 휴식 명단</p></div><div class="legend"><span class="tag tag-men">남복 4</span><span class="tag tag-mixed">혼복 6</span><span class="tag tag-women">여복 2</span></div></div>
     {rounds_html}
     <section class="flow-section" aria-label="선수별 타임테이블">
@@ -214,8 +262,78 @@ html = f'''<!doctype html>
       <div class="flow-scroll"><table class="flow"><thead><tr><th scope="col">선수<small>4경기 · 2휴식</small></th>{flow_headers}</tr></thead><tbody>{flow_rows}</tbody></table></div>
     </section>
   </main>
+  <main id="personal-schedules" hidden>{personal_sections}</main>
   <footer class="footer"><span><strong>대포클럽</strong> · 토요일 복식 대진표</span><span>각 타임 30분 · 1층 / 2층 동시 진행</span></footer>
 </div>
+<script>
+(() => {{
+  const input = document.getElementById('player-search');
+  const results = document.getElementById('player-results');
+  const empty = document.getElementById('player-empty');
+  const hero = document.querySelector('.hero');
+  const full = document.getElementById('full-schedule');
+  const personal = document.getElementById('personal-schedules');
+  const buttons = [...results.querySelectorAll('[data-select-player]')];
+  const sections = [...personal.querySelectorAll('[data-personal]')];
+  const names = buttons.map(button => button.dataset.selectPlayer);
+
+  function updateUrl(name) {{
+    const url = new URL(window.location.href);
+    if (name) url.searchParams.set('player', name);
+    else url.searchParams.delete('player');
+    window.history.replaceState(null, '', url);
+  }}
+
+  function showAll(update = true) {{
+    hero.hidden = false;
+    full.hidden = false;
+    personal.hidden = true;
+    sections.forEach(section => section.hidden = true);
+    if (update) updateUrl('');
+  }}
+
+  function select(name, update = true) {{
+    const section = sections.find(item => item.dataset.personal === name);
+    if (!section) return;
+    input.value = name;
+    hero.hidden = true;
+    full.hidden = true;
+    personal.hidden = false;
+    sections.forEach(item => item.hidden = item !== section);
+    results.hidden = true;
+    empty.hidden = true;
+    if (update) updateUrl(name);
+  }}
+
+  input.addEventListener('input', () => {{
+    const query = input.value.trim().replaceAll(' ', '');
+    if (names.includes(query)) {{ select(query); return; }}
+    showAll();
+    const matches = buttons.filter(button => button.dataset.selectPlayer.includes(query));
+    buttons.forEach(button => button.hidden = !matches.includes(button));
+    results.hidden = !query || matches.length === 0;
+    empty.hidden = !query || matches.length !== 0;
+  }});
+  input.addEventListener('keydown', event => {{
+    if (event.key !== 'Enter') return;
+    const visible = buttons.filter(button => !button.hidden);
+    if (visible.length === 1) {{ event.preventDefault(); select(visible[0].dataset.selectPlayer); }}
+  }});
+  results.addEventListener('click', event => {{
+    const button = event.target.closest('[data-select-player]');
+    if (button) select(button.dataset.selectPlayer);
+  }});
+  personal.addEventListener('click', event => {{
+    if (!event.target.closest('[data-show-all]')) return;
+    input.value = '';
+    showAll();
+    results.hidden = true;
+    input.focus();
+  }});
+  const initial = new URL(window.location.href).searchParams.get('player');
+  if (initial && names.includes(initial)) select(initial, false);
+}})();
+</script>
 </body>
 </html>
 '''
