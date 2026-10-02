@@ -3,6 +3,7 @@ const players = __PLAYERS__;
 const memberships = __MEMBERSHIPS__;
 const dateFilter = document.getElementById('date-filter');
 const playerFilter = document.getElementById('player-filter');
+const partnerSort = document.getElementById('partner-sort');
 const genderOptions = [...document.querySelectorAll('input[name="gender"]')];
 const status = document.getElementById('records-status');
 const retry = document.getElementById('records-retry');
@@ -71,6 +72,44 @@ populatePeriods(initialPeriod);
 populatePlayers(parameters.get('player'));
 genderOptions.find(option => option.value === gender).checked = true;
 
+function renderPartners(filtered = [], { pending = false } = {}) {
+  const list = document.getElementById('partner-stats');
+  const selected = playerFilter.value;
+  list.replaceChildren();
+  document.getElementById('partner-title').textContent = selected
+    ? `${players[selected].name} · 파트너별 성적` : '파트너별 성적';
+  const rows = selected && hasSnapshot && !pending ? resultModel.partners(filtered, selected, players) : [];
+  document.getElementById('partner-sort-control').hidden = rows.length < 2;
+  if (!selected || !hasSnapshot || pending || !rows.length) {
+    const message = !selected ? '위에서 선수 이름을 선택하면 파트너별 승률을 볼 수 있습니다.'
+      : !hasSnapshot ? connectionState === 'error' ? '연결 후 파트너 기록을 확인해 주세요.' : '파트너 기록을 불러오는 중…'
+      : pending ? '회차 기간이 정해지면 파트너 기록을 집계합니다.'
+      : '선택한 기간에 함께한 경기 기록이 없습니다. 점수 저장 후 확인할 수 있습니다.';
+    list.append(element('p', message, 'empty'));
+    return;
+  }
+  if (partnerSort.value === 'winRate') rows.sort((a, b) => b.winRate - a.winRate || b.games - a.games
+    || a.name.localeCompare(b.name, 'ko') || a.id.localeCompare(b.id));
+  for (const row of rows) {
+    const card = element('article', undefined, 'partner-card');
+    card.dataset.partnerStats = row.id;
+    const top = element('div', undefined, 'partner-card-top');
+    const identity = element('div');
+    identity.append(element('h3', row.name));
+    if (row.guestDate || !row.memberGames) identity.append(element('p', row.guestDate ? `게스트 · ${row.guestDate}` : '게스트 파트너', 'partner-role'));
+    else if (row.memberGames < row.games) identity.append(element('p', '회원·게스트 참가 기록 포함', 'partner-role'));
+    const rate = element('div', undefined, 'partner-rate');
+    const percentage = element('strong', resultModel.rate(row)); percentage.dataset.partnerField = 'winRate';
+    rate.append(percentage, element('span', '승률'));
+    top.append(identity, rate);
+    const detail = element('div', undefined, 'partner-detail');
+    const games = element('span', `함께 ${row.games}경기`); games.dataset.partnerField = 'games';
+    const outcome = element('span', `${row.wins}승 ${row.draws}무 ${row.losses}패`); outcome.dataset.partnerField = 'outcome';
+    const points = element('span', `${players[selected].name} 승점 ${row.points}점`); points.dataset.partnerField = 'points';
+    detail.append(games, outcome, points); card.append(top, detail); list.append(card);
+  }
+}
+
 function render() {
   const tbody = document.getElementById('rankings');
   const historyList = document.getElementById('match-history');
@@ -99,11 +138,13 @@ function render() {
     const td = element('td', message, 'empty'); td.colSpan = 8; tr.append(td); tbody.append(tr);
     document.getElementById('records-summary').textContent = message;
     historyList.append(element('p', message, 'empty'));
+    renderPartners();
     return;
   }
   const filtered = records.filter(record => !period || (isMembershipSelection(period)
     ? hasMembershipDates(membership) && membershipModel.periodForDate(record.date, memberships) === period
     : record.date === period));
+  renderPartners(filtered, { pending: periodPending });
   const scopedPlayers = Object.fromEntries(Object.entries(players).filter(([id]) => belongsToGender(id)));
   const ranked = resultModel.rank(filtered, scopedPlayers).filter(row => belongsToGender(row.id));
   const selected = playerFilter.value;
@@ -126,7 +167,10 @@ function render() {
     button.type = 'button';
     button.setAttribute('aria-label', `${row.name} 개인 기록 보기`);
     button.setAttribute('aria-pressed', String(row.id === selected));
-    button.addEventListener('click', () => { playerFilter.value = row.id; update(); });
+    button.addEventListener('click', () => {
+      playerFilter.value = row.id; update();
+      document.getElementById('records-summary').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
     name.append(button); tr.append(name);
     for (const field of ['points', 'winRate', 'games', 'wins', 'draws', 'losses']) {
       const cell = element('td', periodPending ? '—' : field === 'winRate' ? resultModel.rate(row) : row[field], field === 'points' ? 'points' : '');
@@ -190,6 +234,7 @@ dateFilter.addEventListener('change', () => {
   update();
 });
 playerFilter.addEventListener('change', update);
+partnerSort.addEventListener('change', render);
 genderOptions.forEach(option => option.addEventListener('change', () => {
   const selected = playerFilter.value;
   gender = option.value;

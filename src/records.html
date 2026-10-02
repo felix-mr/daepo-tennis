@@ -9,6 +9,11 @@
   <p id="filter-announcement" class="sr-only" role="status"></p>
   <div class="connection"><p id="records-status" role="status" aria-live="polite">기록 연결 중…</p><button id="records-retry" type="button" hidden>다시 연결</button></div>
   <p id="records-summary" class="summary" aria-live="polite"></p>
+  <section id="partner-section" aria-labelledby="partner-title">
+    <div class="partner-heading"><h2 id="partner-title">파트너별 성적</h2><label id="partner-sort-control" hidden>정렬<select id="partner-sort"><option value="games">함께 경기 많은 순</option><option value="winRate">승률 높은 순</option></select></label></div>
+    <p class="hint">선택한 선수·기간 기준. 게스트 파트너 포함. 승률 = 승리 수 ÷ 함께한 경기 수(무승부 포함).</p>
+    <div id="partner-stats" class="partner-list"></div>
+  </section>
   <section aria-labelledby="ranking-title"><h2 id="ranking-title">고정 멤버 순위</h2><p class="hint">승점순 · 동점이면 승률 → 승수 · 승률 = 승리 수 ÷ 전체 경기 수(무승부 포함)</p>
     <p id="membership-hint" class="hint"></p>
     <p class="hint">선수 이름을 누르면 개인 기록 표시. 경기 없는 멤버는 순위 없음. 게스트와 치른 경기도 반영.</p>

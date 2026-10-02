@@ -989,11 +989,36 @@ h1{font-weight:900;text-shadow:0 3px 24px rgba(0,0,0,.26)}h1 .accent{color:#ffd6
       || b.wins - a.wins || a.name.localeCompare(b.name, 'ko'));
   }
 
+  function partners(records, playerId, players = {}) {
+    const stats = new Map();
+    for (const record of records.filter(valid)) {
+      if (Array.isArray(record.fixedPlayerIds) && !record.fixedPlayerIds.includes(playerId)) continue;
+      const side = record.teamA.includes(playerId) ? 'teamA' : record.teamB.includes(playerId) ? 'teamB' : null;
+      if (!side) continue;
+      const index = record[side].findIndex(id => id !== playerId);
+      const id = record[side][index];
+      if (!stats.has(id)) stats.set(id, {
+        id, name: players[id]?.name || record[`${side}Names`][index],
+        games: 0, wins: 0, draws: 0, losses: 0, points: 0, winRate: null, memberGames: 0,
+        guestDate: /^guest-(\d{4}-\d{2}-\d{2})-/.exec(id)?.[1] || null,
+      });
+      const row = stats.get(id);
+      row.games += 1;
+      if (record.outcome === 'draw') { row.draws += 1; row.points += 1; }
+      else if (record.outcome === side) { row.wins += 1; row.points += 3; }
+      else row.losses += 1;
+      if (record.fixedPlayerIds?.includes(id)) row.memberGames += 1;
+      row.winRate = row.wins / row.games;
+    }
+    return [...stats.values()].sort((a, b) => b.games - a.games || b.winRate - a.winRate
+      || a.name.localeCompare(b.name, 'ko') || a.id.localeCompare(b.id));
+  }
+
   const rate = row => row?.games ? `${(row.winRate * 100).toFixed(1)}%` : '—';
   const summary = row => row
     ? `${row.games}경기 · ${row.wins}승 ${row.draws}무 ${row.losses}패 · 승률 ${rate(row)} · 승점 ${row.points}점`
     : '0경기 · 0승 0무 0패 · 승률 — · 승점 0점';
-  return { outcome, valid, aggregate, rank, rate, summary };
+  return { outcome, valid, aggregate, rank, partners, rate, summary };
 })();
 
 const membershipModel = (() => {
