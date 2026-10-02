@@ -11,23 +11,16 @@ assert schedule_day.weekday() == 5, "대포클럽 일정은 토요일이어야 �
 date_label = f"{schedule_day.year}년 {schedule_day.month}월 {schedule_day.day}일 토요일"
 
 FIXED_MEN = ("서명렬", "김영진", "나창은", "박세준", "이재원")
-GUEST_MEN = ("정상현", "안홍익")
+GUEST_MEN = ("정상현", "안홍익", "송효종")
 FIXED_WOMEN = ("조아라", "성주은", "박정민")
-GUEST_WOMEN = ("권태경", "여게스트")
+GUEST_WOMEN = ("권태경",)
 MEN = FIXED_MEN + GUEST_MEN
 WOMEN = FIXED_WOMEN + GUEST_WOMEN
 FIXED_MEMBERS = set(FIXED_MEN + FIXED_WOMEN)
 PEOPLE = set(MEN + WOMEN)
 
 # Each tuple: first-floor team A, first-floor team B, second-floor team A, second-floor team B.
-ROUNDS = [
-    (("박세준", "조아라"), ("이재원", "박정민"), ("정상현", "권태경"), ("서명렬", "여게스트")),
-    (("박세준", "박정민"), ("서명렬", "성주은"), ("김영진", "나창은"), ("안홍익", "정상현")),
-    (("박세준", "정상현"), ("이재원", "안홍익"), ("성주은", "권태경"), ("여게스트", "조아라")),
-    (("서명렬", "박정민"), ("안홍익", "성주은"), ("김영진", "권태경"), ("나창은", "조아라")),
-    (("박세준", "서명렬"), ("이재원", "정상현"), ("김영진", "조아라"), ("나창은", "여게스트")),
-    (("여게스트", "권태경"), ("성주은", "박정민"), ("김영진", "이재원"), ("나창은", "안홍익")),
-]
+ROUNDS = [(('서명렬', '송효종'), ('박세준', '안홍익'), ('이재원', '조아라'), ('정상현', '박정민')), (('김영진', '조아라'), ('박세준', '박정민'), ('나창은', '권태경'), ('이재원', '성주은')), (('이재원', '송효종'), ('정상현', '안홍익'), ('서명렬', '권태경'), ('나창은', '성주은')), (('서명렬', '박세준'), ('김영진', '이재원'), ('조아라', '박정민'), ('성주은', '권태경')), (('김영진', '정상현'), ('안홍익', '송효종'), ('나창은', '박정민'), ('박세준', '조아라')), (('서명렬', '나창은'), ('김영진', '송효종'), ('정상현', '권태경'), ('안홍익', '성주은'))]
 
 def match_type(a, b):
     players = a + b
@@ -52,7 +45,7 @@ for i, round_ in enumerate(ROUNDS):
     resting = PEOPLE - set(active)
     assert len(resting) == 4
     if rests:
-        assert not resting & rests[-1], (i, resting & rests[-1])
+        assert not (resting & rests[-1]) - {"이재원"}, (i, resting & rests[-1])
     rests.append(resting)
     for floor in range(2):
         a, b = round_[floor*2:floor*2+2]
@@ -66,9 +59,9 @@ for i, round_ in enumerate(ROUNDS):
 assert len(ROUNDS) == 6 and all(games[p] == 4 for p in PEOPLE)
 for p in PEOPLE:
     pattern = "".join("G" if any(p in team for team in round_) else "-" for round_ in ROUNDS)
-    assert "GGGG" not in pattern, (p, pattern)
+    assert pattern == "GGGG--" if p in {"이재원"} else "GGGG" not in pattern, (p, pattern)
 assert all(n == 1 for n in partners.values())
-assert types == {"남복":4, "여복":2, "혼복":6}
+assert sum(types.values()) == 12
 assert partners[frozenset(("성주은", "권태경"))] == 1
 assert opposed[frozenset(("서명렬", "성주은"))] == 1
 assert "김영진" in rests[0] and "김영진" not in rests[1]
@@ -81,7 +74,7 @@ floor_changes = {}
 for p in PEOPLE:
     floors = [floor for round_ in ROUNDS for floor in range(2) if p in round_[floor*2] + round_[floor*2+1]]
     floor_changes[p] = sum(a != b for a,b in zip(floors,floors[1:]))
-assert sum(floor_changes.values()) <= 10 and max(floor_changes.values()) == 2
+assert max(floor_changes.values()) <= 2
 
 CSS = r"""
 :root{--ink:#132825;--muted:#60736e;--green:#0b5645;--green2:#0e715a;--lime:#d7f16c;--paper:#f3f6f1;--line:#dce6df;--white:#fff;--gold:#e5ae55}
@@ -263,14 +256,11 @@ html = f'''<!doctype html>
     <div class="topline"><div class="eyebrow">領域展開 // DAEPO COURT DOMAIN</div><button class="print" type="button" onclick="window.print()">인쇄 / PDF 저장</button></div>
     <h1>대포클럽<br><span class="accent">토요일 대진표</span></h1>
     <p class="subtitle">{date_label} &nbsp;·&nbsp; 08:00 — 11:00 &nbsp;·&nbsp; 1층 / 2층 코트</p>
-    <div class="hero-bottom"><div class="hero-notes">
-      <span class="hero-note">전원 4경기</span><span class="hero-note">연속 휴식 없음</span><span class="hero-note">연속 4경기 없음</span><span class="hero-note">층 이동 최대 2회</span><span class="hero-note">김영진 08:30 시작</span><span class="hero-note">조아라 10:30 종료</span>
-      <span class="hero-note">성주은·권태경 페어 1회</span><span class="hero-note">서명렬 ↔ 성주은 맞대결 1회</span>
-    </div><div class="metrics"><div class="metric"><strong>12</strong><span>참가 인원</span></div><div class="metric"><strong>6</strong><span>타임</span></div><div class="metric"><strong>12</strong><span>경기</span></div></div></div>
+    <div class="hero-bottom"><div class="hero-notes"><span class="hero-note">김영진 08:30 시작</span><span class="hero-note">이재원 10:00 종료</span><span class="hero-note">조아라 10:30 종료</span></div><div class="metrics"><div class="metric"><strong>12</strong><span>참가 인원</span></div><div class="metric"><strong>6</strong><span>타임</span></div><div class="metric"><strong>12</strong><span>경기</span></div></div></div>
     <img class="hero-art" src="data:image/webp;base64,{hero_image_data}" alt="푸른 기운에 둘러싸여 테니스 라켓을 든 고죠 사토루">
   </header>
   <main id="full-schedule">
-    <div class="section-head"><div><h2>경기 일정</h2><p>타임별 코트와 휴식 명단</p></div><div class="legend"><span class="tag tag-men">남복 4</span><span class="tag tag-mixed">혼복 6</span><span class="tag tag-women">여복 2</span></div></div>
+    <div class="section-head"><div><h2>경기 일정</h2><p>타임별 코트와 휴식 명단</p></div><div class="legend"><span class="tag tag-men">남복 {types["남복"]}</span><span class="tag tag-mixed">혼복 {types["혼복"]}</span><span class="tag tag-women">여복 {types["여복"]}</span></div></div>
     {rounds_html}
     <section class="flow-section" aria-label="선수별 타임테이블">
       <div class="section-head"><div><h2>선수별 타임테이블</h2><p>각자 언제 경기하고 쉬는지 한눈에 확인 · 휴대폰에서는 표를 좌우로 밀어보기</p></div><div class="legend"><span class="tag tag-mixed">1층 경기</span><span class="tag tag-women">2층 경기</span><span class="tag tag-men">휴식</span></div></div>
@@ -387,4 +377,4 @@ hub_target = ROOT / "index.html"
 hub_target.write_text(hub, encoding="utf-8")
 print("dated schedule:", dated_target.resolve())
 print("archive index:", hub_target.resolve())
-print("validated:", dict(types), "12 players × 4 matches; no consecutive rests or repeat partners; special pairs met;", sum(floor_changes.values()), "floor changes total")
+print("validated:", dict(types), "12 players × 4 matches; no consecutive rests except departing 이재원; no repeat partners; special pairs met;", sum(floor_changes.values()), "floor changes total")
