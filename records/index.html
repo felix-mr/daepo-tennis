@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="ko">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>대포클럽 기록 · 순위</title><style>:root{color-scheme:light;--ink:#132825;--muted:#60736e;--green:#0b5645;--line:#dce6df}*{box-sizing:border-box}body{margin:0;color:var(--ink);background:#f3f6f1;font-family:Inter,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;line-height:1.5}a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}button,input,select{font:inherit}.shell{max-width:1080px;margin:auto;padding:24px 24px 60px}nav{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:20px}nav strong{font-size:18px}nav a{font-size:13px;font-weight:750}.hero{background:linear-gradient(115deg,#073e35,#0e715a);color:#fff;border-radius:24px;padding:35px 38px}.hero h1{font-size:clamp(32px,6vw,48px);letter-spacing:-.05em;margin:12px 0}.hero p{margin:0;color:#d6eae2}.hero .eyebrow{font-size:12px;letter-spacing:.14em;color:#d7f16c;font-weight:850}h2{font-size:24px;letter-spacing:-.04em;margin:30px 0 10px}.hint{color:var(--muted);font-size:12px;margin:0 0 13px}.filters{display:flex;gap:14px;margin:24px 0 12px}.filters label{display:flex;flex-direction:column;gap:6px;flex:1;font-size:13px;font-weight:750}.filters select{appearance:none;-webkit-appearance:none;min-width:0;width:100%;border:1px solid #afc7ba;border-radius:10px;padding:11px 44px 11px 14px;background-color:#fff;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='m3 6 5 5 5-5' fill='none' stroke='%23132825' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;background-size:16px;color:var(--ink)}.connection{display:flex;gap:10px;align-items:center}.connection p{margin:0;color:var(--muted);font-size:12px}button{border:1px solid #aacbbb;border-radius:8px;background:#e0f3e9;color:#19624f;cursor:pointer;padding:7px 10px}.summary{padding:16px;border:1px solid var(--line);border-radius:13px;background:#fff;font-weight:750}.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:15px;background:#fff}table{width:100%;min-width:580px;border-collapse:collapse;white-space:nowrap;text-align:center}th,td{padding:13px 11px;border-bottom:1px solid #e7eee7}th{font-size:12px;background:#e7f0e8;color:#386451}td{font-size:14px}td:nth-child(2),th:nth-child(2){text-align:left}tbody tr:last-child td{border-bottom:0}tr.selected{background:#e9f7ef}.name-button{padding:0;background:transparent;border:0;color:var(--green);font-weight:800;text-align:left}.points{font-weight:900;color:#0b5645}.history{display:grid;gap:11px}.history-card{padding:17px 20px;background:#fff;border:1px solid var(--line);border-radius:14px}.history-top{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:12px}.history-teams{display:flex;align-items:center;gap:13px;flex-wrap:wrap;margin:10px 0;font-size:15px;font-weight:750}.history-teams strong{font-size:21px;color:var(--green)}.history-outcome{font-size:12px;color:#19624f;font-weight:750}.empty{color:var(--muted);font-size:14px;padding:15px}.date-list{display:grid;gap:12px}.date-card{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:22px 24px;background:#fff;border:1px solid var(--line);border-left:4px solid #0e715a;border-radius:15px}.date-info{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.date-label{font-size:20px;font-weight:850}.date-sub{flex-basis:100%;font-size:12px;color:var(--muted)}.badge{font-size:11px;color:#19624f;background:#e0f3e9;border-radius:99px;padding:4px 8px}.arrow{font-size:24px}@media(max-width:700px){.shell{padding:12px 12px 42px}.hero{padding:26px 24px;border-radius:18px}.filters{gap:9px}.summary{font-size:14px}.history-card{padding:14px}.date-card{padding:18px}.date-label{font-size:17px}.history-teams{gap:9px}.hint{line-height:1.7}}
+.gender-filter{border:0;padding:0;margin:16px 0}.gender-filter legend{font-size:13px;font-weight:750;margin-bottom:7px}.gender-options{display:flex;gap:6px;padding:4px;background:#e4ede5;border-radius:12px;max-width:360px}.gender-options label{flex:1;position:relative;cursor:pointer;text-align:center}.gender-options input{position:absolute;opacity:0;width:1px;height:1px}.gender-options span{display:block;padding:10px 15px;border-radius:9px;font-size:14px;font-weight:800;color:#52665d}.gender-options input:checked+span{background:#fff;color:var(--green);box-shadow:0 1px 5px #073e3514}.gender-options input:focus-visible+span,button:focus-visible,select:focus-visible,a:focus-visible,.table-scroll:focus-visible{outline:3px solid #0e715a;outline-offset:3px}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.name-button{min-height:44px;padding:8px 3px}td{padding-top:7px;padding-bottom:7px}.history-top a{padding:5px 0;flex-shrink:0}.connection{flex-wrap:wrap;min-height:30px}.connection button{min-height:44px}.empty{margin:0;text-align:center;background:#fff;border-radius:12px}.empty p{margin:4px 0}.scroll-hint{display:none;margin:7px 0 0;color:var(--muted);font-size:12px}.summary{min-height:58px}.history-teams span{overflow-wrap:anywhere}@media(max-width:700px){.filters label{min-width:0}.gender-options{max-width:none}.history-teams{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);font-size:14px}.history-teams span:last-child{text-align:right}.history-teams strong{white-space:nowrap}.scroll-hint{display:block}table{min-width:550px}th,td{padding-left:9px;padding-right:9px}.table-scroll th:nth-child(2),.table-scroll td:nth-child(2){position:sticky;left:0;z-index:1;background:#fff}.table-scroll th:nth-child(2){background:#e7f0e8}.table-scroll tr.selected td:nth-child(2){background:#e9f7ef}nav{flex-wrap:wrap}.history-top{align-items:center}}
+</style></head>
+<body><main class="shell">
+  <nav><strong>대포클럽</strong><a href="../">← 날짜별 대진표</a></nav>
+  <header class="hero"><p class="eyebrow">DAEPO TENNIS CLUB</p><h1>기록 · 순위</h1><p>승 3점 · 무 1점 · 패 0점</p></header>
+  <div class="filters"><label>기간<select id="date-filter"><option value="">전체 기간</option></select></label><label>선수<select id="player-filter"><option value="">전체 선수</option></select></label></div>
+  <fieldset class="gender-filter"><legend>순위 구분</legend><div class="gender-options"><label><input type="radio" name="gender" value="" checked><span>전체</span></label><label><input type="radio" name="gender" value="male"><span>남자</span></label><label><input type="radio" name="gender" value="female"><span>여자</span></label></div></fieldset>
+  <p id="filter-announcement" class="sr-only" role="status"></p>
+  <div class="connection"><p id="records-status" role="status" aria-live="polite">기록 연결 중…</p><button id="records-retry" type="button" hidden>다시 연결</button></div>
+  <p id="records-summary" class="summary" aria-live="polite"></p>
+  <section aria-labelledby="ranking-title"><h2 id="ranking-title">고정 멤버 순위</h2><p class="hint">승점순 · 동점이면 승률 → 승수 · 승률 = 승리 수 ÷ 전체 경기 수(무승부 포함)</p>
+    <p class="hint">선수 이름을 누르면 개인 기록 표시. 경기 없는 멤버는 순위 없음. 게스트와 치른 경기도 반영.</p>
+    <div class="table-scroll" tabindex="0" role="region" aria-label="고정 멤버 순위 표, 좁은 화면에서는 좌우로 이동"><table><thead><tr><th scope="col">순위</th><th scope="col">선수</th><th scope="col">승점</th><th scope="col">승률</th><th scope="col">경기</th><th scope="col">승</th><th scope="col">무</th><th scope="col">패</th></tr></thead><tbody id="rankings"></tbody></table></div>
+    <p class="scroll-hint">표를 좌우로 밀어 경기 수·승무패 확인</p>
+  </section>
+  <section aria-labelledby="history-title"><h2 id="history-title">경기 기록</h2><p id="history-hint" class="hint">저장 완료된 경기 기준. 점수 수정 시 결과와 순위도 다시 계산됩니다.</p><div id="match-history" class="history"></div></section>
+</main><script type="module">const resultModel = (() => {
+  function outcome(scoreA, scoreB) {
+    return scoreA > scoreB ? 'teamA' : scoreA < scoreB ? 'teamB' : 'draw';
+  }
+
+  function valid(record) {
+    return record && /^\d{4}-\d{2}-\d{2}$/.test(record.date)
+      && [record.scoreA, record.scoreB].every(score => Number.isInteger(score) && score >= 0 && score <= 99)
+      && record.outcome === outcome(record.scoreA, record.scoreB)
+      && Array.isArray(record.teamA) && Array.isArray(record.teamB)
+      && record.teamA.length === 2 && record.teamB.length === 2
+      && new Set([...record.teamA, ...record.teamB]).size === 4
+      && [...record.teamA, ...record.teamB].every(id => typeof id === 'string')
+      && ['teamANames', 'teamBNames'].every(field => Array.isArray(record[field])
+        && record[field].length === 2 && record[field].every(name => typeof name === 'string'))
+      && Number.isInteger(record.round) && record.round >= 1 && record.round <= 6
+      && [1, 2].includes(record.floor);
+  }
+
+  function aggregate(records, players = {}) {
+    const stats = new Map(Object.entries(players).map(([id, profile]) =>
+      [id, { id, name: profile.name, games: 0, wins: 0, draws: 0, losses: 0, points: 0, winRate: null }]));
+    for (const record of records.filter(valid)) {
+      for (const side of ['teamA', 'teamB']) {
+        record[side].forEach((id, index) => {
+          if (!stats.has(id)) stats.set(id, {
+            id, name: record[`${side}Names`]?.[index] || id,
+            games: 0, wins: 0, draws: 0, losses: 0, points: 0, winRate: null,
+          });
+          const row = stats.get(id);
+          row.games += 1;
+          if (record.outcome === 'draw') { row.draws += 1; row.points += 1; }
+          else if (record.outcome === side) { row.wins += 1; row.points += 3; }
+          else row.losses += 1;
+          row.winRate = row.wins / row.games;
+        });
+      }
+    }
+    return stats;
+  }
+
+  function rank(records, players = {}) {
+    return [...aggregate(records, players).values()].sort((a, b) =>
+      b.points - a.points || (b.winRate ?? -1) - (a.winRate ?? -1)
+      || b.wins - a.wins || a.name.localeCompare(b.name, 'ko'));
+  }
+
+  const rate = row => row?.games ? `${(row.winRate * 100).toFixed(1)}%` : '—';
+  const summary = row => row
+    ? `${row.games}경기 · ${row.wins}승 ${row.draws}무 ${row.losses}패 · 승률 ${rate(row)} · 승점 ${row.points}점`
+    : '0경기 · 0승 0무 0패 · 승률 — · 승점 0점';
+  return { outcome, valid, aggregate, rank, rate, summary };
+})();
+
+const firebaseConfig = {
+  "apiKey": "AIzaSyBGQn1egO2A-zVNGo40L6QEyuy538Mi9J8",
+  "authDomain": "daepo-b3b51.firebaseapp.com",
+  "projectId": "daepo-b3b51",
+  "storageBucket": "daepo-b3b51.firebasestorage.app",
+  "messagingSenderId": "66452711954",
+  "appId": "1:66452711954:web:b97266b7c3ab4a8756c6cb",
+  "measurementId": "G-2JS3C8XR2Q"
+}
+;
+const players = {"p001": {"name": "서명렬", "gender": "male", "memberType": "fixed"}, "p002": {"name": "김영진", "gender": "male", "memberType": "fixed"}, "p003": {"name": "나창은", "gender": "male", "memberType": "fixed"}, "p004": {"name": "박세준", "gender": "male", "memberType": "fixed"}, "p005": {"name": "이재원", "gender": "male", "memberType": "fixed"}, "p006": {"name": "조아라", "gender": "female", "memberType": "fixed"}, "p007": {"name": "성주은", "gender": "female", "memberType": "fixed"}, "p008": {"name": "박정민", "gender": "female", "memberType": "fixed"}, "p009": {"name": "정가영", "gender": "female", "memberType": "fixed"}, "p010": {"name": "김규석", "gender": "male", "memberType": "fixed"}, "p011": {"name": "위형종", "gender": "male", "memberType": "fixed"}};
+const dateFilter = document.getElementById('date-filter');
+const playerFilter = document.getElementById('player-filter');
+const genderOptions = [...document.querySelectorAll('input[name="gender"]')];
+const status = document.getElementById('records-status');
+const retry = document.getElementById('records-retry');
+const parameters = new URL(location.href).searchParams;
+let records = [], unsubscribe, timer, generation = 0, modulesPromise, db;
+let hasSnapshot = false, connectionState = 'loading';
+let gender = ['male', 'female'].includes(parameters.get('gender')) ? parameters.get('gender') : '';
+const genderLabels = { male: '남자', female: '여자' };
+const fixedPlayers = Object.entries(players).filter(([, profile]) => profile.memberType === 'fixed');
+const belongsToGender = id => players[id]?.memberType === 'fixed' && (!gender || players[id].gender === gender);
+
+function element(tag, text, className) {
+  const node = document.createElement(tag);
+  if (text !== undefined) node.textContent = text;
+  if (className) node.className = className;
+  return node;
+}
+
+function populatePlayers(selected = '') {
+  playerFilter.replaceChildren(new Option(gender ? `${genderLabels[gender]} 전체 선수` : '전체 선수', ''));
+  fixedPlayers.filter(([id]) => belongsToGender(id))
+    .sort((a, b) => a[1].name.localeCompare(b[1].name, 'ko'))
+    .forEach(([id, profile]) => playerFilter.add(new Option(profile.name, id)));
+  playerFilter.value = belongsToGender(selected) ? selected : '';
+}
+populatePlayers(parameters.get('player'));
+genderOptions.find(option => option.value === gender).checked = true;
+const requestedDate = parameters.get('date');
+if (/^\d{4}-\d{2}-\d{2}$/.test(requestedDate || '')) {
+  dateFilter.add(new Option(requestedDate, requestedDate));
+  dateFilter.value = requestedDate;
+}
+
+function render() {
+  const tbody = document.getElementById('rankings');
+  const historyList = document.getElementById('match-history');
+  tbody.replaceChildren(); historyList.replaceChildren();
+  document.getElementById('ranking-title').textContent = gender ? `${genderLabels[gender]} 고정 멤버 순위` : '고정 멤버 순위';
+  document.getElementById('history-title').textContent = playerFilter.value
+    ? `${players[playerFilter.value].name} 경기 기록` : '경기 기록';
+  document.getElementById('history-hint').textContent = gender && !playerFilter.value
+    ? `${genderLabels[gender]} 고정 멤버가 참가한 경기 표시. 혼합 경기도 포함. 점수 수정 시 결과와 순위도 다시 계산됩니다.`
+    : '저장 완료된 경기 기준. 점수 수정 시 결과와 순위도 다시 계산됩니다.';
+  if (!hasSnapshot) {
+    const message = connectionState === 'error'
+      ? '기록을 불러오지 못했습니다. 연결 후 다시 시도해 주세요.' : '경기 기록을 불러오는 중…';
+    const tr = element('tr');
+    const td = element('td', message, 'empty'); td.colSpan = 8; tr.append(td); tbody.append(tr);
+    document.getElementById('records-summary').textContent = message;
+    historyList.append(element('p', message, 'empty'));
+    return;
+  }
+  const filtered = records.filter(record => !dateFilter.value || record.date === dateFilter.value);
+  const ranked = resultModel.rank(filtered, players).filter(row => belongsToGender(row.id));
+  const selected = playerFilter.value;
+  const row = ranked.find(item => item.id === selected);
+  const games = filtered.filter(record => selected
+    ? [...record.teamA, ...record.teamB].includes(selected)
+    : !gender || [...record.teamA, ...record.teamB].some(belongsToGender))
+    .sort((a, b) => b.date.localeCompare(a.date) || a.round - b.round || a.floor - b.floor);
+  document.getElementById('records-summary').textContent = selected
+    ? `${players[selected].name} · ${resultModel.summary(row)}`
+    : `${gender ? `${genderLabels[gender]} 멤버 참가 · ` : ''}${games.length}경기 기록 · 승부 ${games.filter(record => record.outcome !== 'draw').length}경기 · 무승부 ${games.filter(record => record.outcome === 'draw').length}경기`;
+  ranked.forEach((row, index) => {
+    const tr = element('tr', undefined, row.id === selected ? 'selected' : '');
+    tr.dataset.playerStats = row.id;
+    tr.append(element('td', row.games ? index + 1 : '—'));
+    const name = element('td');
+    const button = element('button', row.name, 'name-button');
+    button.type = 'button';
+    button.setAttribute('aria-label', `${row.name} 개인 기록 보기`);
+    button.setAttribute('aria-pressed', String(row.id === selected));
+    button.addEventListener('click', () => { playerFilter.value = row.id; update(); });
+    name.append(button); tr.append(name);
+    for (const field of ['points', 'winRate', 'games', 'wins', 'draws', 'losses']) {
+      const cell = element('td', field === 'winRate' ? resultModel.rate(row) : row[field], field === 'points' ? 'points' : '');
+      cell.dataset.statField = field; tr.append(cell);
+    }
+    tbody.append(tr);
+  });
+  if (!ranked.length) {
+    const tr = element('tr'); const td = element('td', '등록된 멤버가 없습니다.', 'empty');
+    td.colSpan = 8; tr.append(td); tbody.append(tr);
+  }
+  if (!games.length) {
+    const message = selected ? `${players[selected].name}의 저장된 경기 기록이 없습니다.`
+      : gender ? `${genderLabels[gender]} 멤버가 참가한 저장 기록이 없습니다.` : '저장된 경기 기록이 없습니다.';
+    const empty = element('div', undefined, 'empty');
+    empty.append(element('p', message), element('p', '대진표에서 점수를 저장하면 여기에 반영됩니다.', 'hint'));
+    historyList.append(empty);
+  }
+  for (const record of games) {
+    const card = element('article', undefined, 'history-card');
+    const top = element('div', undefined, 'history-top');
+    top.append(element('span', `${record.date} · ${record.round}타임 · ${record.floor}층`));
+    const link = element('a', '대진표 →');
+    link.href = `../${record.date}/`; top.append(link);
+    const teams = element('div', undefined, 'history-teams');
+    teams.append(element('span', record.teamANames.join(' · ')),
+      element('strong', `${record.scoreA} : ${record.scoreB}`), element('span', record.teamBNames.join(' · ')));
+    const side = selected && (record.teamA.includes(selected) ? 'teamA' : 'teamB');
+    const label = selected
+      ? record.outcome === 'draw' ? `${players[selected].name} 무승부 · +1점`
+        : record.outcome === side ? `${players[selected].name} 승리 · +3점` : `${players[selected].name} 패배 · +0점`
+      : record.outcome === 'draw' ? '무승부 · 각 1점'
+        : `${record[`${record.outcome}Names`].join(' · ')} 승 · 각 3점`;
+    card.append(top, teams, element('div', label, 'history-outcome'));
+    historyList.append(card);
+  }
+}
+
+function update() {
+  const url = new URL(location.href);
+  for (const [key, value] of [['date', dateFilter.value], ['player', playerFilter.value], ['gender', gender]]) {
+    if (value) url.searchParams.set(key, value); else url.searchParams.delete(key);
+  }
+  history.replaceState(null, '', url);
+  render();
+}
+dateFilter.addEventListener('change', update);
+playerFilter.addEventListener('change', update);
+genderOptions.forEach(option => option.addEventListener('change', () => {
+  const selected = playerFilter.value;
+  gender = option.value;
+  populatePlayers(selected);
+  document.getElementById('filter-announcement').textContent = selected && !playerFilter.value
+    ? `${genderLabels[gender]} 순위로 변경. 선수 선택을 전체 선수로 변경했습니다.` : `${genderLabels[gender] || '전체'} 순위로 변경했습니다.`;
+  update();
+}));
+update();
+
+async function connect() {
+  const attempt = ++generation;
+  unsubscribe?.(); clearTimeout(timer);
+  connectionState = 'loading';
+  retry.hidden = true;
+  status.textContent = hasSnapshot ? '기록 다시 연결 중 · 마지막 조회 기록 표시' : '기록 연결 중…';
+  render();
+  timer = setTimeout(() => {
+    if (attempt !== generation) return;
+    status.textContent = '기록 연결이 지연되고 있어요. 다시 연결해 주세요.';
+    connectionState = 'error'; retry.hidden = false; render();
+  }, 12000);
+  try {
+    modulesPromise ??= Promise.all([
+      import('https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js'),
+      import('https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js'),
+    ]).catch(error => { modulesPromise = undefined; throw error; });
+    const [app, firestore] = await modulesPromise;
+    if (attempt !== generation) return;
+    db ??= firestore.getFirestore(app.initializeApp(firebaseConfig));
+    unsubscribe = firestore.onSnapshot(firestore.collectionGroup(db, 'matchResults'),
+      { includeMetadataChanges: true }, snapshot => {
+        if (attempt !== generation || snapshot.metadata.hasPendingWrites) return;
+        // An empty local cache is not evidence that the server has no records.
+        if (snapshot.metadata.fromCache && snapshot.empty && !hasSnapshot) return;
+        hasSnapshot = true;
+        records = snapshot.docs.map(document => document.data()).filter(record => resultModel.valid(record)
+          && [...record.teamA, ...record.teamB].some(id => players[id]?.memberType === 'fixed'));
+        const selectedDate = dateFilter.value;
+        dateFilter.replaceChildren(new Option('전체 기간', ''));
+        const dates = new Set(records.map(record => record.date));
+        if (selectedDate) dates.add(selectedDate);
+        [...dates].sort().reverse().forEach(date => dateFilter.add(new Option(date, date)));
+        dateFilter.value = selectedDate;
+        if (!snapshot.metadata.fromCache) { clearTimeout(timer); connectionState = 'ready'; }
+        status.textContent = snapshot.metadata.fromCache ? '마지막 조회 기록 표시 · 서버 연결 확인 중' : '최신 기록 반영 중';
+        retry.hidden = !snapshot.metadata.fromCache;
+        render();
+      }, error => {
+        if (attempt !== generation) return;
+        clearTimeout(timer); connectionState = 'error';
+        status.textContent = error.code === 'permission-denied'
+          ? '기록 접근 권한을 확인해 주세요.' : '기록 연결 실패. 다시 연결해 주세요.';
+        if (hasSnapshot) status.textContent += ' · 마지막 조회 기록 표시';
+        retry.hidden = false; render();
+      });
+  } catch {
+    if (attempt !== generation) return;
+    clearTimeout(timer); connectionState = 'error';
+    status.textContent = '기록 연결 실패. 다시 연결해 주세요.';
+    if (hasSnapshot) status.textContent += ' · 마지막 조회 기록 표시';
+    retry.hidden = false; render();
+  }
+}
+retry.addEventListener('click', connect);
+window.addEventListener('online', connect);
+window.addEventListener('offline', () => {
+  ++generation; unsubscribe?.(); clearTimeout(timer); connectionState = 'error';
+  status.textContent = hasSnapshot ? '인터넷 연결 끊김 · 마지막 조회 기록 표시 중' : '인터넷 연결 끊김 · 연결 후 다시 시도해 주세요.';
+  retry.hidden = false; render();
+});
+connect();
+</script></body>
+</html>

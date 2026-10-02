@@ -1,0 +1,57 @@
+{
+  "p001": {
+    "name": "서명렬",
+    "gender": "male",
+    "memberType": "fixed"
+  },
+  "p002": {
+    "name": "김영진",
+    "gender": "male",
+    "memberType": "fixed"
+  },
+  "p003": {
+    "name": "나창은",
+    "gender": "male",
+    "memberType": "fixed"
+  },
+  "p004": {
+    "name": "박세준",
+    "gender": "male",
+    "memberType": "fixed"
+  },
+  "p005": {
+    "name": "이재원",
+    "gender": "male",
+    "memberType": "fixed"
+  },
+  "p006": {
+    "name": "조아라",
+    "gender": "female",
+    "memberType": "fixed"
+  },
+  "p007": {
+    "name": "성주은",
+    "gender": "female",
+    "memberType": "fixed"
+  },
+  "p008": {
+    "name": "박정민",
+    "gender": "female",
+    "memberType": "fixed"
+  },
+  "p009": {
+    "name": "정가영",
+    "gender": "female",
+    "memberType": "fixed"
+  },
+  "p010": {
+    "name": "김규석",
+    "gender": "male",
+    "memberType": "fixed"
+  },
+  "p011": {
+    "name": "위형종",
+    "gender": "male",
+    "memberType": "fixed"
+  }
+}

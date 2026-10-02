@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="ko">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>대포클럽 기록 · 순위</title><style>__CSS__</style></head>
+<body><main class="shell">
+  <nav><strong>대포클럽</strong><a href="../">← 날짜별 대진표</a></nav>
+  <header class="hero"><p class="eyebrow">DAEPO TENNIS CLUB</p><h1>기록 · 순위</h1><p>승 3점 · 무 1점 · 패 0점</p></header>
+  <div class="filters"><label>기간<select id="date-filter"><option value="">전체 기간</option></select></label><label>선수<select id="player-filter"><option value="">전체 선수</option></select></label></div>
+  <fieldset class="gender-filter"><legend>순위 구분</legend><div class="gender-options"><label><input type="radio" name="gender" value="" checked><span>전체</span></label><label><input type="radio" name="gender" value="male"><span>남자</span></label><label><input type="radio" name="gender" value="female"><span>여자</span></label></div></fieldset>
+  <p id="filter-announcement" class="sr-only" role="status"></p>
+  <div class="connection"><p id="records-status" role="status" aria-live="polite">기록 연결 중…</p><button id="records-retry" type="button" hidden>다시 연결</button></div>
+  <p id="records-summary" class="summary" aria-live="polite"></p>
+  <section aria-labelledby="ranking-title"><h2 id="ranking-title">고정 멤버 순위</h2><p class="hint">승점순 · 동점이면 승률 → 승수 · 승률 = 승리 수 ÷ 전체 경기 수(무승부 포함)</p>
+    <p class="hint">선수 이름을 누르면 개인 기록 표시. 경기 없는 멤버는 순위 없음. 게스트와 치른 경기도 반영.</p>
+    <div class="table-scroll" tabindex="0" role="region" aria-label="고정 멤버 순위 표, 좁은 화면에서는 좌우로 이동"><table><thead><tr><th scope="col">순위</th><th scope="col">선수</th><th scope="col">승점</th><th scope="col">승률</th><th scope="col">경기</th><th scope="col">승</th><th scope="col">무</th><th scope="col">패</th></tr></thead><tbody id="rankings"></tbody></table></div>
+    <p class="scroll-hint">표를 좌우로 밀어 경기 수·승무패 확인</p>
+  </section>
+  <section aria-labelledby="history-title"><h2 id="history-title">경기 기록</h2><p id="history-hint" class="hint">저장 완료된 경기 기준. 점수 수정 시 결과와 순위도 다시 계산됩니다.</p><div id="match-history" class="history"></div></section>
+</main><script type="module">__SCRIPT__</script></body>
+</html>

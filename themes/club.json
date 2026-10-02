@@ -1,0 +1,9 @@
+{
+  "name": "클럽 기본",
+  "stylesheet": "themes/club.css",
+  "eyebrow": "DAEPO TENNIS CLUB",
+  "title": "대포클럽",
+  "accent": "토요일 대진표",
+  "heroImage": null,
+  "heroAlt": ""
+}
