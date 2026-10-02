@@ -25,18 +25,19 @@ service cloud.firestore {
     }
     match /membershipPeriods/{period} {
       function validPeriod() {
-        let periods = {"2026-Q4": {"memberIds": ["p001", "p002", "p003", "p004", "p005", "p006", "p007", "p008", "p009", "p010", "p011"], "startsOn": "2026-10-01", "endsBefore": "2027-01-01"}};
+        let periods = {"current-members": {"memberIds": ["p001", "p002", "p003", "p004", "p005", "p006", "p007", "p008", "p009", "p010", "p011"], "label": "8~10월(임시)", "startsOn": "2026-08-01", "endsBefore": "2026-11-01"}};
         let data = request.resource.data;
-        return period in periods && data.keys().hasAll(['period', 'memberIds', 'startsOn', 'endsBefore', 'updatedAt'])
-          && data.keys().hasOnly(['period', 'memberIds', 'startsOn', 'endsBefore', 'updatedAt'])
+        return period in periods && data.keys().hasAll(['period', 'label', 'memberIds', 'startsOn', 'endsBefore', 'updatedAt'])
+          && data.keys().hasOnly(['period', 'label', 'memberIds', 'startsOn', 'endsBefore', 'updatedAt'])
           && data.period == period && data.memberIds == periods[period].memberIds
+          && data.label == periods[period].label
           && data.startsOn == periods[period].startsOn && data.endsBefore == periods[period].endsBefore
           && data.updatedAt == request.time;
       }
       allow read: if true;
       allow create: if validPeriod();
       allow update: if validPeriod()
-        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['memberIds', 'updatedAt']);
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['label', 'startsOn', 'endsBefore', 'memberIds', 'updatedAt']);
       allow delete: if false;
     }
     // Collection-group reads power cumulative records; writes are limited below.

@@ -13,17 +13,24 @@ let gender = ['male', 'female'].includes(parameters.get('gender')) ? parameters.
 const genderLabels = { male: '남자', female: '여자' };
 let periodRoster = new Set();
 const belongsToGender = id => periodRoster.has(id) && players[id] && (!gender || players[id].gender === gender);
-const quarterLabel = id => `${id.slice(0, 4)}년 ${id.slice(-1)}분기`;
+const isDate = value => /^\d{4}-\d{2}-\d{2}$/.test(value || '');
+const isMembershipSelection = period => period && (Object.hasOwn(memberships, period) || !isDate(period));
+const membershipForSelection = period => isMembershipSelection(period) ? period : membershipModel.periodForDate(period, memberships);
+const hasMembershipDates = period => period && isDate(period.startsOn) && isDate(period.endsBefore) && period.startsOn < period.endsBefore;
+function inclusiveEndDate(endsBefore) {
+  const date = new Date(`${endsBefore}T00:00:00Z`);
+  date.setUTCDate(date.getUTCDate() - 1);
+  return date.toISOString().slice(0, 10);
+}
 const koreaParts = new Intl.DateTimeFormat('en-US', {
   timeZone: 'Asia/Seoul', year: 'numeric', month: '2-digit', day: '2-digit',
 }).formatToParts(new Date());
 const koreaDate = ['year', 'month', 'day'].map(type => koreaParts.find(part => part.type === type).value).join('-');
-const currentQuarter = membershipModel.quarter(koreaDate);
+const currentMembership = membershipModel.periodForDate(koreaDate, memberships);
 const requestedDate = parameters.get('date');
-const requestedQuarter = parameters.get('quarter');
-const initialPeriod = /^\d{4}-\d{2}-\d{2}$/.test(requestedDate || '') ? requestedDate
-  : /^\d{4}-Q[1-4]$/.test(requestedQuarter || '') ? requestedQuarter
-    : parameters.get('period') === 'all' ? '' : Object.hasOwn(memberships, currentQuarter) ? currentQuarter : '';
+const requestedMembership = parameters.get('membership');
+const initialPeriod = isDate(requestedDate) ? requestedDate
+  : requestedMembership || (parameters.get('period') === 'all' ? '' : currentMembership || '');
 
 function element(tag, text, className) {
   const node = document.createElement(tag);
@@ -35,8 +42,8 @@ function element(tag, text, className) {
 function populatePlayers(selected = '') {
   const period = dateFilter.value;
   periodRoster = new Set(period
-    ? membershipModel.memberIds(/^\d{4}-Q[1-4]$/.test(period) ? period : membershipModel.quarter(period), memberships)
-    : Object.keys(memberships).flatMap(quarter => membershipModel.memberIds(quarter, memberships)));
+    ? membershipModel.memberIds(membershipForSelection(period), memberships)
+    : Object.keys(memberships).flatMap(id => membershipModel.memberIds(id, memberships)));
   playerFilter.replaceChildren(new Option(gender ? `${genderLabels[gender]} 전체 선수` : '전체 선수', ''));
   Object.entries(players).filter(([id]) => belongsToGender(id))
     .sort((a, b) => a[1].name.localeCompare(b[1].name, 'ko'))
@@ -45,15 +52,16 @@ function populatePlayers(selected = '') {
 }
 function populatePeriods(selected) {
   dateFilter.replaceChildren(new Option('전체 누적', ''));
-  const quarters = new Set(Object.keys(memberships));
-  if (/^\d{4}-Q[1-4]$/.test(selected)) quarters.add(selected);
-  const quarterGroup = element('optgroup'); quarterGroup.label = '분기별 기록';
-  [...quarters].sort().reverse().forEach(quarter => {
-    quarterGroup.append(new Option(quarterLabel(quarter), quarter));
+  const periods = new Set(Object.keys(memberships));
+  if (isMembershipSelection(selected)) periods.add(selected);
+  const membershipGroup = element('optgroup'); membershipGroup.label = '회차별 기록';
+  [...periods].sort((a, b) => (memberships[b]?.startsOn || '').localeCompare(memberships[a]?.startsOn || '') || a.localeCompare(b))
+    .forEach(id => {
+    membershipGroup.append(new Option(memberships[id]?.label || '등록되지 않은 회차', id));
   });
-  if (quarters.size) dateFilter.append(quarterGroup);
+  if (periods.size) dateFilter.append(membershipGroup);
   const dates = new Set(records.map(record => record.date));
-  if (/^\d{4}-\d{2}-\d{2}$/.test(selected)) dates.add(selected);
+  if (isDate(selected) && !isMembershipSelection(selected)) dates.add(selected);
   const dateGroup = element('optgroup'); dateGroup.label = '날짜별 기록';
   [...dates].sort().reverse().forEach(date => dateGroup.append(new Option(date, date)));
   if (dates.size) dateFilter.append(dateGroup);
@@ -69,10 +77,16 @@ function render() {
   tbody.replaceChildren(); historyList.replaceChildren();
   document.getElementById('ranking-title').textContent = gender ? `${genderLabels[gender]} 고정 멤버 순위` : '고정 멤버 순위';
   const period = dateFilter.value;
-  const periodQuarter = /^\d{4}-Q[1-4]$/.test(period) ? period : period && membershipModel.quarter(period);
+  const membershipId = period && membershipForSelection(period);
+  const membership = Object.hasOwn(memberships, membershipId) ? memberships[membershipId] : undefined;
+  const periodPending = isMembershipSelection(period) && membership && !hasMembershipDates(membership);
   document.getElementById('membership-hint').textContent = period
-    ? `${period === currentQuarter ? '이번 분기 · ' : ''}${quarterLabel(periodQuarter)} 회원 ${periodRoster.size}명 기준. 당시 고정 회원으로 참가한 경기만 집계합니다.`
-    : `역대 회원 ${periodRoster.size}명 기준. 탈퇴 전 기록은 유지하고, 게스트로 참가한 경기는 개인 성적에서 제외합니다.`;
+    ? membership
+      ? hasMembershipDates(membership)
+        ? `${membership.label} · ${membership.startsOn} ~ ${inclusiveEndDate(membership.endsBefore)} · 회원 ${periodRoster.size}명 기준. 당시 고정 회원으로 참가한 경기만 집계합니다.`
+        : `${membership.label} · 회원 ${periodRoster.size}명. 회차 시작일·종료일 설정이 필요합니다. 기간 설정 전에는 이 회차 기록을 집계하지 않습니다.`
+      : '이 기간에 해당하는 회차가 등록되지 않았습니다. 회차 날짜와 회원 명단을 확인해 주세요.'
+    : `역대 회원 ${periodRoster.size}명 기준. 탈퇴 전 기록은 유지하고, 게스트로 참가한 경기는 개인 성적에서 제외합니다.${Object.values(memberships).some(item => !hasMembershipDates(item)) ? ' 기간이 정해지지 않은 회차가 있습니다.' : ''}`;
   document.getElementById('history-title').textContent = playerFilter.value
     ? `${players[playerFilter.value].name} 경기 기록` : '경기 기록';
   document.getElementById('history-hint').textContent = gender && !playerFilter.value
@@ -87,7 +101,9 @@ function render() {
     historyList.append(element('p', message, 'empty'));
     return;
   }
-  const filtered = records.filter(record => !period || (period === record.date || period === membershipModel.quarter(record.date)));
+  const filtered = records.filter(record => !period || (isMembershipSelection(period)
+    ? hasMembershipDates(membership) && membershipModel.periodForDate(record.date, memberships) === period
+    : record.date === period));
   const scopedPlayers = Object.fromEntries(Object.entries(players).filter(([id]) => belongsToGender(id)));
   const ranked = resultModel.rank(filtered, scopedPlayers).filter(row => belongsToGender(row.id));
   const selected = playerFilter.value;
@@ -96,7 +112,9 @@ function render() {
     ? record.fixedPlayerIds.includes(selected)
     : record.fixedPlayerIds.some(belongsToGender))
     .sort((a, b) => b.date.localeCompare(a.date) || a.round - b.round || a.floor - b.floor);
-  document.getElementById('records-summary').textContent = selected
+  document.getElementById('records-summary').textContent = periodPending
+    ? `${selected ? `${players[selected].name} · ` : ''}${membership.label} · 기간 설정 대기 · 회원 ${periodRoster.size}명`
+    : selected
     ? `${players[selected].name} · ${resultModel.summary(row)}`
     : `${gender ? `${genderLabels[gender]} 멤버 참가 · ` : ''}${games.length}경기 기록 · 승부 ${games.filter(record => record.outcome !== 'draw').length}경기 · 무승부 ${games.filter(record => record.outcome === 'draw').length}경기`;
   ranked.forEach((row, index) => {
@@ -111,7 +129,7 @@ function render() {
     button.addEventListener('click', () => { playerFilter.value = row.id; update(); });
     name.append(button); tr.append(name);
     for (const field of ['points', 'winRate', 'games', 'wins', 'draws', 'losses']) {
-      const cell = element('td', field === 'winRate' ? resultModel.rate(row) : row[field], field === 'points' ? 'points' : '');
+      const cell = element('td', periodPending ? '—' : field === 'winRate' ? resultModel.rate(row) : row[field], field === 'points' ? 'points' : '');
       cell.dataset.statField = field; tr.append(cell);
     }
     tbody.append(tr);
@@ -122,12 +140,13 @@ function render() {
     td.colSpan = 8; tr.append(td); tbody.append(tr);
   }
   if (!games.length) {
-    const message = !periodRoster.size ? '회원 명단 등록 후 이 기간의 기록을 확인할 수 있습니다.'
+    const message = periodPending ? '회차 기간이 정해지면 기록을 집계합니다.'
+      : !periodRoster.size ? '회원 명단 등록 후 이 기간의 기록을 확인할 수 있습니다.'
       : selected ? `${players[selected].name}의 저장된 경기 기록이 없습니다.`
       : gender ? `${genderLabels[gender]} 멤버가 참가한 저장 기록이 없습니다.` : '저장된 경기 기록이 없습니다.';
     const empty = element('div', undefined, 'empty');
-    empty.append(element('p', message), element('p', periodRoster.size
-      ? '대진표에서 점수를 저장하면 여기에 반영됩니다.' : '다른 분기 또는 전체 누적을 선택해 주세요.', 'hint'));
+    empty.append(element('p', message), element('p', periodPending ? '회차 시작일·종료일 설정이 필요합니다.'
+      : periodRoster.size ? '대진표에서 점수를 저장하면 여기에 반영됩니다.' : '다른 회차 또는 전체 누적을 선택해 주세요.', 'hint'));
     historyList.append(empty);
   }
   for (const record of games) {
@@ -153,9 +172,9 @@ function render() {
 function update() {
   const url = new URL(location.href);
   const period = dateFilter.value;
-  for (const key of ['date', 'quarter', 'period']) url.searchParams.delete(key);
+  for (const key of ['date', 'membership', 'quarter', 'period']) url.searchParams.delete(key);
   if (!period) url.searchParams.set('period', 'all');
-  else url.searchParams.set(/^\d{4}-Q[1-4]$/.test(period) ? 'quarter' : 'date', period);
+  else url.searchParams.set(isMembershipSelection(period) ? 'membership' : 'date', period);
   for (const [key, value] of [['player', playerFilter.value], ['gender', gender]]) {
     if (value) url.searchParams.set(key, value); else url.searchParams.delete(key);
   }

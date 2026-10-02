@@ -28,11 +28,8 @@ button.addEventListener('click', async () => {
         }
       });
       periods.forEach(([id, membership], index) => {
-        const [year, quarter] = id.split('-Q').map(Number);
-        const month = (quarter - 1) * 3 + 1;
-        const startsOn = `${year}-${String(month).padStart(2, '0')}-01`;
-        const endsBefore = quarter === 4 ? `${year+1}-01-01` : `${year}-${String(month+3).padStart(2, '0')}-01`;
-        const expected = { period: id, memberIds: membership.memberIds, startsOn, endsBefore };
+        const expected = { period: id, label: membership.label, memberIds: membership.memberIds,
+          startsOn: membership.startsOn, endsBefore: membership.endsBefore };
         const previous = periodDocuments[index].data();
         if (!previous || Object.entries(expected).some(([field, value]) => JSON.stringify(previous[field]) !== JSON.stringify(value))) {
           transaction.set(firestore.doc(db, 'membershipPeriods', id), { ...expected, updatedAt: firestore.serverTimestamp() });
@@ -41,8 +38,8 @@ button.addEventListener('click', async () => {
       });
     });
     status.textContent = count || periodCount
-      ? `회원 ${count}명 추가 · 분기 명단 ${periodCount}개 반영 완료. 기존 회원·기록은 유지됩니다.`
-      : '회원 정보와 분기 명단이 모두 최신 상태입니다.';
+      ? `회원 ${count}명 추가 · 회차 명단 ${periodCount}개 반영 완료. 기존 회원·기록은 유지됩니다.`
+      : '회원 정보와 회차 명단이 모두 최신 상태입니다.';
   } catch (error) {
     status.textContent = error.code === 'permission-denied'
       ? '등록 권한을 확인해 주세요. Firestore 규칙 반영 후 다시 시도해 주세요.'

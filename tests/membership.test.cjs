@@ -5,15 +5,22 @@ const vm = require('node:vm');
 const path = require('node:path');
 const load = name => vm.runInNewContext(fs.readFileSync(path.join(__dirname, `../src/${name}.js`), 'utf8') + `\n${name === 'membership' ? 'membershipModel' : 'resultModel'};`);
 const membership = load('membership'), results = load('results');
-const periods = { '2026-Q4': { memberIds: ['a'] }, '2027-Q1': { memberIds: ['b'] }, '2027-Q2': { memberIds: ['a', 'b'] } };
+const periods = {
+  first: { startsOn: '2026-09-15', endsBefore: '2026-12-15', memberIds: ['a'] },
+  second: { startsOn: '2026-12-15', endsBefore: '2027-03-15', memberIds: ['b'] },
+  third: { startsOn: '2027-03-15', endsBefore: '2027-06-15', memberIds: ['a', 'b'] },
+};
 const fixture = (date, fixedPlayerIds) => ({ date, fixedPlayerIds, round: 1, floor: 1,
   teamA: ['a', 'b'], teamB: ['g1', 'g2'], teamANames: ['가', '나'], teamBNames: ['게1', '게2'],
   scoreA: 6, scoreB: 4, outcome: 'teamA' });
 
-test('quarter boundaries include year rollover', () => {
-  assert.equal(membership.quarter('2026-12-31'), '2026-Q4');
-  assert.equal(membership.quarter('2027-01-01'), '2027-Q1');
-  assert.equal(membership.quarter('2027-04-01'), '2027-Q2');
+test('club cycle boundaries follow actual dates across calendar quarters and years', () => {
+  assert.equal(membership.periodForDate('2026-10-01', periods), 'first');
+  assert.equal(membership.periodForDate('2026-12-14', periods), 'first');
+  assert.equal(membership.periodForDate('2026-12-15', periods), 'second');
+  assert.equal(membership.periodForDate('2027-01-01', periods), 'second');
+  assert.equal(membership.periodForDate('2027-03-15', periods), 'third');
+  assert.equal(membership.periodForDate('2026-09-14', periods), null);
 });
 
 test('joining later never turns an earlier guest game into member points', () => {
@@ -31,8 +38,8 @@ test('retirement keeps past results; rejoining reuses ID and joins only member r
   assert.equal(totals.has('g1'), false);
 });
 
-test('stored member snapshot survives later roster edits; legacy records use their quarter', () => {
-  const old = membership.normalize(fixture('2026-10-03', ['a']), { '2026-Q4': { memberIds: ['b'] } });
+test('stored member snapshot survives later roster edits; legacy records use membership dates', () => {
+  const old = membership.normalize(fixture('2026-10-03', ['a']), { first: { ...periods.first, memberIds: ['b'] } });
   assert.equal(old.fixedPlayerIds.join(','), 'a');
   const legacy = membership.normalize(fixture('2027-01-02', undefined), periods);
   assert.equal(legacy.fixedPlayerIds.join(','), 'b');

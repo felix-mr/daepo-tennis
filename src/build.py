@@ -9,11 +9,17 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 FIXED_PLAYERS = json.loads((ROOT / "data/players.json").read_text(encoding="utf-8"))
 MEMBERSHIPS = json.loads((ROOT / "data/memberships.json").read_text(encoding="utf-8"))
+windows = []
 for period, membership in MEMBERSHIPS.items():
-    year, quarter = period.split("-Q")
-    assert len(year) == 4 and year.isdigit() and quarter in ("1", "2", "3", "4")
-    assert len(membership["memberIds"]) == len(set(membership["memberIds"])), "분기 명단에 중복 ID가 있습니다"
+    assert period and "/" not in period, "회차 ID는 경로 문자를 포함할 수 없습니다"
+    assert membership.get("startsOn") and membership.get("endsBefore"), "회원 회차의 실제 시작일과 종료일을 설정해야 합니다"
+    start, end = date.fromisoformat(membership["startsOn"]), date.fromisoformat(membership["endsBefore"])
+    assert start < end, "회원 회차의 종료일은 시작일보다 뒤여야 합니다"
+    windows.append((start, end))
+    assert len(membership["memberIds"]) == len(set(membership["memberIds"])), "회차 명단에 중복 ID가 있습니다"
     assert set(membership["memberIds"]) <= set(FIXED_PLAYERS), "회원 프로필이 없는 ID가 있습니다"
+windows.sort()
+assert all(previous[1] <= following[0] for previous, following in zip(windows, windows[1:])), "회원 회차의 기간이 겹칩니다"
 parser = argparse.ArgumentParser(description="대포클럽 날짜별 대진표와 기록 화면 생성")
 parser.add_argument("--date", default=max(path.stem for path in (ROOT / "data/schedules").glob("*.json")))
 SCHEDULE_DATE = parser.parse_args().date
@@ -21,15 +27,16 @@ settings = json.loads((ROOT / f"data/schedules/{SCHEDULE_DATE}.json").read_text(
 assert settings["date"] == SCHEDULE_DATE
 PLAYERS = {**FIXED_PLAYERS, **settings.get("guests", {})}
 schedule_day = date.fromisoformat(SCHEDULE_DATE)
-membership_period = f"{schedule_day.year}-Q{(schedule_day.month-1)//3+1}"
-assert membership_period in MEMBERSHIPS, "해당 분기 회원 명단을 먼저 등록해야 합니다"
+membership_period = next((period for period, membership in MEMBERSHIPS.items()
+                          if membership["startsOn"] <= SCHEDULE_DATE < membership["endsBefore"]), None)
+assert membership_period, "경기 날짜에 적용되는 회원 회차를 먼저 등록해야 합니다"
 assert schedule_day.weekday() == 5, "대포클럽 일정은 토요일이어야 합니다"
 date_label = f"{schedule_day.year}년 {schedule_day.month}월 {schedule_day.day}일 토요일"
 theme = json.loads((ROOT / f"themes/{settings['theme']}.json").read_text(encoding="utf-8"))
 player_ids = {PLAYERS[pid]["name"]: pid for pid in settings["players"]}
 assert len(player_ids) == len(settings["players"]), "동명이인은 표시 이름을 구분해야 합니다"
 fixed_ids = set(MEMBERSHIPS[membership_period]["memberIds"])
-assert set(settings["fixedPlayers"]) == set(settings["players"]) & fixed_ids, "참석한 고정 멤버를 해당 분기 명단과 대조해야 합니다"
+assert set(settings["fixedPlayers"]) == set(settings["players"]) & fixed_ids, "참석한 고정 멤버를 해당 회차 명단과 대조해야 합니다"
 FIXED_MEN = tuple(PLAYERS[pid]["name"] for pid in settings["players"] if pid in fixed_ids and PLAYERS[pid]["gender"] == "male")
 GUEST_MEN = tuple(PLAYERS[pid]["name"] for pid in settings["players"] if pid not in fixed_ids and PLAYERS[pid]["gender"] == "male")
 FIXED_WOMEN = tuple(PLAYERS[pid]["name"] for pid in settings["players"] if pid in fixed_ids and PLAYERS[pid]["gender"] == "female")

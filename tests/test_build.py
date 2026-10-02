@@ -26,7 +26,8 @@ class GuestOnlyMatchTest(unittest.TestCase):
             schedule["fixedPlayers"] = [player for player in schedule["fixedPlayers"] if player not in guests]
             membership_path = root / "data/memberships.json"
             memberships = json.loads(membership_path.read_text())
-            memberships["2026-Q4"]["memberIds"] = [pid for pid in memberships["2026-Q4"]["memberIds"] if pid not in guests]
+            memberships["current-members"].update(startsOn="2026-09-15", endsBefore="2026-12-15")
+            memberships["current-members"]["memberIds"] = [pid for pid in memberships["current-members"]["memberIds"] if pid not in guests]
             membership_path.write_text(json.dumps(memberships))
             roster_path.write_text(json.dumps(roster, ensure_ascii=False))
             schedule_path.write_text(json.dumps(schedule, ensure_ascii=False))
@@ -41,14 +42,15 @@ class GuestOnlyMatchTest(unittest.TestCase):
                 self.assertIn(schedule["guests"][player]["name"], html)
             self.assertNotIn('"r1-f1":', (root / "firebase/firestore.rules").read_text())
 
-    def test_new_quarter_keeps_old_profiles_and_old_membership_snapshots(self):
+    def test_new_membership_cycle_keeps_profiles_and_old_snapshots(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             for name in ("src", "data", "themes", "firebase"):
                 shutil.copytree(ROOT / name, root / name)
             membership_path = root / "data/memberships.json"
             memberships = json.loads(membership_path.read_text())
-            memberships["2027-Q1"] = {"memberIds": [pid for pid in memberships["2026-Q4"]["memberIds"] if pid != "p001"]}
+            memberships["current-members"].update(startsOn="2026-09-15", endsBefore="2026-12-15")
+            memberships["next-members"] = {"label": "다음 회차", "startsOn": "2026-12-15", "endsBefore": "2027-03-15", "memberIds": [pid for pid in memberships["current-members"]["memberIds"] if pid != "p001"]}
             membership_path.write_text(json.dumps(memberships))
             original = root / "data/schedules/2026-10-03.json"
             schedule = json.loads(original.read_text().replace("2026-10-03", "2027-01-02"))

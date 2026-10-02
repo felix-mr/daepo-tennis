@@ -8,11 +8,11 @@ def write_rules(root, schedule_date, matches):
     manifest = json.loads(manifest_path.read_text(encoding="utf-8")) if manifest_path.exists() else {}
     memberships = json.loads((root / "data/memberships.json").read_text(encoding="utf-8"))
     for day, day_matches in manifest.items():
-        parsed = date.fromisoformat(day)
-        period = f"{parsed.year}-Q{(parsed.month-1)//3+1}"
+        period = next((pid for pid, entry in memberships.items()
+                       if entry["startsOn"] <= day < entry["endsBefore"]), None)
         for match in day_matches.values():
             if "fixedPlayerIds" not in match:
-                assert period in memberships, "지난 경기의 회원 분기 명단이 필요합니다"
+                assert period in memberships, "지난 경기 날짜에 적용되는 회원 회차가 필요합니다"
                 members = set(memberships[period]["memberIds"])
                 match["fixedPlayerIds"] = [pid for pid in match["teamA"] + match["teamB"] if pid in members]
     manifest[schedule_date] = matches
@@ -77,26 +77,25 @@ service cloud.firestore {
     rules = rules.replace("    // Collection-group reads", user_rules+"    // Collection-group reads")
     periods = {}
     for period, membership in memberships.items():
-        year, quarter = map(int, period.split("-Q"))
-        month = (quarter - 1) * 3 + 1
         periods[period] = {
-            "memberIds": membership["memberIds"], "startsOn": f"{year}-{month:02d}-01",
-            "endsBefore": f"{year+1}-01-01" if quarter == 4 else f"{year}-{month+3:02d}-01",
+            "memberIds": membership["memberIds"], "label": membership["label"],
+            "startsOn": membership["startsOn"], "endsBefore": membership["endsBefore"],
         }
     membership_rules = '''    match /membershipPeriods/{period} {
       function validPeriod() {
         let periods = __PERIODS__;
         let data = request.resource.data;
-        return period in periods && data.keys().hasAll(['period', 'memberIds', 'startsOn', 'endsBefore', 'updatedAt'])
-          && data.keys().hasOnly(['period', 'memberIds', 'startsOn', 'endsBefore', 'updatedAt'])
+        return period in periods && data.keys().hasAll(['period', 'label', 'memberIds', 'startsOn', 'endsBefore', 'updatedAt'])
+          && data.keys().hasOnly(['period', 'label', 'memberIds', 'startsOn', 'endsBefore', 'updatedAt'])
           && data.period == period && data.memberIds == periods[period].memberIds
+          && data.label == periods[period].label
           && data.startsOn == periods[period].startsOn && data.endsBefore == periods[period].endsBefore
           && data.updatedAt == request.time;
       }
       allow read: if true;
       allow create: if validPeriod();
       allow update: if validPeriod()
-        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['memberIds', 'updatedAt']);
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['label', 'startsOn', 'endsBefore', 'memberIds', 'updatedAt']);
       allow delete: if false;
     }
 '''.replace("__PERIODS__", json.dumps(periods, ensure_ascii=False))
