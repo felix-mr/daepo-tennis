@@ -1,6 +1,7 @@
 const firebaseConfig = __FIREBASE_CONFIG__;
 const scheduleDate = __SCHEDULE_DATE__;
 const matches = __MATCHES__;
+const memberships = __MEMBERSHIPS__;
 const forms = [...document.querySelectorAll('[data-score-form]')];
 const connection = document.getElementById('score-connection-status');
 const retry = document.getElementById('score-retry');
@@ -95,13 +96,15 @@ async function connect() {
       snapshot.forEach(document => {
         const data = document.data();
         if (resultModel.valid(data)) {
-          allRecords.push(data);
+          allRecords.push(membershipModel.normalize(data, memberships));
           if (data.date === scheduleDate && matches[document.id]) saved.set(document.id, data);
         }
       });
-      const stats = resultModel.aggregate(allRecords);
+      const stats = resultModel.aggregate(allRecords, {}, { fixedOnly: true });
+      const guestStats = resultModel.aggregate(allRecords.filter(record => record.date === scheduleDate));
       document.querySelectorAll('[data-player-summary]').forEach(node => {
-        node.textContent = `전체 기록 · ${resultModel.summary(stats.get(node.dataset.playerSummary))}`;
+        const fixed = node.dataset.memberStatus === 'fixed';
+        node.textContent = `${fixed ? '고정 멤버 누적' : '이번 주 게스트 기록'} · ${resultModel.summary((fixed ? stats : guestStats).get(node.dataset.playerSummary))}`;
       });
       for (const [id, draft] of drafts) {
         if (!sameVersion(previous.get(id), saved.get(id)) && !saving.has(id)) {

@@ -6,12 +6,13 @@
 <body><main class="shell">
   <nav><strong>대포클럽</strong><a href="../">← 날짜별 대진표</a></nav>
   <header class="hero"><p class="eyebrow">DAEPO TENNIS CLUB</p><h1>기록 · 순위</h1><p>승 3점 · 무 1점 · 패 0점</p></header>
-  <div class="filters"><label>기간<select id="date-filter"><option value="">전체 기간</option></select></label><label>선수<select id="player-filter"><option value="">전체 선수</option></select></label></div>
+  <div class="filters"><label>기간<select id="date-filter"><option value="">전체 누적</option></select></label><label>선수<select id="player-filter"><option value="">전체 선수</option></select></label></div>
   <fieldset class="gender-filter"><legend>순위 구분</legend><div class="gender-options"><label><input type="radio" name="gender" value="" checked><span>전체</span></label><label><input type="radio" name="gender" value="male"><span>남자</span></label><label><input type="radio" name="gender" value="female"><span>여자</span></label></div></fieldset>
   <p id="filter-announcement" class="sr-only" role="status"></p>
   <div class="connection"><p id="records-status" role="status" aria-live="polite">기록 연결 중…</p><button id="records-retry" type="button" hidden>다시 연결</button></div>
   <p id="records-summary" class="summary" aria-live="polite"></p>
   <section aria-labelledby="ranking-title"><h2 id="ranking-title">고정 멤버 순위</h2><p class="hint">승점순 · 동점이면 승률 → 승수 · 승률 = 승리 수 ÷ 전체 경기 수(무승부 포함)</p>
+    <p id="membership-hint" class="hint"></p>
     <p class="hint">선수 이름을 누르면 개인 기록 표시. 경기 없는 멤버는 순위 없음. 게스트와 치른 경기도 반영.</p>
     <div class="table-scroll" tabindex="0" role="region" aria-label="고정 멤버 순위 표, 좁은 화면에서는 좌우로 이동"><table><thead><tr><th scope="col">순위</th><th scope="col">선수</th><th scope="col">승점</th><th scope="col">승률</th><th scope="col">경기</th><th scope="col">승</th><th scope="col">무</th><th scope="col">패</th></tr></thead><tbody id="rankings"></tbody></table></div>
     <p class="scroll-hint">표를 좌우로 밀어 경기 수·승무패 확인</p>
@@ -30,18 +31,22 @@
       && record.teamA.length === 2 && record.teamB.length === 2
       && new Set([...record.teamA, ...record.teamB]).size === 4
       && [...record.teamA, ...record.teamB].every(id => typeof id === 'string')
+      && (record.fixedPlayerIds === undefined || (Array.isArray(record.fixedPlayerIds)
+        && new Set(record.fixedPlayerIds).size === record.fixedPlayerIds.length
+        && record.fixedPlayerIds.every(id => [...record.teamA, ...record.teamB].includes(id))))
       && ['teamANames', 'teamBNames'].every(field => Array.isArray(record[field])
         && record[field].length === 2 && record[field].every(name => typeof name === 'string'))
       && Number.isInteger(record.round) && record.round >= 1 && record.round <= 6
       && [1, 2].includes(record.floor);
   }
 
-  function aggregate(records, players = {}) {
+  function aggregate(records, players = {}, { fixedOnly = false } = {}) {
     const stats = new Map(Object.entries(players).map(([id, profile]) =>
       [id, { id, name: profile.name, games: 0, wins: 0, draws: 0, losses: 0, points: 0, winRate: null }]));
     for (const record of records.filter(valid)) {
       for (const side of ['teamA', 'teamB']) {
         record[side].forEach((id, index) => {
+          if (fixedOnly && Array.isArray(record.fixedPlayerIds) && !record.fixedPlayerIds.includes(id)) return;
           if (!stats.has(id)) stats.set(id, {
             id, name: record[`${side}Names`]?.[index] || id,
             games: 0, wins: 0, draws: 0, losses: 0, points: 0, winRate: null,
@@ -59,7 +64,7 @@
   }
 
   function rank(records, players = {}) {
-    return [...aggregate(records, players).values()].sort((a, b) =>
+    return [...aggregate(records, players, { fixedOnly: true }).values()].sort((a, b) =>
       b.points - a.points || (b.winRate ?? -1) - (a.winRate ?? -1)
       || b.wins - a.wins || a.name.localeCompare(b.name, 'ko'));
   }
@@ -69,6 +74,20 @@
     ? `${row.games}경기 · ${row.wins}승 ${row.draws}무 ${row.losses}패 · 승률 ${rate(row)} · 승점 ${row.points}점`
     : '0경기 · 0승 0무 0패 · 승률 — · 승점 0점';
   return { outcome, valid, aggregate, rank, rate, summary };
+})();
+
+const membershipModel = (() => {
+  const quarter = date => /^\d{4}-\d{2}-\d{2}$/.test(date || '')
+    ? `${date.slice(0, 4)}-Q${Math.ceil(Number(date.slice(5, 7)) / 3)}` : null;
+  const memberIds = (period, memberships) => memberships[period]?.memberIds || [];
+  function fixedPlayerIds(record, memberships) {
+    const participants = [...(record.teamA || []), ...(record.teamB || [])];
+    const members = Array.isArray(record.fixedPlayerIds)
+      ? record.fixedPlayerIds : memberIds(quarter(record.date), memberships);
+    return [...new Set(members)].filter(id => participants.includes(id));
+  }
+  const normalize = (record, memberships) => ({ ...record, fixedPlayerIds: fixedPlayerIds(record, memberships) });
+  return { quarter, memberIds, fixedPlayerIds, normalize };
 })();
 
 const firebaseConfig = {
@@ -82,6 +101,7 @@ const firebaseConfig = {
 }
 ;
 const players = {"p001": {"name": "서명렬", "gender": "male", "memberType": "fixed"}, "p002": {"name": "김영진", "gender": "male", "memberType": "fixed"}, "p003": {"name": "나창은", "gender": "male", "memberType": "fixed"}, "p004": {"name": "박세준", "gender": "male", "memberType": "fixed"}, "p005": {"name": "이재원", "gender": "male", "memberType": "fixed"}, "p006": {"name": "조아라", "gender": "female", "memberType": "fixed"}, "p007": {"name": "성주은", "gender": "female", "memberType": "fixed"}, "p008": {"name": "박정민", "gender": "female", "memberType": "fixed"}, "p009": {"name": "정가영", "gender": "female", "memberType": "fixed"}, "p010": {"name": "김규석", "gender": "male", "memberType": "fixed"}, "p011": {"name": "위형종", "gender": "male", "memberType": "fixed"}};
+const memberships = {"2026-Q4": {"memberIds": ["p001", "p002", "p003", "p004", "p005", "p006", "p007", "p008", "p009", "p010", "p011"]}};
 const dateFilter = document.getElementById('date-filter');
 const playerFilter = document.getElementById('player-filter');
 const genderOptions = [...document.querySelectorAll('input[name="gender"]')];
@@ -92,8 +112,19 @@ let records = [], unsubscribe, timer, generation = 0, modulesPromise, db;
 let hasSnapshot = false, connectionState = 'loading';
 let gender = ['male', 'female'].includes(parameters.get('gender')) ? parameters.get('gender') : '';
 const genderLabels = { male: '남자', female: '여자' };
-const fixedPlayers = Object.entries(players).filter(([, profile]) => profile.memberType === 'fixed');
-const belongsToGender = id => players[id]?.memberType === 'fixed' && (!gender || players[id].gender === gender);
+let periodRoster = new Set();
+const belongsToGender = id => periodRoster.has(id) && players[id] && (!gender || players[id].gender === gender);
+const quarterLabel = id => `${id.slice(0, 4)}년 ${id.slice(-1)}분기`;
+const koreaParts = new Intl.DateTimeFormat('en-US', {
+  timeZone: 'Asia/Seoul', year: 'numeric', month: '2-digit', day: '2-digit',
+}).formatToParts(new Date());
+const koreaDate = ['year', 'month', 'day'].map(type => koreaParts.find(part => part.type === type).value).join('-');
+const currentQuarter = membershipModel.quarter(koreaDate);
+const requestedDate = parameters.get('date');
+const requestedQuarter = parameters.get('quarter');
+const initialPeriod = /^\d{4}-\d{2}-\d{2}$/.test(requestedDate || '') ? requestedDate
+  : /^\d{4}-Q[1-4]$/.test(requestedQuarter || '') ? requestedQuarter
+    : parameters.get('period') === 'all' ? '' : Object.hasOwn(memberships, currentQuarter) ? currentQuarter : '';
 
 function element(tag, text, className) {
   const node = document.createElement(tag);
@@ -103,30 +134,51 @@ function element(tag, text, className) {
 }
 
 function populatePlayers(selected = '') {
+  const period = dateFilter.value;
+  periodRoster = new Set(period
+    ? membershipModel.memberIds(/^\d{4}-Q[1-4]$/.test(period) ? period : membershipModel.quarter(period), memberships)
+    : Object.keys(memberships).flatMap(quarter => membershipModel.memberIds(quarter, memberships)));
   playerFilter.replaceChildren(new Option(gender ? `${genderLabels[gender]} 전체 선수` : '전체 선수', ''));
-  fixedPlayers.filter(([id]) => belongsToGender(id))
+  Object.entries(players).filter(([id]) => belongsToGender(id))
     .sort((a, b) => a[1].name.localeCompare(b[1].name, 'ko'))
     .forEach(([id, profile]) => playerFilter.add(new Option(profile.name, id)));
   playerFilter.value = belongsToGender(selected) ? selected : '';
 }
+function populatePeriods(selected) {
+  dateFilter.replaceChildren(new Option('전체 누적', ''));
+  const quarters = new Set(Object.keys(memberships));
+  if (/^\d{4}-Q[1-4]$/.test(selected)) quarters.add(selected);
+  const quarterGroup = element('optgroup'); quarterGroup.label = '분기별 기록';
+  [...quarters].sort().reverse().forEach(quarter => {
+    quarterGroup.append(new Option(quarterLabel(quarter), quarter));
+  });
+  if (quarters.size) dateFilter.append(quarterGroup);
+  const dates = new Set(records.map(record => record.date));
+  if (/^\d{4}-\d{2}-\d{2}$/.test(selected)) dates.add(selected);
+  const dateGroup = element('optgroup'); dateGroup.label = '날짜별 기록';
+  [...dates].sort().reverse().forEach(date => dateGroup.append(new Option(date, date)));
+  if (dates.size) dateFilter.append(dateGroup);
+  dateFilter.value = selected;
+}
+populatePeriods(initialPeriod);
 populatePlayers(parameters.get('player'));
 genderOptions.find(option => option.value === gender).checked = true;
-const requestedDate = parameters.get('date');
-if (/^\d{4}-\d{2}-\d{2}$/.test(requestedDate || '')) {
-  dateFilter.add(new Option(requestedDate, requestedDate));
-  dateFilter.value = requestedDate;
-}
 
 function render() {
   const tbody = document.getElementById('rankings');
   const historyList = document.getElementById('match-history');
   tbody.replaceChildren(); historyList.replaceChildren();
   document.getElementById('ranking-title').textContent = gender ? `${genderLabels[gender]} 고정 멤버 순위` : '고정 멤버 순위';
+  const period = dateFilter.value;
+  const periodQuarter = /^\d{4}-Q[1-4]$/.test(period) ? period : period && membershipModel.quarter(period);
+  document.getElementById('membership-hint').textContent = period
+    ? `${period === currentQuarter ? '이번 분기 · ' : ''}${quarterLabel(periodQuarter)} 회원 ${periodRoster.size}명 기준. 당시 고정 회원으로 참가한 경기만 집계합니다.`
+    : `역대 회원 ${periodRoster.size}명 기준. 탈퇴 전 기록은 유지하고, 게스트로 참가한 경기는 개인 성적에서 제외합니다.`;
   document.getElementById('history-title').textContent = playerFilter.value
     ? `${players[playerFilter.value].name} 경기 기록` : '경기 기록';
   document.getElementById('history-hint').textContent = gender && !playerFilter.value
-    ? `${genderLabels[gender]} 고정 멤버가 참가한 경기 표시. 혼합 경기도 포함. 점수 수정 시 결과와 순위도 다시 계산됩니다.`
-    : '저장 완료된 경기 기준. 점수 수정 시 결과와 순위도 다시 계산됩니다.';
+    ? `${genderLabels[gender]} 고정 멤버가 참가한 경기 표시. 혼합 경기도 포함. 경기 당시 회원 자격을 기준으로 집계합니다.`
+    : '저장 완료된 경기 기준. 경기 당시 회원 자격을 적용하며, 점수 수정 시 결과와 순위도 다시 계산됩니다.';
   if (!hasSnapshot) {
     const message = connectionState === 'error'
       ? '기록을 불러오지 못했습니다. 연결 후 다시 시도해 주세요.' : '경기 기록을 불러오는 중…';
@@ -136,13 +188,14 @@ function render() {
     historyList.append(element('p', message, 'empty'));
     return;
   }
-  const filtered = records.filter(record => !dateFilter.value || record.date === dateFilter.value);
-  const ranked = resultModel.rank(filtered, players).filter(row => belongsToGender(row.id));
+  const filtered = records.filter(record => !period || (period === record.date || period === membershipModel.quarter(record.date)));
+  const scopedPlayers = Object.fromEntries(Object.entries(players).filter(([id]) => belongsToGender(id)));
+  const ranked = resultModel.rank(filtered, scopedPlayers).filter(row => belongsToGender(row.id));
   const selected = playerFilter.value;
   const row = ranked.find(item => item.id === selected);
   const games = filtered.filter(record => selected
-    ? [...record.teamA, ...record.teamB].includes(selected)
-    : !gender || [...record.teamA, ...record.teamB].some(belongsToGender))
+    ? record.fixedPlayerIds.includes(selected)
+    : record.fixedPlayerIds.some(belongsToGender))
     .sort((a, b) => b.date.localeCompare(a.date) || a.round - b.round || a.floor - b.floor);
   document.getElementById('records-summary').textContent = selected
     ? `${players[selected].name} · ${resultModel.summary(row)}`
@@ -165,14 +218,17 @@ function render() {
     tbody.append(tr);
   });
   if (!ranked.length) {
-    const tr = element('tr'); const td = element('td', '등록된 멤버가 없습니다.', 'empty');
+    const tr = element('tr'); const td = element('td', periodRoster.size
+      ? '선택한 구분에 등록된 회원이 없습니다.' : '이 기간의 회원 명단이 등록되지 않았습니다.', 'empty');
     td.colSpan = 8; tr.append(td); tbody.append(tr);
   }
   if (!games.length) {
-    const message = selected ? `${players[selected].name}의 저장된 경기 기록이 없습니다.`
+    const message = !periodRoster.size ? '회원 명단 등록 후 이 기간의 기록을 확인할 수 있습니다.'
+      : selected ? `${players[selected].name}의 저장된 경기 기록이 없습니다.`
       : gender ? `${genderLabels[gender]} 멤버가 참가한 저장 기록이 없습니다.` : '저장된 경기 기록이 없습니다.';
     const empty = element('div', undefined, 'empty');
-    empty.append(element('p', message), element('p', '대진표에서 점수를 저장하면 여기에 반영됩니다.', 'hint'));
+    empty.append(element('p', message), element('p', periodRoster.size
+      ? '대진표에서 점수를 저장하면 여기에 반영됩니다.' : '다른 분기 또는 전체 누적을 선택해 주세요.', 'hint'));
     historyList.append(empty);
   }
   for (const record of games) {
@@ -188,8 +244,8 @@ function render() {
     const label = selected
       ? record.outcome === 'draw' ? `${players[selected].name} 무승부 · +1점`
         : record.outcome === side ? `${players[selected].name} 승리 · +3점` : `${players[selected].name} 패배 · +0점`
-      : record.outcome === 'draw' ? '무승부 · 각 1점'
-        : `${record[`${record.outcome}Names`].join(' · ')} 승 · 각 3점`;
+      : record.outcome === 'draw' ? '무승부 · 당시 회원 각 +1점'
+        : `${record[`${record.outcome}Names`].join(' · ')} 승 · ${record[record.outcome].some(id => record.fixedPlayerIds.includes(id)) ? '당시 회원 각 +3점' : '회원 승점 +0점'}`;
     card.append(top, teams, element('div', label, 'history-outcome'));
     historyList.append(card);
   }
@@ -197,13 +253,24 @@ function render() {
 
 function update() {
   const url = new URL(location.href);
-  for (const [key, value] of [['date', dateFilter.value], ['player', playerFilter.value], ['gender', gender]]) {
+  const period = dateFilter.value;
+  for (const key of ['date', 'quarter', 'period']) url.searchParams.delete(key);
+  if (!period) url.searchParams.set('period', 'all');
+  else url.searchParams.set(/^\d{4}-Q[1-4]$/.test(period) ? 'quarter' : 'date', period);
+  for (const [key, value] of [['player', playerFilter.value], ['gender', gender]]) {
     if (value) url.searchParams.set(key, value); else url.searchParams.delete(key);
   }
   history.replaceState(null, '', url);
   render();
 }
-dateFilter.addEventListener('change', update);
+dateFilter.addEventListener('change', () => {
+  const selected = playerFilter.value;
+  populatePlayers(selected);
+  document.getElementById('filter-announcement').textContent = selected && !playerFilter.value
+    ? '기간 변경. 이 기간에 포함되지 않는 선수 선택을 해제했습니다.'
+    : '선택한 기간의 회원 명단과 기록을 표시합니다.';
+  update();
+});
 playerFilter.addEventListener('change', update);
 genderOptions.forEach(option => option.addEventListener('change', () => {
   const selected = playerFilter.value;
@@ -241,14 +308,10 @@ async function connect() {
         // An empty local cache is not evidence that the server has no records.
         if (snapshot.metadata.fromCache && snapshot.empty && !hasSnapshot) return;
         hasSnapshot = true;
-        records = snapshot.docs.map(document => document.data()).filter(record => resultModel.valid(record)
-          && [...record.teamA, ...record.teamB].some(id => players[id]?.memberType === 'fixed'));
+        records = snapshot.docs.map(document => document.data()).filter(resultModel.valid)
+          .map(record => membershipModel.normalize(record, memberships)).filter(record => record.fixedPlayerIds.length);
         const selectedDate = dateFilter.value;
-        dateFilter.replaceChildren(new Option('전체 기간', ''));
-        const dates = new Set(records.map(record => record.date));
-        if (selectedDate) dates.add(selectedDate);
-        [...dates].sort().reverse().forEach(date => dateFilter.add(new Option(date, date)));
-        dateFilter.value = selectedDate;
+        populatePeriods(selectedDate);
         if (!snapshot.metadata.fromCache) { clearTimeout(timer); connectionState = 'ready'; }
         status.textContent = snapshot.metadata.fromCache ? '마지막 조회 기록 표시 · 서버 연결 확인 중' : '최신 기록 반영 중';
         retry.hidden = !snapshot.metadata.fromCache;

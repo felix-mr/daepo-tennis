@@ -11,18 +11,22 @@ const resultModel = (() => {
       && record.teamA.length === 2 && record.teamB.length === 2
       && new Set([...record.teamA, ...record.teamB]).size === 4
       && [...record.teamA, ...record.teamB].every(id => typeof id === 'string')
+      && (record.fixedPlayerIds === undefined || (Array.isArray(record.fixedPlayerIds)
+        && new Set(record.fixedPlayerIds).size === record.fixedPlayerIds.length
+        && record.fixedPlayerIds.every(id => [...record.teamA, ...record.teamB].includes(id))))
       && ['teamANames', 'teamBNames'].every(field => Array.isArray(record[field])
         && record[field].length === 2 && record[field].every(name => typeof name === 'string'))
       && Number.isInteger(record.round) && record.round >= 1 && record.round <= 6
       && [1, 2].includes(record.floor);
   }
 
-  function aggregate(records, players = {}) {
+  function aggregate(records, players = {}, { fixedOnly = false } = {}) {
     const stats = new Map(Object.entries(players).map(([id, profile]) =>
       [id, { id, name: profile.name, games: 0, wins: 0, draws: 0, losses: 0, points: 0, winRate: null }]));
     for (const record of records.filter(valid)) {
       for (const side of ['teamA', 'teamB']) {
         record[side].forEach((id, index) => {
+          if (fixedOnly && Array.isArray(record.fixedPlayerIds) && !record.fixedPlayerIds.includes(id)) return;
           if (!stats.has(id)) stats.set(id, {
             id, name: record[`${side}Names`]?.[index] || id,
             games: 0, wins: 0, draws: 0, losses: 0, points: 0, winRate: null,
@@ -40,7 +44,7 @@ const resultModel = (() => {
   }
 
   function rank(records, players = {}) {
-    return [...aggregate(records, players).values()].sort((a, b) =>
+    return [...aggregate(records, players, { fixedOnly: true }).values()].sort((a, b) =>
       b.points - a.points || (b.winRate ?? -1) - (a.winRate ?? -1)
       || b.wins - a.wins || a.name.localeCompare(b.name, 'ko'));
   }

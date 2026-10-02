@@ -8,6 +8,12 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 FIXED_PLAYERS = json.loads((ROOT / "data/players.json").read_text(encoding="utf-8"))
+MEMBERSHIPS = json.loads((ROOT / "data/memberships.json").read_text(encoding="utf-8"))
+for period, membership in MEMBERSHIPS.items():
+    year, quarter = period.split("-Q")
+    assert len(year) == 4 and year.isdigit() and quarter in ("1", "2", "3", "4")
+    assert len(membership["memberIds"]) == len(set(membership["memberIds"])), "분기 명단에 중복 ID가 있습니다"
+    assert set(membership["memberIds"]) <= set(FIXED_PLAYERS), "회원 프로필이 없는 ID가 있습니다"
 parser = argparse.ArgumentParser(description="대포클럽 날짜별 대진표와 기록 화면 생성")
 parser.add_argument("--date", default=max(path.stem for path in (ROOT / "data/schedules").glob("*.json")))
 SCHEDULE_DATE = parser.parse_args().date
@@ -15,13 +21,15 @@ settings = json.loads((ROOT / f"data/schedules/{SCHEDULE_DATE}.json").read_text(
 assert settings["date"] == SCHEDULE_DATE
 PLAYERS = {**FIXED_PLAYERS, **settings.get("guests", {})}
 schedule_day = date.fromisoformat(SCHEDULE_DATE)
+membership_period = f"{schedule_day.year}-Q{(schedule_day.month-1)//3+1}"
+assert membership_period in MEMBERSHIPS, "해당 분기 회원 명단을 먼저 등록해야 합니다"
 assert schedule_day.weekday() == 5, "대포클럽 일정은 토요일이어야 합니다"
 date_label = f"{schedule_day.year}년 {schedule_day.month}월 {schedule_day.day}일 토요일"
 theme = json.loads((ROOT / f"themes/{settings['theme']}.json").read_text(encoding="utf-8"))
 player_ids = {PLAYERS[pid]["name"]: pid for pid in settings["players"]}
 assert len(player_ids) == len(settings["players"]), "동명이인은 표시 이름을 구분해야 합니다"
-fixed_ids = set(FIXED_PLAYERS)
-assert set(settings["fixedPlayers"]) == set(settings["players"]) & fixed_ids, "참석한 고정 멤버를 전체 회원 명단과 대조해야 합니다"
+fixed_ids = set(MEMBERSHIPS[membership_period]["memberIds"])
+assert set(settings["fixedPlayers"]) == set(settings["players"]) & fixed_ids, "참석한 고정 멤버를 해당 분기 명단과 대조해야 합니다"
 FIXED_MEN = tuple(PLAYERS[pid]["name"] for pid in settings["players"] if pid in fixed_ids and PLAYERS[pid]["gender"] == "male")
 GUEST_MEN = tuple(PLAYERS[pid]["name"] for pid in settings["players"] if pid not in fixed_ids and PLAYERS[pid]["gender"] == "male")
 FIXED_WOMEN = tuple(PLAYERS[pid]["name"] for pid in settings["players"] if pid in fixed_ids and PLAYERS[pid]["gender"] == "female")
@@ -116,6 +124,7 @@ for round_idx, round_ in enumerate(ROUNDS):
         score_matches[f"r{round_idx+1}-f{floor_idx+1}"] = {
             "round": round_idx+1, "floor": floor_idx+1,
             "date": SCHEDULE_DATE,
+            "fixedPlayerIds": [player_ids[name] for name in round_[floor_idx*2] + round_[floor_idx*2+1] if name in FIXED_MEMBERS],
             "teamA": [player_ids[name] for name in round_[floor_idx*2]],
             "teamB": [player_ids[name] for name in round_[floor_idx*2+1]],
             "teamANames": list(round_[floor_idx*2]), "teamBNames": list(round_[floor_idx*2+1]),
@@ -209,11 +218,15 @@ def personal_round_html(player, i, round_):
 
 def personal_html(player):
     role = "고정멤버" if player in FIXED_MEMBERS else "게스트"
+    member_status = "fixed" if player in FIXED_MEMBERS else "guest"
+    pid = player_ids[player]
+    records_query = f"?player={pid}&period=all" if pid in FIXED_PLAYERS else ""
+    records_label = "개인 기록 · 순위 보기" if player in FIXED_MEMBERS else ("고정 멤버 시절 기록 보기" if pid in FIXED_PLAYERS else "고정 멤버 순위 보기")
     rounds = "\n".join(personal_round_html(player, i, r) for i, r in enumerate(ROUNDS))
     return f'''<section class="personal-schedule" data-personal="{escape(player)}" aria-label="{escape(player)} 개인 대진표" hidden>
       <div class="personal-head"><div><h2>{escape(player)} 대진표</h2><p>{fmt(start_minutes)}–{fmt(start_minutes+len(ROUNDS)*round_minutes)} · 경기 {games[player]}회 / 휴식 {len(ROUNDS)-games[player]}회</p></div><button class="all-button" type="button" data-show-all>전체 대진표 보기</button></div>
       <div class="personal-meta"><span>{role}</span><span>층 이동 {floor_changes[player]}회</span><span>{round_minutes}분 × {len(ROUNDS)}타임</span></div>
-      <p class="player-summary" data-player-summary="{player_ids[player]}">누적 기록 연결 중…</p><a class="archive-back" href="../records/?player={player_ids[player]}">개인 기록 · 순위 보기 →</a>
+      <p class="player-summary" data-player-summary="{pid}" data-member-status="{member_status}">기록 연결 중…</p><a class="archive-back" href="../records/{records_query}">{records_label} →</a>
       {rounds}
     </section>'''
 
@@ -221,7 +234,8 @@ personal_sections = "\n".join(personal_html(p) for p in MEN+WOMEN)
 lookup_buttons = "\n".join(f'<button type="button" data-select-player="{escape(p)}">{escape(p)}</button>' for p in MEN+WOMEN)
 hero_image_data = base64.b64encode((ROOT / theme["heroImage"]).read_bytes()).decode("ascii") if theme["heroImage"] else ""
 hero_art = f'<img class="hero-art" src="data:image/webp;base64,{hero_image_data}" alt="{escape(theme["heroAlt"])}">' if hero_image_data else ""
-score_script = (ROOT / "src/results.js").read_text(encoding="utf-8") + "\n" + (ROOT / "src/scores.js").read_text(encoding="utf-8")
+score_script = (ROOT / "src/results.js").read_text(encoding="utf-8") + "\n" + (ROOT / "src/membership.js").read_text(encoding="utf-8") + "\n" + (ROOT / "src/scores.js").read_text(encoding="utf-8")
+score_script = score_script.replace("__MEMBERSHIPS__", json.dumps(MEMBERSHIPS, ensure_ascii=False))
 score_script = score_script.replace("__FIREBASE_CONFIG__", (ROOT / "firebase/firebase-config.json").read_text(encoding="utf-8"))
 score_script = score_script.replace("__SCHEDULE_DATE__", json.dumps(SCHEDULE_DATE))
 score_script = score_script.replace("__MATCHES__", json.dumps(score_matches, ensure_ascii=False))
@@ -367,7 +381,8 @@ hub_css = (ROOT / "src/records.css").read_text(encoding="utf-8")
 hub = f'''<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>대포클럽 날짜별 대진표</title><style>{hub_css}</style></head><body><main class="shell"><nav><strong>대포클럽</strong><a href="./records/">기록 · 순위 →</a></nav><header class="hero"><p class="eyebrow">DAEPO TENNIS CLUB</p><h1>토요일 대진표</h1><p>날짜를 선택해 대진과 개인 일정을 확인하세요.</p></header><section aria-label="날짜별 대진표"><h2>날짜별 대진표</h2><div class="date-list">{''.join(cards)}</div></section></main></body></html>'''
 (ROOT / "index.html").write_text(hub, encoding="utf-8")
 records_template = (ROOT / "src/records.html").read_text(encoding="utf-8")
-records_script = (ROOT / "src/results.js").read_text(encoding="utf-8") + "\n" + (ROOT / "src/records.js").read_text(encoding="utf-8")
+records_script = (ROOT / "src/results.js").read_text(encoding="utf-8") + "\n" + (ROOT / "src/membership.js").read_text(encoding="utf-8") + "\n" + (ROOT / "src/records.js").read_text(encoding="utf-8")
+records_script = records_script.replace("__MEMBERSHIPS__", json.dumps(MEMBERSHIPS, ensure_ascii=False))
 records_script = records_script.replace("__FIREBASE_CONFIG__", (ROOT / "firebase/firebase-config.json").read_text(encoding="utf-8"))
 records_script = records_script.replace("__PLAYERS__", json.dumps(FIXED_PLAYERS, ensure_ascii=False))
 records_dir = ROOT / "records"
@@ -376,6 +391,7 @@ records_dir.mkdir(exist_ok=True)
 setup_script = (ROOT / "src/setup.js").read_text(encoding="utf-8")
 setup_script = setup_script.replace("__FIREBASE_CONFIG__", (ROOT / "firebase/firebase-config.json").read_text(encoding="utf-8"))
 setup_script = setup_script.replace("__PLAYERS__", json.dumps(FIXED_PLAYERS, ensure_ascii=False))
+setup_script = setup_script.replace("__MEMBERSHIPS__", json.dumps(MEMBERSHIPS, ensure_ascii=False))
 setup_dir = ROOT / "setup"
 setup_dir.mkdir(exist_ok=True)
 setup_dir.joinpath("index.html").write_text((ROOT / "src/setup.html").read_text(encoding="utf-8").replace("__CSS__", hub_css).replace("__SCRIPT__", setup_script).replace("__COUNT__", str(len(FIXED_PLAYERS))), encoding="utf-8")

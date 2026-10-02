@@ -4,6 +4,10 @@
       "round": 1,
       "floor": 1,
       "date": "2026-10-03",
+      "fixedPlayerIds": [
+        "p001",
+        "p004"
+      ],
       "teamA": [
         "p001",
         "guest-2026-10-03-03"
@@ -25,6 +29,11 @@
       "round": 1,
       "floor": 2,
       "date": "2026-10-03",
+      "fixedPlayerIds": [
+        "p005",
+        "p006",
+        "p008"
+      ],
       "teamA": [
         "p005",
         "p006"
@@ -46,6 +55,12 @@
       "round": 2,
       "floor": 1,
       "date": "2026-10-03",
+      "fixedPlayerIds": [
+        "p002",
+        "p006",
+        "p004",
+        "p008"
+      ],
       "teamA": [
         "p002",
         "p006"
@@ -67,6 +82,11 @@
       "round": 2,
       "floor": 2,
       "date": "2026-10-03",
+      "fixedPlayerIds": [
+        "p003",
+        "p005",
+        "p007"
+      ],
       "teamA": [
         "p003",
         "guest-2026-10-03-04"
@@ -88,6 +108,9 @@
       "round": 3,
       "floor": 1,
       "date": "2026-10-03",
+      "fixedPlayerIds": [
+        "p005"
+      ],
       "teamA": [
         "p005",
         "guest-2026-10-03-03"
@@ -109,6 +132,11 @@
       "round": 3,
       "floor": 2,
       "date": "2026-10-03",
+      "fixedPlayerIds": [
+        "p001",
+        "p003",
+        "p007"
+      ],
       "teamA": [
         "p001",
         "guest-2026-10-03-04"
@@ -130,6 +158,12 @@
       "round": 4,
       "floor": 1,
       "date": "2026-10-03",
+      "fixedPlayerIds": [
+        "p001",
+        "p004",
+        "p002",
+        "p005"
+      ],
       "teamA": [
         "p001",
         "p004"
@@ -151,6 +185,11 @@
       "round": 4,
       "floor": 2,
       "date": "2026-10-03",
+      "fixedPlayerIds": [
+        "p006",
+        "p008",
+        "p007"
+      ],
       "teamA": [
         "p006",
         "p008"
@@ -172,6 +211,9 @@
       "round": 5,
       "floor": 1,
       "date": "2026-10-03",
+      "fixedPlayerIds": [
+        "p002"
+      ],
       "teamA": [
         "p002",
         "guest-2026-10-03-01"
@@ -193,6 +235,12 @@
       "round": 5,
       "floor": 2,
       "date": "2026-10-03",
+      "fixedPlayerIds": [
+        "p003",
+        "p008",
+        "p004",
+        "p006"
+      ],
       "teamA": [
         "p003",
         "p008"
@@ -214,6 +262,11 @@
       "round": 6,
       "floor": 1,
       "date": "2026-10-03",
+      "fixedPlayerIds": [
+        "p001",
+        "p003",
+        "p002"
+      ],
       "teamA": [
         "p001",
         "p003"
@@ -235,6 +288,9 @@
       "round": 6,
       "floor": 2,
       "date": "2026-10-03",
+      "fixedPlayerIds": [
+        "p007"
+      ],
       "teamA": [
         "guest-2026-10-03-01",
         "guest-2026-10-03-04"
