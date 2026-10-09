@@ -63,6 +63,28 @@ class WeeklyPairsTest(unittest.TestCase):
         self.assertIn('TOJI ZENIN', html)
         self.assertIn('테니스 라켓을 든 젠인 토우지', html)
 
+    def test_early_departure_finishes_four_games_and_personal_view_at_ten(self):
+        self.assertEqual(self.schedule['conditions']['earlyDeparture'], {'p001': 600})
+        self.assertEqual(self.schedule['conditions']['consecutiveExceptions'], ['p001'])
+        for i, row in enumerate(self.schedule['rounds']):
+            self.assertEqual('p001' in sum(row, []), i < 4)
+        result = self.build()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        html = self.root.joinpath(f'{DAY}/index.html').read_text()
+        own = html.split('data-personal="서명렬"', 1)[1].split('</section>', 1)[0]
+        self.assertIn('08:00–10:00 · 경기 4회 / 휴식 0회', own)
+        self.assertIn('30분 × 4타임', own)
+        self.assertEqual(own.count('class="personal-round"'), 4)
+        self.assertEqual(own.count('data-score-form'), 4)
+        self.assertNotIn('10:30', own)
+        self.assertIn('서명렬 10:00 종료', html)
+        self.assertEqual(html.count('<td class="rest">종료</td>'), 2)
+
+    def test_missing_departure_exception_rejected(self):
+        self.schedule['conditions']['consecutiveExceptions'] = []
+        result = self.build()
+        self.assertNotEqual(result.returncode, 0)
+
     def test_next_week_uses_reserved_geto_theme(self):
         following = json.loads(json.dumps(self.schedule).replace(DAY, '2026-10-17'))
         following.pop('theme')

@@ -193,16 +193,31 @@ def match_html(round_idx, floor_idx, team_a, team_b):
       {score_form(round_idx, floor_idx)}
     </article>'''
 
+def availability_status(player, round_idx):
+    pid = player_ids[player]
+    start = start_minutes + round_idx*round_minutes
+    if start >= conditions["earlyDeparture"].get(pid, start_minutes+len(ROUNDS)*round_minutes):
+        return "종료"
+    if start < conditions["lateArrival"].get(pid, start_minutes):
+        return "참가 전"
+    return None
+
 def round_html(i, round_):
     start = start_minutes + i*round_minutes
     end = start+round_minutes
     fmt = lambda m: f"{m//60:02d}:{m%60:02d}"
-    names = "".join(f'<span class="rest-name">{escape(p)}</span>' for p in MEN+WOMEN if p in rests[i])
+    groups = []
+    for status, label in ((None, "휴식"), ("참가 전", "참가 전"), ("종료", "종료")):
+        names = "".join(f'<span class="rest-name">{escape(p)}</span>' for p in MEN+WOMEN
+                        if p in rests[i] and availability_status(p, i) == status)
+        if names:
+            groups.append(f'<span class="rest-label">{label}</span>{names}')
+    rest_labels = "".join(groups)
     return f'''<section class="round" aria-label="{i+1}타임 {fmt(start)}부터 {fmt(end)}까지">
       <div class="round-time"><div class="round-num">ROUND {i+1:02d}</div><div class="clock">{fmt(start)}</div><div class="clock-end">— {fmt(end)}</div></div>
       {match_html(i,0,round_[0],round_[1])}
       {match_html(i,1,round_[2],round_[3])}
-      <div class="round-rest"><span class="rest-label">휴식</span>{names}</div>
+      <div class="round-rest">{rest_labels}</div>
     </section>'''
 
 rounds_html = "\n".join(round_html(i, r) for i, r in enumerate(ROUNDS))
@@ -213,7 +228,8 @@ def flow_row(p, index):
     for i, round_ in enumerate(ROUNDS):
         found = next((floor for floor in range(2) if p in round_[floor*2] + round_[floor*2+1]), None)
         if found is None:
-            cells.append('<td class="rest">휴식</td>')
+            label = availability_status(p, i) or "휴식"
+            cells.append(f'<td class="rest">{label}</td>')
         else:
             typ = match_type(round_[found*2],round_[found*2+1])
             cells.append(f'<td class="play-{found+1}">{found+1}층<small>{typ}</small></td>')
@@ -253,10 +269,14 @@ def personal_html(player):
     pid = player_ids[player]
     records_query = f"?player={pid}&period=all" if pid in FIXED_PLAYERS else ""
     records_label = "개인 기록 · 순위 보기" if player in FIXED_MEMBERS else ("고정 멤버 시절 기록 보기" if pid in FIXED_PLAYERS else "고정 멤버 순위 보기")
-    rounds = "\n".join(personal_round_html(player, i, r) for i, r in enumerate(ROUNDS))
+    personal_start = conditions["lateArrival"].get(pid, start_minutes)
+    personal_end = conditions["earlyDeparture"].get(pid, start_minutes+len(ROUNDS)*round_minutes)
+    available_rounds = [(i, r) for i, r in enumerate(ROUNDS) if availability_status(player, i) is None]
+    rounds = "\n".join(personal_round_html(player, i, r) for i, r in available_rounds)
+    rest_count = sum(player in rests[i] for i, _ in available_rounds)
     return f'''<section class="personal-schedule" data-personal="{escape(player)}" aria-label="{escape(player)} 개인 대진표" hidden>
-      <div class="personal-head"><div><h2>{escape(player)} 대진표</h2><p>{fmt(start_minutes)}–{fmt(start_minutes+len(ROUNDS)*round_minutes)} · 경기 {games[player]}회 / 휴식 {len(ROUNDS)-games[player]}회</p></div><button class="all-button" type="button" data-show-all>전체 대진표 보기</button></div>
-      <div class="personal-meta"><span>{role}</span><span>층 이동 {floor_changes[player]}회</span><span>{round_minutes}분 × {len(ROUNDS)}타임</span></div>
+      <div class="personal-head"><div><h2>{escape(player)} 대진표</h2><p>{fmt(personal_start)}–{fmt(personal_end)} · 경기 {games[player]}회 / 휴식 {rest_count}회</p></div><button class="all-button" type="button" data-show-all>전체 대진표 보기</button></div>
+      <div class="personal-meta"><span>{role}</span><span>층 이동 {floor_changes[player]}회</span><span>{round_minutes}분 × {len(available_rounds)}타임</span></div>
       <p class="player-summary" data-player-summary="{pid}" data-member-status="{member_status}">기록 연결 중…</p><a class="archive-back" href="../records/{records_query}">{records_label} →</a>
       {rounds}
     </section>'''
