@@ -83,6 +83,7 @@ for pair in conditions.get("fixedWomenDoublesPairs", []):
     assert names not in women_pairs, "여복 고정 페어가 중복 설정됐습니다"
     women_pairs.append(names)
 women_partners = Counter()
+mixed_games = Counter()
 for i, round_ in enumerate(ROUNDS):
     active = [p for team in round_ for p in team]
     assert len(active) == len(set(active)) == 8
@@ -96,6 +97,7 @@ for i, round_ in enumerate(ROUNDS):
         a, b = round_[floor*2:floor*2+2]
         typ = match_type(a,b)
         types[typ] += 1
+        if typ == "혼복": mixed_games.update(a+b)
         if typ == "여복":
             assert all(pair in (frozenset(a), frozenset(b)) for pair in women_pairs), "여복 고정 페어를 지켜야 합니다"
             for team in (a,b): women_partners[frozenset(team)] += 1
@@ -113,6 +115,8 @@ assert all(n == 1 or (pair in women_pairs and n == women_partners[pair])
            for pair, n in partners.items()), "고정 여복 페어 외에는 페어를 반복할 수 없습니다"
 assert not women_pairs or types["여복"] > 0, "여복 고정 페어를 설정한 주에는 여복 경기가 있어야 합니다"
 assert sum(types.values()) == 12
+for pid, count in conditions.get("mixedGamesPerPlayer", {}).items():
+    assert pid in settings["players"] and mixed_games[PLAYERS[pid]["name"]] == count, "선수별 혼복 경기 수 조건을 지켜야 합니다"
 for pair in conditions["requiredPartners"]:
     assert partners[frozenset(PLAYERS[pid]["name"] for pid in pair)] == 1
 for pair in conditions["requiredOpponents"]:

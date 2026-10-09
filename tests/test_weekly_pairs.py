@@ -54,7 +54,8 @@ class WeeklyPairsTest(unittest.TestCase):
                     self.assertIn({'p007', 'guest-2026-10-10-04'}, [set(a), set(b)])
         self.assertEqual(dict(types), {4: 6, 2: 4, 0: 2})
         self.assertTrue(all(appearances[p] == 4 for p in self.schedule['players']))
-        self.assertTrue(all(mixed[p] == (1 if genders[p]['gender'] == 'male' else 2)
+        expected_mixed = {'p001': 2, 'p005': 0}
+        self.assertTrue(all(mixed[p] == expected_mixed.get(p, 1 if genders[p]['gender'] == 'male' else 2)
                             for p in self.schedule['players']))
         html = (self.root / f'{DAY}/index.html').read_text()
         self.assertIn('여복 고정 페어 · 성주은 · 추진영', html)
@@ -79,6 +80,13 @@ class WeeklyPairsTest(unittest.TestCase):
         self.assertNotIn('10:30', own)
         self.assertIn('서명렬 10:00 종료', html)
         self.assertEqual(html.count('<td class="rest">종료</td>'), 2)
+
+    def test_requested_two_mixed_games_are_enforced(self):
+        self.assertEqual(self.schedule['conditions']['mixedGamesPerPlayer'], {'p001': 2})
+        self.schedule['conditions']['mixedGamesPerPlayer']['p001'] = 3
+        result = self.build()
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('선수별 혼복 경기 수 조건', result.stderr)
 
     def test_missing_departure_exception_rejected(self):
         self.schedule['conditions']['consecutiveExceptions'] = []
