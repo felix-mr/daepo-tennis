@@ -71,6 +71,15 @@ partners = Counter()
 rests = []
 types = Counter()
 opposed = Counter()
+women_pairs = []
+for pair in conditions.get("fixedWomenDoublesPairs", []):
+    assert len(pair) == len(set(pair)) == 2, "여복 고정 페어는 서로 다른 두 선수여야 합니다"
+    assert set(pair) <= set(settings["players"]), "여복 고정 페어 선수가 참석 명단에 없습니다"
+    names = frozenset(PLAYERS[pid]["name"] for pid in pair)
+    assert names <= set(WOMEN), "여복 고정 페어는 여자 선수로 구성해야 합니다"
+    assert names not in women_pairs, "여복 고정 페어가 중복 설정됐습니다"
+    women_pairs.append(names)
+women_partners = Counter()
 for i, round_ in enumerate(ROUNDS):
     active = [p for team in round_ for p in team]
     assert len(active) == len(set(active)) == 8
@@ -82,7 +91,11 @@ for i, round_ in enumerate(ROUNDS):
     rests.append(resting)
     for floor in range(2):
         a, b = round_[floor*2:floor*2+2]
-        types[match_type(a,b)] += 1
+        typ = match_type(a,b)
+        types[typ] += 1
+        if typ == "여복":
+            assert all(pair in (frozenset(a), frozenset(b)) for pair in women_pairs), "여복 고정 페어를 지켜야 합니다"
+            for team in (a,b): women_partners[frozenset(team)] += 1
         for p in a+b: games[p] += 1
         for team in (a,b): partners[frozenset(team)] += 1
         for p in a:
@@ -93,7 +106,9 @@ assert len(ROUNDS) == 6 and all(games[p] == conditions["gamesPerPlayer"] for p i
 for p in PEOPLE:
     pattern = "".join("G" if any(p in team for team in round_) else "-" for round_ in ROUNDS)
     assert p in exceptions or "GGGG" not in pattern, (p, pattern)
-assert all(n == 1 for n in partners.values())
+assert all(n == 1 or (pair in women_pairs and n == women_partners[pair])
+           for pair, n in partners.items()), "고정 여복 페어 외에는 페어를 반복할 수 없습니다"
+assert not women_pairs or types["여복"] > 0, "여복 고정 페어를 설정한 주에는 여복 경기가 있어야 합니다"
 assert sum(types.values()) == 12
 for pair in conditions["requiredPartners"]:
     assert partners[frozenset(PLAYERS[pid]["name"] for pid in pair)] == 1
@@ -118,6 +133,10 @@ for p in PEOPLE:
     floors = [floor for round_ in ROUNDS for floor in range(2) if p in round_[floor*2] + round_[floor*2+1]]
     floor_changes[p] = sum(a != b for a,b in zip(floors,floors[1:]))
 assert max(floor_changes.values()) <= conditions["maxFloorChanges"]
+
+for pair in conditions.get("fixedWomenDoublesPairs", []):
+    names = " · ".join(PLAYERS[pid]["name"] for pid in pair)
+    time_notes_html += f'<span class="hero-note">여복 고정 페어 · {escape(names)}</span>'
 
 CSS = (ROOT / theme["stylesheet"]).read_text(encoding="utf-8")
 
@@ -271,7 +290,7 @@ html = f'''<!doctype html>
     <h1>{escape(theme["title"])}<br><span class="accent">{escape(theme["accent"])}</span></h1>
     <p class="subtitle">{date_label} &nbsp;·&nbsp; {fmt(start_minutes)} — {fmt(start_minutes+len(ROUNDS)*round_minutes)} &nbsp;·&nbsp; 1층 / 2층 코트</p>
     <div class="hero-bottom"><div class="hero-notes">{time_notes_html}</div><div class="metrics"><div class="metric"><strong>12</strong><span>참가 인원</span></div><div class="metric"><strong>6</strong><span>타임</span></div><div class="metric"><strong>12</strong><span>경기</span></div></div></div>
-    {hero_art}
+{hero_art}
   </header>
   <main id="full-schedule">
     <div class="section-head"><div><h2>경기 일정</h2><p>타임별 코트와 휴식 명단</p></div><div class="legend"><span class="tag tag-men">남복 {types["남복"]}</span><span class="tag tag-mixed">혼복 {types["혼복"]}</span><span class="tag tag-women">여복 {types["여복"]}</span></div></div>
@@ -404,4 +423,4 @@ setup_dir.mkdir(exist_ok=True)
 setup_dir.joinpath("index.html").write_text((ROOT / "src/setup.html").read_text(encoding="utf-8").replace("__CSS__", hub_css).replace("__SCRIPT__", setup_script).replace("__COUNT__", str(len(FIXED_PLAYERS))), encoding="utf-8")
 print("dated schedule:", dated_target.resolve())
 print("records:", records_dir.resolve())
-print("validated:", dict(types), "12 players × 4 matches; no repeat partners;", sum(floor_changes.values()), "floor changes total")
+print("validated:", dict(types), "12 players × 4 matches; partner repeats limited to configured women doubles pairs;", sum(floor_changes.values()), "floor changes total")

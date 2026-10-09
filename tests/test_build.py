@@ -1,5 +1,6 @@
 """Verify guest-only games remain scheduled without score inputs or write rules."""
 import json
+import re
 import shutil
 import subprocess
 import sys
@@ -40,7 +41,10 @@ class GuestOnlyMatchTest(unittest.TestCase):
             self.assertIn('data-score-form data-match="r2-f1"', html)
             for player in guests:
                 self.assertIn(schedule["guests"][player]["name"], html)
-            self.assertNotIn('"r1-f1":', (root / "firebase/firestore.rules").read_text())
+            rules = (root / "firebase/firestore.rules").read_text()
+            block = re.search(r"match /schedules/2026-10-03/matchResults/\{matchId\} \{.*?let matches = ([^\n]+);", rules, re.S)
+            self.assertIsNotNone(block)
+            self.assertNotIn("r1-f1", json.loads(block.group(1)))
 
     def test_new_membership_cycle_keeps_profiles_and_old_snapshots(self):
         with tempfile.TemporaryDirectory() as directory:

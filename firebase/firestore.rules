@@ -62,5 +62,23 @@ service cloud.firestore {
             && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['scoreA', 'scoreB', 'outcome', 'updatedAt', 'fixedPlayerIds'])));
       allow delete: if false;
     }
+    match /schedules/2026-10-10/matchResults/{matchId} {
+      function validMatch() {
+        let matches = {"r1-f1": {"round": 1, "floor": 1, "date": "2026-10-10", "fixedPlayerIds": ["p001", "p009"], "teamA": ["p001", "p009"], "teamB": ["guest-2026-10-10-02", "guest-2026-10-10-04"], "teamANames": ["서명렬", "정가영"], "teamBNames": ["정상현", "추진영"]}, "r1-f2": {"round": 1, "floor": 2, "date": "2026-10-10", "fixedPlayerIds": ["p003", "p005", "p011"], "teamA": ["p003", "guest-2026-10-10-03"], "teamB": ["p005", "p011"], "teamANames": ["나창은", "김진수"], "teamBNames": ["이재원", "위형종"]}, "r2-f1": {"round": 2, "floor": 1, "date": "2026-10-10", "fixedPlayerIds": ["p007", "p008", "p009"], "teamA": ["p007", "guest-2026-10-10-04"], "teamB": ["p008", "p009"], "teamANames": ["성주은", "추진영"], "teamBNames": ["박정민", "정가영"]}, "r2-f2": {"round": 2, "floor": 2, "date": "2026-10-10", "fixedPlayerIds": ["p004", "p011", "p005"], "teamA": ["p004", "p011"], "teamB": ["p005", "guest-2026-10-10-01"], "teamANames": ["박세준", "위형종"], "teamBNames": ["이재원", "김규현"]}, "r3-f1": {"round": 3, "floor": 1, "date": "2026-10-10", "fixedPlayerIds": ["p001", "p003"], "teamA": ["p001", "guest-2026-10-10-03"], "teamB": ["p003", "guest-2026-10-10-02"], "teamANames": ["서명렬", "김진수"], "teamBNames": ["나창은", "정상현"]}, "r3-f2": {"round": 3, "floor": 2, "date": "2026-10-10", "fixedPlayerIds": ["p004", "p008"], "teamA": ["guest-2026-10-10-01", "guest-2026-10-10-04"], "teamB": ["p004", "p008"], "teamANames": ["김규현", "추진영"], "teamBNames": ["박세준", "박정민"]}, "r4-f1": {"round": 4, "floor": 1, "date": "2026-10-10", "fixedPlayerIds": ["p007", "p011", "p009"], "teamA": ["guest-2026-10-10-03", "p007"], "teamB": ["p011", "p009"], "teamANames": ["김진수", "성주은"], "teamBNames": ["위형종", "정가영"]}, "r4-f2": {"round": 4, "floor": 2, "date": "2026-10-10", "fixedPlayerIds": ["p003", "p004", "p005"], "teamA": ["p003", "guest-2026-10-10-01"], "teamB": ["p004", "p005"], "teamANames": ["나창은", "김규현"], "teamBNames": ["박세준", "이재원"]}, "r5-f1": {"round": 5, "floor": 1, "date": "2026-10-10", "fixedPlayerIds": ["p001", "p011"], "teamA": ["p001", "p011"], "teamB": ["guest-2026-10-10-02", "guest-2026-10-10-03"], "teamANames": ["서명렬", "위형종"], "teamBNames": ["정상현", "김진수"]}, "r5-f2": {"round": 5, "floor": 2, "date": "2026-10-10", "fixedPlayerIds": ["p007", "p008", "p009"], "teamA": ["p007", "guest-2026-10-10-04"], "teamB": ["p008", "p009"], "teamANames": ["성주은", "추진영"], "teamBNames": ["박정민", "정가영"]}, "r6-f1": {"round": 6, "floor": 1, "date": "2026-10-10", "fixedPlayerIds": ["p001", "p004"], "teamA": ["p001", "p004"], "teamB": ["guest-2026-10-10-01", "guest-2026-10-10-02"], "teamANames": ["서명렬", "박세준"], "teamBNames": ["김규현", "정상현"]}, "r6-f2": {"round": 6, "floor": 2, "date": "2026-10-10", "fixedPlayerIds": ["p005", "p008", "p003", "p007"], "teamA": ["p005", "p008"], "teamB": ["p003", "p007"], "teamANames": ["이재원", "박정민"], "teamBNames": ["나창은", "성주은"]}};
+        let data = request.resource.data;
+        return matchId in matches && data.date == '2026-10-10'
+          && data.round == matches[matchId].round && data.floor == matches[matchId].floor
+          && data.teamA == matches[matchId].teamA && data.teamB == matches[matchId].teamB
+          && data.teamANames == matches[matchId].teamANames
+          && data.teamBNames == matches[matchId].teamBNames
+          && data.fixedPlayerIds == matches[matchId].fixedPlayerIds;
+      }
+      allow create: if validScore() && validMatch();
+      allow update: if validScore() && validMatch()
+        && (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['scoreA', 'scoreB', 'outcome', 'updatedAt'])
+          || (!resource.data.keys().hasAny(['fixedPlayerIds'])
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['scoreA', 'scoreB', 'outcome', 'updatedAt', 'fixedPlayerIds'])));
+      allow delete: if false;
+    }
   }
 }
