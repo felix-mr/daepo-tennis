@@ -1,0 +1,9 @@
+{
+  "name": "젠인 토우지",
+  "stylesheet": "themes/toji.css",
+  "eyebrow": "TOJI ZENIN // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "토요일 대진표",
+  "heroImage": "src/toji.webp",
+  "heroAlt": "테니스 라켓을 든 젠인 토우지"
+}

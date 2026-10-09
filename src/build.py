@@ -32,7 +32,10 @@ membership_period = next((period for period, membership in MEMBERSHIPS.items()
 assert membership_period, "경기 날짜에 적용되는 회원 회차를 먼저 등록해야 합니다"
 assert schedule_day.weekday() == 5, "대포클럽 일정은 토요일이어야 합니다"
 date_label = f"{schedule_day.year}년 {schedule_day.month}월 {schedule_day.day}일 토요일"
-theme = json.loads((ROOT / f"themes/{settings['theme']}.json").read_text(encoding="utf-8"))
+theme_plans_path = ROOT / "data/theme-plans.json"
+theme_plans = json.loads(theme_plans_path.read_text(encoding="utf-8")) if theme_plans_path.exists() else {}
+theme_id = settings.get("theme") or theme_plans.get(SCHEDULE_DATE, "club")
+theme = json.loads((ROOT / f"themes/{theme_id}.json").read_text(encoding="utf-8"))
 player_ids = {PLAYERS[pid]["name"]: pid for pid in settings["players"]}
 assert len(player_ids) == len(settings["players"]), "동명이인은 표시 이름을 구분해야 합니다"
 fixed_ids = set(MEMBERSHIPS[membership_period]["memberIds"])
@@ -134,7 +137,9 @@ for p in PEOPLE:
     floor_changes[p] = sum(a != b for a,b in zip(floors,floors[1:]))
 assert max(floor_changes.values()) <= conditions["maxFloorChanges"]
 
-for pair in conditions.get("fixedWomenDoublesPairs", []):
+pair_notes = settings.get("display", {}).get("womenDoublesPairNotes", conditions.get("fixedWomenDoublesPairs", []))
+assert all(pair in conditions.get("fixedWomenDoublesPairs", []) for pair in pair_notes), "표시할 여복 페어는 대진 조건에 등록된 페어여야 합니다"
+for pair in pair_notes:
     names = " · ".join(PLAYERS[pid]["name"] for pid in pair)
     time_notes_html += f'<span class="hero-note">여복 고정 페어 · {escape(names)}</span>'
 

@@ -1,6 +1,6 @@
 {
   "date": "2026-10-10",
-  "theme": "club",
+  "theme": "toji",
   "players": [
     "p001",
     "p003",
@@ -174,5 +174,13 @@
       "name": "추진영",
       "gender": "female"
     }
+  },
+  "display": {
+    "womenDoublesPairNotes": [
+      [
+        "p007",
+        "guest-2026-10-10-04"
+      ]
+    ]
   }
 }

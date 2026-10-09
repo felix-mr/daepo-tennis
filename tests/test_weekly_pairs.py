@@ -59,6 +59,28 @@ class WeeklyPairsTest(unittest.TestCase):
         html = (self.root / f'{DAY}/index.html').read_text()
         self.assertIn('여복 고정 페어 · 성주은 · 추진영', html)
         self.assertNotIn('고죠', html)
+        self.assertNotIn('여복 고정 페어 · 박정민 · 정가영', html)
+        self.assertIn('TOJI ZENIN', html)
+        self.assertIn('테니스 라켓을 든 젠인 토우지', html)
+
+    def test_next_week_uses_reserved_geto_theme(self):
+        following = json.loads(json.dumps(self.schedule).replace(DAY, '2026-10-17'))
+        following.pop('theme')
+        path = self.root / 'data/schedules/2026-10-17.json'
+        path.write_text(json.dumps(following, ensure_ascii=False))
+        result = subprocess.run([sys.executable, str(self.root / 'src/build.py'), '--date', '2026-10-17'],
+                                capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        html = self.root.joinpath('2026-10-17/index.html').read_text()
+        self.assertIn('GETO SUGURU', html)
+        self.assertIn('테니스 라켓을 든 게토 스구루', html)
+        self.assertNotIn('TOJI ZENIN', html)
+
+    def test_display_note_cannot_claim_unconfigured_pair(self):
+        self.schedule['display']['womenDoublesPairNotes'] = [['p007', 'p008']]
+        result = self.build()
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('대진 조건에 등록된 페어', result.stderr)
 
     def test_wrong_partner_in_one_womens_match_rejected(self):
         women = {'p007', 'p008', 'p009', 'guest-2026-10-10-04'}
