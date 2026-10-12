@@ -1,0 +1,511 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>대포클럽 대진표 만들기</title><style>:root{--ink:#19352a;--muted:#65796f;--green:#14644a;--paper:#f3f6f1;--line:#d9e5db;--white:#fff}*{box-sizing:border-box}[hidden]{display:none!important}body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;line-height:1.5}button,input,select{font:inherit}button,a,input,select{touch-action:manipulation}button{cursor:pointer}button:disabled{cursor:default;opacity:.55}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #76ac87;outline-offset:3px}.builder-shell{max-width:1050px;margin:auto;padding:28px 28px 70px}nav{display:flex;gap:20px;justify-content:space-between;margin-bottom:18px}a{color:var(--green);font-weight:750;text-decoration:none}.builder-hero{background:linear-gradient(120deg,#103f31,#1b6b4e);padding:30px;border-radius:23px;color:white}.eyebrow{font-size:11px;letter-spacing:.15em;font-weight:850;color:#d7ea9f}.builder-hero h1{margin:8px 0;font-size:34px;letter-spacing:-.045em}.builder-hero p:last-child{margin:0;color:#e2ede1}.builder-notice{border:1px solid var(--line);padding:12px 16px;border-radius:13px;background:#fff;margin:16px 0;color:var(--muted);font-size:13px}.builder-panel{border:1px solid var(--line);border-radius:20px;background:var(--white);padding:26px;margin-top:20px}.panel-heading{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:14px}.panel-heading h2,.panel-heading h3{margin:0}.panel-heading h2{font-size:23px}.panel-heading h3{font-size:17px}.panel-heading span:not(.step-label){font-size:13px;color:var(--muted)}.step-label{color:var(--green);font-size:12px;font-weight:800}.meeting-fields{display:grid;grid-template-columns:1fr 1fr;gap:14px}label{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:750}input,select{min-width:0;width:100%;border:1px solid #b9d0bd;border-radius:11px;background:#fafcf9;padding:11px 13px;color:var(--ink)}select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='m3 6 5 5 5-5' fill='none' stroke='%23265d43' stroke-width='1.5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:38px}.hint{font-size:12px;color:var(--muted);line-height:1.65}.member-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}.member-card{position:relative;display:flex;flex-direction:row;align-items:center;gap:10px;padding:12px;border:1px solid var(--line);border-radius:12px;background:#fafcf9;cursor:pointer}.member-card:has(input:checked){border-color:#48825e;background:#e7f3e7}.member-card input,.option-check input{width:18px;height:18px;flex-shrink:0;accent-color:var(--green)}.member-card small{display:block;color:var(--muted);font-size:11px}.member-card strong{font-size:15px;overflow-wrap:anywhere}.guest-section{border-top:1px solid var(--line);margin-top:23px;padding-top:20px}.guest-form{display:grid;grid-template-columns:2fr 1fr auto auto;gap:10px;align-items:end;margin:12px 0}.guest-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.guest-entry{display:flex;align-items:center;gap:7px}.guest-entry .member-card{flex:1;min-width:0}.remove-button{background:transparent;border:0;color:var(--muted);font-size:22px;width:32px;height:40px;flex-shrink:0}.selection-summary{margin:20px 0;border-radius:12px;background:#edf5e9;padding:12px 15px;font-weight:800;color:#345f42}.options{border-top:1px solid var(--line);padding-top:16px}summary{cursor:pointer;font-size:14px;font-weight:800}.player-options{display:grid;gap:9px}.player-option{display:grid;grid-template-columns:1.2fr repeat(3,1fr);gap:10px;padding:12px 0;border-bottom:1px solid #edf1eb;align-items:center}.player-option strong{font-size:14px}.player-option label{font-size:11px}.player-option select{padding:9px 32px 9px 9px;background-position:right 9px center;font-size:13px}.pair-editor{padding:15px 0}.pair-editor h3{font-size:15px;margin:0}.pair-fields{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:end}.pair-chip{display:flex;gap:10px;align-items:center;justify-content:space-between;background:#edf5e9;border-radius:9px;padding:6px 12px;margin-top:7px;font-size:13px}.option-check{display:flex;flex-direction:row;align-items:center;gap:10px;margin:12px 0;font-size:13px}.primary,.secondary,.primary-link{display:inline-block;border-radius:10px;font-size:14px;font-weight:800;padding:11px 15px;border:1px solid #14644a}.primary,.primary-link{background:#14644a;color:#fff}.secondary{background:#f4f8f1;color:#20563b;border-color:#b9d0bd}.text-button{border:0;background:transparent;color:var(--green);font-size:13px;font-weight:800;padding:7px}.editor-actions,.preview-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:20px}.form-error{padding:12px 14px;border-radius:10px;background:#fff1e9;color:#893e21;font-size:13px}.preview-round{margin:17px 0;border:1px solid var(--line);border-radius:14px;overflow:hidden}.preview-time{padding:9px 14px;background:#eaf2e7;font-size:14px;font-weight:850}.preview-matches{display:grid;grid-template-columns:1fr 1fr;gap:0}.preview-match{padding:13px 16px;min-width:0}.preview-match+ .preview-match{border-left:1px solid var(--line)}.preview-match strong{display:block;font-size:15px;overflow-wrap:anywhere}.preview-match small{font-size:11px;color:var(--muted);font-weight:750}.preview-vs{font-size:10px;color:var(--muted);padding:5px 0}.preview-rests{padding:8px 14px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}.allocation-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:14px 0}.allocation-card{padding:12px;border:1px solid var(--line);border-radius:12px}.allocation-card strong{display:block;font-size:14px}.allocation-card p{font-size:12px;color:var(--muted);margin:5px 0}.primary-link{margin-top:12px}#save-status{font-size:13px;color:var(--green)}@media(max-width:700px){.builder-shell{padding:14px 12px 50px}.builder-hero{padding:23px}.builder-hero h1{font-size:29px}.builder-panel{padding:18px}.panel-heading{align-items:flex-start}.member-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.guest-list{grid-template-columns:1fr}.guest-form{grid-template-columns:1fr 1fr}.guest-form label:first-child{grid-column:1/3}.player-option{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.player-option strong{grid-column:1/4}.pair-fields{grid-template-columns:1fr 1fr}.pair-fields button{grid-column:1/3}.allocation-grid{grid-template-columns:1fr 1fr}.preview-match{padding:11px}.preview-match strong{font-size:13px}.preview-actions{display:grid;grid-template-columns:1fr 1fr}.preview-actions .primary{grid-column:1/3}nav{font-size:12px}.step-label{white-space:nowrap}.meeting-fields{gap:10px}}@media(max-width:360px){.allocation-grid{grid-template-columns:1fr}.member-card{padding:9px;font-size:13px}}
+</style></head><body><main class="builder-shell">
+<nav><a href="../">← 날짜별 대진표</a><a href="../records/">기록 · 순위 →</a></nav>
+<header class="builder-hero"><p class="eyebrow">DAEPO TENNIS CLUB</p><h1>대진표 만들기</h1><p>참석자를 고르고, 대진을 확인한 뒤 확정하세요.</p></header>
+<div id="connection" class="builder-notice" role="status">공유 대진 연결 중…</div>
+<div id="existing" class="builder-notice" hidden></div>
+<section id="editor" class="builder-panel" aria-labelledby="meeting-title">
+<div class="panel-heading"><h2 id="meeting-title">이번 모임</h2><span class="step-label">1 · 참석자 선택</span></div>
+<div class="meeting-fields"><label>날짜<input id="date" type="date" required></label><label>컨셉<select id="theme"></select></label></div>
+<p class="hint">08:00–11:00 · 30분 × 6타임 · 1층 / 2층 복식</p><p id="membership-note" class="hint"></p>
+<div class="panel-heading"><h3>고정 멤버 <span id="member-count"></span></h3><button id="toggle-members" type="button" class="text-button">전체 해제</button></div>
+<div id="members" class="member-grid"></div>
+<div class="guest-section"><div class="panel-heading"><h3>게스트 <span id="guest-count"></span></h3><button id="open-guest" type="button" class="secondary" aria-expanded="false" aria-controls="guest-form">게스트 +</button></div>
+<form id="guest-form" class="guest-form" hidden><label>이름<input id="guest-name" maxlength="24" autocomplete="off" required placeholder="게스트 이름"></label><label>성별<select id="guest-gender"><option value="male">남자</option><option value="female">여자</option></select></label><button class="primary" type="submit">추가</button><button id="cancel-guest" type="button" class="text-button">취소</button></form><div id="guests" class="guest-list"></div><p class="hint">게스트도 경기·휴식 배정에 포함됩니다. 고정 멤버 순위에는 포함되지 않습니다.</p></div>
+<div id="selection-summary" class="selection-summary" aria-live="polite"></div>
+<details class="options"><summary>경기 수 · 참석 시간 · 고정 페어</summary><p class="hint">기본 4경기. 인원이 많으면 경기 수를 조정합니다. 지각·조퇴 조건이 없으면 08:00–11:00으로 두세요.</p><div id="player-options" class="player-options"></div>
+<div class="pair-editor"><h3>고정 페어</h3><p class="hint">남복·여복·혼복 모두 등록할 수 있습니다. 선택한 횟수만큼 함께 뛰고 나머지는 다른 파트너와 출전합니다.</p><div class="pair-fields"><label>첫 선수<select id="pair-a"></select></label><label>두 번째 선수<select id="pair-b"></select></label><label>함께 경기<select id="pair-games"><option value="1">1경기</option><option value="2">2경기</option><option value="3">3경기</option><option value="all">전체 경기</option></select></label><button id="add-pair" type="button" class="secondary">페어 추가</button></div><div id="pairs"></div></div>
+<label class="option-check"><input id="avoid-rests" type="checkbox" checked>연속 휴식 피하기</label><label class="option-check"><input id="allow-repeats" type="checkbox">같은 페어 반복 허용</label><p class="hint">등록한 고정 페어는 지정한 횟수만큼 반복할 수 있습니다. 참가 인원이 적어 조건을 맞추기 어렵다면 경기 수를 줄이거나 반복을 허용해 주세요.</p></details>
+<p id="error" class="form-error" role="alert" hidden></p><div class="editor-actions"><button id="generate" type="button" class="primary">대진 만들기</button><button id="clear-draft" type="button" class="text-button">초안 초기화</button></div><p class="hint">확정 전 초안은 이 브라우저에 보관됩니다.</p></section>
+<section id="preview" class="builder-panel" aria-labelledby="preview-title" hidden><div class="panel-heading"><div><span class="step-label">2 · 대진 확인</span><h2 id="preview-title">대진 미리보기</h2></div><button id="edit" type="button" class="secondary">참석·조건 수정</button></div><p id="preview-summary"></p><p id="preview-warning" class="hint"></p><p id="preview-locks" class="hint"></p><div id="preview-rounds"></div><details open><summary>개인별 경기 · 휴식</summary><div id="preview-players" class="allocation-grid"></div></details><div class="preview-actions"><button id="regenerate" type="button" class="secondary">다시 만들기</button><button id="download" type="button" class="secondary">초안 파일 저장</button><button id="confirm" type="button" class="primary" disabled>대진 확정·공유</button></div><p class="hint">확정하면 팀 구성은 유지됩니다. 점수는 대진표에서 입력합니다.</p><p id="save-status" role="status" aria-live="polite"></p><a id="saved-link" class="primary-link" hidden>확정된 대진표 보기 →</a></section>
+</main><script type="module">const builderModel = (() => {
+  const pad = n => String(n).padStart(2, '0');
+  const minute = value => Number(value.slice(0, 2)) * 60 + Number(value.slice(3));
+  const time = n => pad(Math.floor(n / 60)) + ':' + pad(n % 60);
+  const today = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
+  function nextSaturday(day = today()) {
+    const date = new Date(day + 'T00:00:00Z');
+    date.setUTCDate(date.getUTCDate() + (6 - date.getUTCDay() + 7) % 7);
+    return date.toISOString().slice(0, 10);
+  }
+  function validDate(day) {
+    return /^\d{4}-\d{2}-\d{2}$/.test(day) && !Number.isNaN(Date.parse(day)) && new Date(day + 'T00:00:00Z').toISOString().slice(0, 10) === day;
+  }
+  const periodForDate = (day, periods) => Object.entries(periods).find(([, p]) => p.startsOn <= day && day < p.endsBefore)?.[0] || null;
+  const name = value => String(value).normalize('NFC').trim().replace(/\s+/g, ' ');
+  function validateName(value) {
+    const normalized = name(value);
+    if (!normalized || normalized.length > 24 || /[\u0000-\u001f\u007f]/.test(normalized)) throw Error('이름은 1~24자로 입력해 주세요.');
+    return normalized;
+  }
+  function guestId(day, guests) {
+    for (let i = 1; i <= 99; i++) {
+      const id = 'guest-' + day + '-' + pad(i);
+      if (!Object.hasOwn(guests, id)) return id;
+    }
+    throw Error('게스트를 더 추가할 수 없습니다.');
+  }
+  function allocate(ids, available, rounds = 6) {
+    const capacity = Math.min(2, Math.floor(ids.length / 4)) * 4 * rounds;
+    const target = Math.min(ids.length === 4 ? 3 : 4, Math.floor(capacity / ids.length));
+    if (target < 2) throw Error('모두 2경기 이상 치를 수 있도록 참석 인원을 줄여 주세요.');
+    if (ids.some(id => (available[id] ?? rounds) < 2)) throw Error('모두 두 타임 이상 참석할 수 있도록 시간을 맞춰 주세요.');
+    const quotas = Object.fromEntries(ids.map(id => [id, Math.min(target, available[id] ?? rounds)]));
+    let slots = Object.values(quotas).reduce((a, b) => a + b, 0);
+    for (const id of [...ids].reverse()) {
+      if (slots % 4 === 0) break;
+      if (quotas[id] > 2) { quotas[id]--; slots--; }
+    }
+    if (slots % 4) throw Error('전체 출전 횟수가 4의 배수가 되도록 개인 경기 수를 맞춰 주세요.');
+    return quotas;
+  }
+  const key = pair => [...pair].sort().join('|');
+  function type(a, b, profiles) {
+    const kinds = [a, b].map(team => team.filter(id => profiles[id].gender === 'female').length);
+    if (kinds[0] === 0 && kinds[1] === 0) return '남복';
+    if (kinds[0] === 2 && kinds[1] === 2) return '여복';
+    if (kinds[0] === 1 && kinds[1] === 1) return '혼복';
+    return null;
+  }
+  const lockedTargets = input => new Map(input.lockedPairs.map(entry => [key(entry.players), entry.games === 'all' ? input.quotas[entry.players[0]] : entry.games]));
+  function repeatLimits(input) {
+    const limits = lockedTargets(input);
+    for (const entry of input.lockedPairs) {
+      const pair = entry.players, genders = pair.map(id => input.profiles[id].gender);
+      let pool = input.players;
+      if (genders[0] === genders[1]) pool = pool.filter(id => input.profiles[id].gender === genders[0]);
+      if (pool.length === 4) {
+        const other = pool.filter(id => !pair.includes(id));
+        const k = key(other);
+        if (!limits.has(k)) limits.set(k, limits.get(key(pair)));
+      }
+    }
+    return limits;
+  }
+  function effectiveWindow(input, id) {
+    const window = { ...input.availability[id] }, targets = lockedTargets(input);
+    for (const entry of input.lockedPairs) {
+      if (entry.players.includes(id) && targets.get(key(entry.players)) === input.quotas[id]) {
+        const peer = entry.players.find(p => p !== id), other = input.availability[peer];
+        window.from = Math.max(window.from, other.from); window.to = Math.min(window.to, other.to);
+      }
+    }
+    return window;
+  }
+  function validateInput(input) {
+    if (!validDate(input.date) || new Date(input.date + 'T00:00:00Z').getUTCDay() !== 6) throw Error('토요일 모임 날짜를 선택해 주세요.');
+    if (!input.membershipPeriod) throw Error('해당 날짜의 회원 회차 명단을 먼저 등록해 주세요.');
+    const ids = input.players;
+    if (!Array.isArray(ids) || ids.length < 4 || ids.length > 16 || new Set(ids).size !== ids.length) throw Error('참석자 4~16명을 선택해 주세요.');
+    const names = new Set();
+    for (const id of ids) {
+      const profile = input.profiles[id];
+      if (!profile || !['male', 'female'].includes(profile.gender)) throw Error('모든 선수의 성별을 선택해 주세요.');
+      const normalized = validateName(profile.name);
+      if (normalized !== profile.name || names.has(normalized)) throw Error('같은 이름의 참석자가 있습니다. 이름을 구분해 주세요.');
+      names.add(normalized);
+      const window = input.availability[id];
+      if (!window || !Number.isInteger(window.from) || !Number.isInteger(window.to) || window.from < 0 || window.to > 6 || window.from >= window.to) throw Error(profile.name + ' 참석 시간을 확인해 주세요.');
+      const quota = input.quotas[id];
+      if (!Number.isInteger(quota) || quota < 2 || quota > 4 || quota > window.to - window.from) throw Error(profile.name + ' 경기 수가 참석 가능 시간을 넘습니다.');
+    }
+    const slots = ids.reduce((sum, id) => sum + input.quotas[id], 0);
+    if (slots % 4 || slots > Math.min(2, Math.floor(ids.length / 4)) * 24) throw Error('전체 출전 횟수를 4의 배수, 최대 48회로 맞춰 주세요.');
+    const womenSlots = ids.filter(id => input.profiles[id].gender === 'female').reduce((sum, id) => sum + input.quotas[id], 0);
+    if (womenSlots % 2) throw Error('여자 선수의 전체 출전 횟수는 짝수여야 남복·여복·혼복으로 배정할 수 있습니다. 개인 경기 수를 조정해 주세요.');
+    if (!Array.isArray(input.lockedPairs) || input.lockedPairs.length > 8) throw Error('고정 페어는 최대 8조까지 등록할 수 있습니다.');
+    const seen = new Set(), lockedCounts = {};
+    for (const entry of input.lockedPairs) {
+      const pair = entry.players;
+      if (!Array.isArray(pair) || pair.length !== 2 || pair[0] === pair[1] || pair.some(id => !ids.includes(id)) || seen.has(key(pair))) throw Error('서로 다른 참석자 두 명을 선택해 주세요. 같은 페어는 한 번만 등록합니다.');
+      seen.add(key(pair));
+      if (entry.games === 'all' && input.quotas[pair[0]] !== input.quotas[pair[1]]) throw Error('전체 경기 고정 페어는 두 선수의 경기 수를 같게 맞춰 주세요.');
+      const count = entry.games === 'all' ? input.quotas[pair[0]] : entry.games;
+      if (!Number.isInteger(count) || count < 1 || count > Math.min(...pair.map(id => input.quotas[id])) || (entry.games !== 'all' && ![1, 2, 3].includes(entry.games))) throw Error('고정 페어 경기 수는 개인 경기 수 안에서 1·2·3경기 또는 전체를 선택해 주세요.');
+      const overlap = Math.min(...pair.map(id => input.availability[id].to)) - Math.max(...pair.map(id => input.availability[id].from));
+      if (overlap < count) throw Error('고정 페어 두 선수가 함께 참석하는 시간이 부족합니다.');
+      const gender = input.profiles[pair[0]].gender, same = gender === input.profiles[pair[1]].gender;
+      const pool = ids.filter(id => input.profiles[id].gender === gender);
+      const other = ids.filter(id => input.profiles[id].gender !== gender);
+      if ((same && pool.length < 4) || (!same && (pool.length < 2 || other.length < 2))) throw Error('고정 페어를 상대할 같은 종목의 선수가 부족합니다. 참석자 성별 구성을 확인해 주세요.');
+      if (same && pool.length === 4 && pool.every(id => input.quotas[id] === count)) {
+        const capacity = count * (other.length >= 4 ? 4 : 0) + (6 - count) * Math.min(2, Math.floor(other.length / 4)) * 4;
+        if (other.reduce((sum, id) => sum + input.quotas[id], 0) > capacity) throw Error('현재 인원과 경기 수로 이 고정 페어를 배정하면 다른 선수의 경기가 부족해집니다. 고정 횟수나 개인 경기 수를 조정해 주세요.');
+      }
+      pair.forEach(id => lockedCounts[id] = (lockedCounts[id] || 0) + count);
+    }
+    if (ids.some(id => (lockedCounts[id] || 0) > input.quotas[id])) throw Error('한 선수에게 등록한 고정 페어 경기 수가 개인 경기 수를 넘습니다.');
+    return input;
+  }
+  function documentOf(input, rounds) {
+    const matches = {};
+    rounds.forEach((teams, r) => {
+      for (let floor = 0; floor < 2; floor++) {
+        const a = [...teams[floor * 2]].sort(), b = [...teams[floor * 2 + 1]].sort();
+        if (!a.length) continue;
+        matches['r' + (r + 1) + '-f' + (floor + 1)] = { date: input.date, round: r + 1, floor: floor + 1, teamA: a, teamB: b,
+          teamANames: a.map(id => input.profiles[id].name), teamBNames: b.map(id => input.profiles[id].name),
+          fixedPlayerIds: [...a, ...b].filter(id => input.fixedPlayerIds.includes(id)) };
+      }
+    });
+    return { schemaVersion: 1, date: input.date, membershipPeriod: input.membershipPeriod, theme: input.theme,
+      startMinutes: 480, roundMinutes: 30, roundCount: 6, players: [...input.players], fixedPlayerIds: [...input.fixedPlayerIds],
+      profiles: structuredClone(input.profiles), playerNames: input.players.map(id=>input.profiles[id].name), quotas: { ...input.quotas }, availability: structuredClone(input.availability),
+      floorPlan: Object.fromEntries(input.players.map(id => [id, rounds.map((row,i) => Object.values(matches).find(m=>m.round===i+1 && [...m.teamA,...m.teamB].includes(id))?.floor || 0)])),
+      genderPlayers: Object.fromEntries(['male','female'].map(gender=>[gender,input.players.filter(id=>input.profiles[id].gender===gender)])),
+      lockedPairTargets: Object.fromEntries(lockedTargets(input)), lockedPairKeys: [...lockedTargets(input).keys()],
+      teamKeys: Array.from({length:12},(_,i)=>matches['r'+(Math.floor(i/2)+1)+'-f'+(i%2+1)]).flatMap(m=>m?[key(m.teamA),key(m.teamB)]:['','']),
+      roundParticipants: Object.fromEntries(rounds.map((row, i) => ['r' + (i + 1), Object.values(matches).filter(m => m.round === i + 1).flatMap(m => [...m.teamA, ...m.teamB])])),
+      lockedPairs: input.lockedPairs.map(entry => ({players:[...entry.players].sort(),games:entry.games})), allowPartnerRepeats: !!input.allowPartnerRepeats,
+      avoidConsecutiveRests: !!input.avoidConsecutiveRests, maxFloorChanges: 2, matches };
+  }
+  function validateDocument(doc, options = {}) {
+    validateInput(doc);
+    if (JSON.stringify(doc.playerNames)!==JSON.stringify(doc.players.map(id=>doc.profiles[id].name))) throw Error('참석자 이름 정보가 다릅니다.');
+    const games = Object.fromEntries(doc.players.map(id => [id, 0]));
+    const byRound = Array.from({ length: 6 }, () => []), pairs = new Map();
+    const limits = repeatLimits(doc), targets = lockedTargets(doc);
+    for (const [matchId, match] of Object.entries(doc.matches).sort(([,a],[,b])=>a.round-b.round || a.floor-b.floor)) {
+      if (!/^r[1-6]-f[12]$/.test(matchId) || match.date !== doc.date || matchId !== 'r' + match.round + '-f' + match.floor
+          || match.teamA.length !== 2 || match.teamB.length !== 2) throw Error('경기 정보를 확인해 주세요.');
+      const ids = [...match.teamA, ...match.teamB];
+      if (new Set(ids).size !== 4 || ids.some(id => !doc.players.includes(id))) throw Error('같은 경기의 선수가 중복됐습니다.');
+      const kind = type(match.teamA, match.teamB, doc.profiles);
+      if (!kind) throw Error('남복·여복·혼복 구성을 확인해 주세요.');
+      for (const id of ids) {
+        if (match.round <= doc.availability[id].from || match.round > doc.availability[id].to) throw Error('참석 시간 밖에 경기가 배정됐습니다.');
+        games[id]++;
+      }
+      byRound[match.round - 1].push(...ids);
+      for (const pair of [match.teamA, match.teamB]) {
+        const k = key(pair), count = pairs.get(k) || 0;
+        if (count && !doc.allowPartnerRepeats && !(limits.has(k) && count < limits.get(k))) throw Error('허용하지 않은 페어 반복입니다.');
+        pairs.set(k, count + 1);
+        if (targets.has(k) && count + 1 > targets.get(k)) throw Error('고정 페어 경기 수를 넘었습니다.');
+      }
+      for (const side of ['A', 'B']) if (JSON.stringify(match['team' + side + 'Names']) !== JSON.stringify(match['team' + side].map(id => doc.profiles[id].name))) throw Error('선수 이름을 확인해 주세요.');
+      if (new Set(match.fixedPlayerIds).size !== match.fixedPlayerIds.length || key(match.fixedPlayerIds) !== key(ids.filter(id => doc.fixedPlayerIds.includes(id)))) throw Error('경기 당시 회원 명단이 다릅니다.');
+    }
+    if (byRound.some(row => row.length !== new Set(row).size)) throw Error('같은 타임에 중복 출전했습니다.');
+    if (doc.players.some(id => games[id] !== doc.quotas[id])) throw Error('개인 경기 수가 설정과 다릅니다.');
+    if ([...targets].some(([pair, count]) => (pairs.get(pair) || 0) !== count)) throw Error('고정 페어 경기 수가 설정과 다릅니다.');
+    for (const id of doc.players) {
+      const plan = Array.from({length:6},(_,r)=>Object.values(doc.matches).find(m=>m.round===r+1 && [...m.teamA,...m.teamB].includes(id))?.floor || 0);
+      if (JSON.stringify(doc.floorPlan[id]) !== JSON.stringify(plan)) throw Error('선수별 층 정보가 다릅니다.');
+    }
+    if (['male','female'].some(g=>new Set(doc.genderPlayers[g]).size !== doc.genderPlayers[g].length || key(doc.genderPlayers[g]) !== key(doc.players.filter(id=>doc.profiles[id].gender===g)))
+      || Object.keys(doc.lockedPairTargets).length !== targets.size || [...targets].some(([k,count])=>doc.lockedPairTargets[k] !== count)) throw Error('페어 검증 정보가 다릅니다.');
+    if (JSON.stringify(doc.lockedPairKeys)!==JSON.stringify([...targets.keys()]) || JSON.stringify(doc.teamKeys)!==JSON.stringify(Array.from({length:12},(_,i)=>doc.matches['r'+(Math.floor(i/2)+1)+'-f'+(i%2+1)]).flatMap(m=>m?[key(m.teamA),key(m.teamB)]:['','']))) throw Error('팀 검증 정보가 다릅니다.');
+    if (byRound.some((row,i)=>JSON.stringify(doc.roundParticipants['r'+(i+1)]) !== JSON.stringify(row))) throw Error('타임별 참석 명단이 다릅니다.');
+    if (Object.values(summary(doc).rows).some(row => row.floorChanges > 2)) throw Error('층 이동이 두 번을 넘습니다.');
+    if (options.preferences !== false) for (const id of doc.players) {
+      const window = effectiveWindow(doc, id), active = Array.from({length:6},(_,r)=>byRound[r].includes(id));
+      if (doc.avoidConsecutiveRests && [0,1,2,3,4].some(r=>r>=window.from && r+1<window.to && !active[r] && !active[r+1])) throw Error('연속 휴식 조건을 지키지 않았습니다.');
+      if (window.to-window.from !== doc.quotas[id] && [0,1,2].some(r=>active.slice(r,r+4).every(Boolean))) throw Error('4경기 연속 출전 조건을 확인해 주세요.');
+    }
+    return doc;
+  }
+  function summary(doc) {
+    const rows = Object.fromEntries(doc.players.map(id => [id, { id, games: 0, men: 0, women: 0, mixed: 0, floors: [], rests: [] }]));
+    const pairs = new Map(), types = { '남복': 0, '여복': 0, '혼복': 0 };
+    for (const match of Object.values(doc.matches).sort((a,b)=>a.round-b.round || a.floor-b.floor)) {
+      const kind = type(match.teamA, match.teamB, doc.profiles); types[kind]++;
+      for (const pair of [match.teamA, match.teamB]) {
+        pairs.set(key(pair), (pairs.get(key(pair)) || 0) + 1);
+        for (const id of pair) { rows[id].games++; rows[id][{ '남복': 'men', '여복': 'women', '혼복': 'mixed' }[kind]]++; rows[id].floors.push(match.floor); }
+      }
+    }
+    for (const row of Object.values(rows)) {
+      row.floorChanges = row.floors.reduce((n, floor, i, arr) => n + (i && arr[i - 1] !== floor ? 1 : 0), 0);
+      for (let r = doc.availability[row.id].from; r < doc.availability[row.id].to; r++) {
+        if (!Object.values(doc.matches).some(m => m.round === r + 1 && [...m.teamA, ...m.teamB].includes(row.id))) row.rests.push(r + 1);
+      }
+    }
+    return { rows, types, partnerRepeats: [...pairs.values()].reduce((n, value) => n + Math.max(0, value - 1), 0) };
+  }
+  return { time, minute, today, nextSaturday, validDate, periodForDate, name, validateName, guestId, allocate, key, type, lockedTargets, repeatLimits, effectiveWindow, validateInput, validateDocument, documentOf, summary };
+})();
+if (typeof module !== 'undefined') module.exports = builderModel;
+
+const builderStore = (() => {
+  let modules, db;
+  async function connection(config) {
+    modules ||= Promise.all([import('https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js'), import('https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js')]).catch(error => { modules = null; throw error; });
+    const [app, f] = await modules;
+    db ||= f.getFirestore(app.initializeApp(config));
+    return { f, db };
+  }
+  async function read(config, date) {
+    const { f, db } = await connection(config);
+    const snap = await f.getDocFromServer(f.doc(db, 'schedules', date));
+    return snap.exists() ? snap.data() : null;
+  }
+  async function save(config, document) {
+    builderModel.validateDocument(document);
+    if (!navigator.onLine) throw Error('인터넷 연결 후 확정해 주세요. 초안은 유지됩니다.');
+    const { f, db } = await connection(config);
+    const ref = f.doc(db, 'schedules', document.date);
+    const payload = { ...document, createdAt: f.serverTimestamp() };
+    delete payload.searchNodes;
+    const draftRef = f.doc(f.collection(db, 'scheduleDrafts'));
+    const onlineStage = async action => {
+      if (!navigator.onLine) throw Error('인터넷 연결 후 다시 확정해 주세요. 초안은 유지됩니다.');
+      let timer, interrupt;
+      const stopped = new Promise((_, reject) => {
+        interrupt = () => reject(Error('인터넷 연결이 끊겼어요. 초안은 유지됩니다. 다시 연결한 뒤 확정해 주세요.'));
+        timer = setTimeout(() => reject(Error('서버 확인이 지연되고 있어요. 초안은 유지됩니다. 다시 확정해 주세요.')), 20000);
+        window.addEventListener('offline', interrupt, {once:true});
+      });
+      try { return await Promise.race([action(), stopped]); }
+      finally { clearTimeout(timer); window.removeEventListener('offline', interrupt); }
+    };
+    await onlineStage(() => f.setDoc(draftRef, payload));
+    const prove = proof => f.setDoc(f.doc(draftRef, 'validation', proof), { date: document.date, createdAt: f.serverTimestamp() });
+    const stage = async proofs => {
+      for (let start = 0; start < proofs.length; start += 4) await onlineStage(async () => {
+        const results = await Promise.allSettled(proofs.slice(start, start + 4).map(prove));
+        const failed = results.find(result => result.status === 'rejected');
+        if (failed) throw failed.reason;
+      });
+    };
+    await stage(['structure']);
+    await stage([...Array.from({length:16},(_,i)=>'p'+(i+1)), ...Array.from({length:12},(_,i)=>'m'+(i+1)), 'l1', 'l2']);
+    await stage(['players1','players2','matches1','matches2']);
+    await stage(['roster','rounds','locks']);
+    if (!navigator.onLine) throw Error('인터넷 연결 후 다시 확정해 주세요. 초안은 유지됩니다.');
+    await f.runTransaction(db, async transaction => {
+      const existing = await transaction.get(ref);
+      if (existing.exists() && existing.data().sourceDraftId === draftRef.id) return;
+      if (existing.exists()) { const error = Error('다른 사람이 먼저 이 날짜 대진을 확정했어요. 저장된 대진을 확인해 주세요.'); error.code = 'already-exists'; throw error; }
+      transaction.set(ref, { ...payload, sourceDraftId: draftRef.id });
+    });
+    return document.date;
+  }
+  async function listen(config, success, failure) {
+    const { f, db } = await connection(config);
+    return f.onSnapshot(f.collection(db, 'schedules'), { includeMetadataChanges: true }, snapshot => {
+      if (snapshot.metadata.hasPendingWrites || snapshot.metadata.fromCache) return;
+      success(snapshot.docs.map(doc => doc.data()));
+    }, failure);
+  }
+  return { connection, read, save, listen };
+})();
+
+const builderData = {"players": {"p001": {"name": "서명렬", "gender": "male", "memberType": "fixed"}, "p002": {"name": "김영진", "gender": "male", "memberType": "fixed"}, "p003": {"name": "나창은", "gender": "male", "memberType": "fixed"}, "p004": {"name": "박세준", "gender": "male", "memberType": "fixed"}, "p005": {"name": "이재원", "gender": "male", "memberType": "fixed"}, "p006": {"name": "조아라", "gender": "female", "memberType": "fixed"}, "p007": {"name": "성주은", "gender": "female", "memberType": "fixed"}, "p008": {"name": "박정민", "gender": "female", "memberType": "fixed"}, "p009": {"name": "정가영", "gender": "female", "memberType": "fixed"}, "p010": {"name": "김규석", "gender": "male", "memberType": "fixed"}, "p011": {"name": "위형종", "gender": "male", "memberType": "fixed"}}, "memberships": {"current-members": {"label": "8~10월(임시)", "startsOn": "2026-08-01", "endsBefore": "2026-11-01", "memberIds": ["p001", "p002", "p003", "p004", "p005", "p006", "p007", "p008", "p009", "p010", "p011"]}}, "themePlans": {"2026-10-17": "geto"}, "themes": {"club": {"name": "클럽 기본", "stylesheet": "themes/club.css", "eyebrow": "DAEPO TENNIS CLUB", "title": "대포클럽", "accent": "토요일 대진표", "heroImage": null, "heroAlt": ""}, "gojo": {"name": "고죠 사토루", "stylesheet": "themes/gojo.css", "eyebrow": "領域展開 // DAEPO COURT DOMAIN", "title": "대포클럽", "accent": "토요일 대진표", "heroImage": "src/gojo.webp", "heroAlt": "푸른 기운에 둘러싸여 테니스 라켓을 든 고죠 사토루"}, "geto": {"name": "게토 스구루", "stylesheet": "themes/geto.css", "eyebrow": "GETO SUGURU // DAEPO TENNIS", "title": "대포클럽", "accent": "토요일 대진표", "heroImage": "src/geto.webp", "heroAlt": "보라색 주력에 둘러싸여 테니스 라켓을 든 게토 스구루"}, "toji": {"name": "젠인 토우지", "stylesheet": "themes/toji.css", "eyebrow": "TOJI ZENIN // DAEPO TENNIS", "title": "대포클럽", "accent": "토요일 대진표", "heroImage": "src/toji.webp", "heroAlt": "테니스 라켓을 든 젠인 토우지"}}, "legacyDates": ["2026-10-03", "2026-10-10"], "firebaseConfig": {"apiKey": "AIzaSyBGQn1egO2A-zVNGo40L6QEyuy538Mi9J8", "authDomain": "daepo-b3b51.firebaseapp.com", "projectId": "daepo-b3b51", "storageBucket": "daepo-b3b51.firebasestorage.app", "messagingSenderId": "66452711954", "appId": "1:66452711954:web:b97266b7c3ab4a8756c6cb", "measurementId": "G-2JS3C8XR2Q"}};
+const workerSource = "const builderModel = (() => {\n  const pad = n => String(n).padStart(2, '0');\n  const minute = value => Number(value.slice(0, 2)) * 60 + Number(value.slice(3));\n  const time = n => pad(Math.floor(n / 60)) + ':' + pad(n % 60);\n  const today = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());\n  function nextSaturday(day = today()) {\n    const date = new Date(day + 'T00:00:00Z');\n    date.setUTCDate(date.getUTCDate() + (6 - date.getUTCDay() + 7) % 7);\n    return date.toISOString().slice(0, 10);\n  }\n  function validDate(day) {\n    return /^\\d{4}-\\d{2}-\\d{2}$/.test(day) && !Number.isNaN(Date.parse(day)) && new Date(day + 'T00:00:00Z').toISOString().slice(0, 10) === day;\n  }\n  const periodForDate = (day, periods) => Object.entries(periods).find(([, p]) => p.startsOn <= day && day < p.endsBefore)?.[0] || null;\n  const name = value => String(value).normalize('NFC').trim().replace(/\\s+/g, ' ');\n  function validateName(value) {\n    const normalized = name(value);\n    if (!normalized || normalized.length > 24 || /[\\u0000-\\u001f\\u007f]/.test(normalized)) throw Error('\uc774\ub984\uc740 1~24\uc790\ub85c \uc785\ub825\ud574 \uc8fc\uc138\uc694.');\n    return normalized;\n  }\n  function guestId(day, guests) {\n    for (let i = 1; i <= 99; i++) {\n      const id = 'guest-' + day + '-' + pad(i);\n      if (!Object.hasOwn(guests, id)) return id;\n    }\n    throw Error('\uac8c\uc2a4\ud2b8\ub97c \ub354 \ucd94\uac00\ud560 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4.');\n  }\n  function allocate(ids, available, rounds = 6) {\n    const capacity = Math.min(2, Math.floor(ids.length / 4)) * 4 * rounds;\n    const target = Math.min(ids.length === 4 ? 3 : 4, Math.floor(capacity / ids.length));\n    if (target < 2) throw Error('\ubaa8\ub450 2\uacbd\uae30 \uc774\uc0c1 \uce58\ub97c \uc218 \uc788\ub3c4\ub85d \ucc38\uc11d \uc778\uc6d0\uc744 \uc904\uc5ec \uc8fc\uc138\uc694.');\n    if (ids.some(id => (available[id] ?? rounds) < 2)) throw Error('\ubaa8\ub450 \ub450 \ud0c0\uc784 \uc774\uc0c1 \ucc38\uc11d\ud560 \uc218 \uc788\ub3c4\ub85d \uc2dc\uac04\uc744 \ub9de\ucdb0 \uc8fc\uc138\uc694.');\n    const quotas = Object.fromEntries(ids.map(id => [id, Math.min(target, available[id] ?? rounds)]));\n    let slots = Object.values(quotas).reduce((a, b) => a + b, 0);\n    for (const id of [...ids].reverse()) {\n      if (slots % 4 === 0) break;\n      if (quotas[id] > 2) { quotas[id]--; slots--; }\n    }\n    if (slots % 4) throw Error('\uc804\uccb4 \ucd9c\uc804 \ud69f\uc218\uac00 4\uc758 \ubc30\uc218\uac00 \ub418\ub3c4\ub85d \uac1c\uc778 \uacbd\uae30 \uc218\ub97c \ub9de\ucdb0 \uc8fc\uc138\uc694.');\n    return quotas;\n  }\n  const key = pair => [...pair].sort().join('|');\n  function type(a, b, profiles) {\n    const kinds = [a, b].map(team => team.filter(id => profiles[id].gender === 'female').length);\n    if (kinds[0] === 0 && kinds[1] === 0) return '\ub0a8\ubcf5';\n    if (kinds[0] === 2 && kinds[1] === 2) return '\uc5ec\ubcf5';\n    if (kinds[0] === 1 && kinds[1] === 1) return '\ud63c\ubcf5';\n    return null;\n  }\n  const lockedTargets = input => new Map(input.lockedPairs.map(entry => [key(entry.players), entry.games === 'all' ? input.quotas[entry.players[0]] : entry.games]));\n  function repeatLimits(input) {\n    const limits = lockedTargets(input);\n    for (const entry of input.lockedPairs) {\n      const pair = entry.players, genders = pair.map(id => input.profiles[id].gender);\n      let pool = input.players;\n      if (genders[0] === genders[1]) pool = pool.filter(id => input.profiles[id].gender === genders[0]);\n      if (pool.length === 4) {\n        const other = pool.filter(id => !pair.includes(id));\n        const k = key(other);\n        if (!limits.has(k)) limits.set(k, limits.get(key(pair)));\n      }\n    }\n    return limits;\n  }\n  function effectiveWindow(input, id) {\n    const window = { ...input.availability[id] }, targets = lockedTargets(input);\n    for (const entry of input.lockedPairs) {\n      if (entry.players.includes(id) && targets.get(key(entry.players)) === input.quotas[id]) {\n        const peer = entry.players.find(p => p !== id), other = input.availability[peer];\n        window.from = Math.max(window.from, other.from); window.to = Math.min(window.to, other.to);\n      }\n    }\n    return window;\n  }\n  function validateInput(input) {\n    if (!validDate(input.date) || new Date(input.date + 'T00:00:00Z').getUTCDay() !== 6) throw Error('\ud1a0\uc694\uc77c \ubaa8\uc784 \ub0a0\uc9dc\ub97c \uc120\ud0dd\ud574 \uc8fc\uc138\uc694.');\n    if (!input.membershipPeriod) throw Error('\ud574\ub2f9 \ub0a0\uc9dc\uc758 \ud68c\uc6d0 \ud68c\ucc28 \uba85\ub2e8\uc744 \uba3c\uc800 \ub4f1\ub85d\ud574 \uc8fc\uc138\uc694.');\n    const ids = input.players;\n    if (!Array.isArray(ids) || ids.length < 4 || ids.length > 16 || new Set(ids).size !== ids.length) throw Error('\ucc38\uc11d\uc790 4~16\uba85\uc744 \uc120\ud0dd\ud574 \uc8fc\uc138\uc694.');\n    const names = new Set();\n    for (const id of ids) {\n      const profile = input.profiles[id];\n      if (!profile || !['male', 'female'].includes(profile.gender)) throw Error('\ubaa8\ub4e0 \uc120\uc218\uc758 \uc131\ubcc4\uc744 \uc120\ud0dd\ud574 \uc8fc\uc138\uc694.');\n      const normalized = validateName(profile.name);\n      if (normalized !== profile.name || names.has(normalized)) throw Error('\uac19\uc740 \uc774\ub984\uc758 \ucc38\uc11d\uc790\uac00 \uc788\uc2b5\ub2c8\ub2e4. \uc774\ub984\uc744 \uad6c\ubd84\ud574 \uc8fc\uc138\uc694.');\n      names.add(normalized);\n      const window = input.availability[id];\n      if (!window || !Number.isInteger(window.from) || !Number.isInteger(window.to) || window.from < 0 || window.to > 6 || window.from >= window.to) throw Error(profile.name + ' \ucc38\uc11d \uc2dc\uac04\uc744 \ud655\uc778\ud574 \uc8fc\uc138\uc694.');\n      const quota = input.quotas[id];\n      if (!Number.isInteger(quota) || quota < 2 || quota > 4 || quota > window.to - window.from) throw Error(profile.name + ' \uacbd\uae30 \uc218\uac00 \ucc38\uc11d \uac00\ub2a5 \uc2dc\uac04\uc744 \ub118\uc2b5\ub2c8\ub2e4.');\n    }\n    const slots = ids.reduce((sum, id) => sum + input.quotas[id], 0);\n    if (slots % 4 || slots > Math.min(2, Math.floor(ids.length / 4)) * 24) throw Error('\uc804\uccb4 \ucd9c\uc804 \ud69f\uc218\ub97c 4\uc758 \ubc30\uc218, \ucd5c\ub300 48\ud68c\ub85c \ub9de\ucdb0 \uc8fc\uc138\uc694.');\n    const womenSlots = ids.filter(id => input.profiles[id].gender === 'female').reduce((sum, id) => sum + input.quotas[id], 0);\n    if (womenSlots % 2) throw Error('\uc5ec\uc790 \uc120\uc218\uc758 \uc804\uccb4 \ucd9c\uc804 \ud69f\uc218\ub294 \uc9dd\uc218\uc5ec\uc57c \ub0a8\ubcf5\u00b7\uc5ec\ubcf5\u00b7\ud63c\ubcf5\uc73c\ub85c \ubc30\uc815\ud560 \uc218 \uc788\uc2b5\ub2c8\ub2e4. \uac1c\uc778 \uacbd\uae30 \uc218\ub97c \uc870\uc815\ud574 \uc8fc\uc138\uc694.');\n    if (!Array.isArray(input.lockedPairs) || input.lockedPairs.length > 8) throw Error('\uace0\uc815 \ud398\uc5b4\ub294 \ucd5c\ub300 8\uc870\uae4c\uc9c0 \ub4f1\ub85d\ud560 \uc218 \uc788\uc2b5\ub2c8\ub2e4.');\n    const seen = new Set(), lockedCounts = {};\n    for (const entry of input.lockedPairs) {\n      const pair = entry.players;\n      if (!Array.isArray(pair) || pair.length !== 2 || pair[0] === pair[1] || pair.some(id => !ids.includes(id)) || seen.has(key(pair))) throw Error('\uc11c\ub85c \ub2e4\ub978 \ucc38\uc11d\uc790 \ub450 \uba85\uc744 \uc120\ud0dd\ud574 \uc8fc\uc138\uc694. \uac19\uc740 \ud398\uc5b4\ub294 \ud55c \ubc88\ub9cc \ub4f1\ub85d\ud569\ub2c8\ub2e4.');\n      seen.add(key(pair));\n      if (entry.games === 'all' && input.quotas[pair[0]] !== input.quotas[pair[1]]) throw Error('\uc804\uccb4 \uacbd\uae30 \uace0\uc815 \ud398\uc5b4\ub294 \ub450 \uc120\uc218\uc758 \uacbd\uae30 \uc218\ub97c \uac19\uac8c \ub9de\ucdb0 \uc8fc\uc138\uc694.');\n      const count = entry.games === 'all' ? input.quotas[pair[0]] : entry.games;\n      if (!Number.isInteger(count) || count < 1 || count > Math.min(...pair.map(id => input.quotas[id])) || (entry.games !== 'all' && ![1, 2, 3].includes(entry.games))) throw Error('\uace0\uc815 \ud398\uc5b4 \uacbd\uae30 \uc218\ub294 \uac1c\uc778 \uacbd\uae30 \uc218 \uc548\uc5d0\uc11c 1\u00b72\u00b73\uacbd\uae30 \ub610\ub294 \uc804\uccb4\ub97c \uc120\ud0dd\ud574 \uc8fc\uc138\uc694.');\n      const overlap = Math.min(...pair.map(id => input.availability[id].to)) - Math.max(...pair.map(id => input.availability[id].from));\n      if (overlap < count) throw Error('\uace0\uc815 \ud398\uc5b4 \ub450 \uc120\uc218\uac00 \ud568\uaed8 \ucc38\uc11d\ud558\ub294 \uc2dc\uac04\uc774 \ubd80\uc871\ud569\ub2c8\ub2e4.');\n      const gender = input.profiles[pair[0]].gender, same = gender === input.profiles[pair[1]].gender;\n      const pool = ids.filter(id => input.profiles[id].gender === gender);\n      const other = ids.filter(id => input.profiles[id].gender !== gender);\n      if ((same && pool.length < 4) || (!same && (pool.length < 2 || other.length < 2))) throw Error('\uace0\uc815 \ud398\uc5b4\ub97c \uc0c1\ub300\ud560 \uac19\uc740 \uc885\ubaa9\uc758 \uc120\uc218\uac00 \ubd80\uc871\ud569\ub2c8\ub2e4. \ucc38\uc11d\uc790 \uc131\ubcc4 \uad6c\uc131\uc744 \ud655\uc778\ud574 \uc8fc\uc138\uc694.');\n      if (same && pool.length === 4 && pool.every(id => input.quotas[id] === count)) {\n        const capacity = count * (other.length >= 4 ? 4 : 0) + (6 - count) * Math.min(2, Math.floor(other.length / 4)) * 4;\n        if (other.reduce((sum, id) => sum + input.quotas[id], 0) > capacity) throw Error('\ud604\uc7ac \uc778\uc6d0\uacfc \uacbd\uae30 \uc218\ub85c \uc774 \uace0\uc815 \ud398\uc5b4\ub97c \ubc30\uc815\ud558\uba74 \ub2e4\ub978 \uc120\uc218\uc758 \uacbd\uae30\uac00 \ubd80\uc871\ud574\uc9d1\ub2c8\ub2e4. \uace0\uc815 \ud69f\uc218\ub098 \uac1c\uc778 \uacbd\uae30 \uc218\ub97c \uc870\uc815\ud574 \uc8fc\uc138\uc694.');\n      }\n      pair.forEach(id => lockedCounts[id] = (lockedCounts[id] || 0) + count);\n    }\n    if (ids.some(id => (lockedCounts[id] || 0) > input.quotas[id])) throw Error('\ud55c \uc120\uc218\uc5d0\uac8c \ub4f1\ub85d\ud55c \uace0\uc815 \ud398\uc5b4 \uacbd\uae30 \uc218\uac00 \uac1c\uc778 \uacbd\uae30 \uc218\ub97c \ub118\uc2b5\ub2c8\ub2e4.');\n    return input;\n  }\n  function documentOf(input, rounds) {\n    const matches = {};\n    rounds.forEach((teams, r) => {\n      for (let floor = 0; floor < 2; floor++) {\n        const a = [...teams[floor * 2]].sort(), b = [...teams[floor * 2 + 1]].sort();\n        if (!a.length) continue;\n        matches['r' + (r + 1) + '-f' + (floor + 1)] = { date: input.date, round: r + 1, floor: floor + 1, teamA: a, teamB: b,\n          teamANames: a.map(id => input.profiles[id].name), teamBNames: b.map(id => input.profiles[id].name),\n          fixedPlayerIds: [...a, ...b].filter(id => input.fixedPlayerIds.includes(id)) };\n      }\n    });\n    return { schemaVersion: 1, date: input.date, membershipPeriod: input.membershipPeriod, theme: input.theme,\n      startMinutes: 480, roundMinutes: 30, roundCount: 6, players: [...input.players], fixedPlayerIds: [...input.fixedPlayerIds],\n      profiles: structuredClone(input.profiles), playerNames: input.players.map(id=>input.profiles[id].name), quotas: { ...input.quotas }, availability: structuredClone(input.availability),\n      floorPlan: Object.fromEntries(input.players.map(id => [id, rounds.map((row,i) => Object.values(matches).find(m=>m.round===i+1 && [...m.teamA,...m.teamB].includes(id))?.floor || 0)])),\n      genderPlayers: Object.fromEntries(['male','female'].map(gender=>[gender,input.players.filter(id=>input.profiles[id].gender===gender)])),\n      lockedPairTargets: Object.fromEntries(lockedTargets(input)), lockedPairKeys: [...lockedTargets(input).keys()],\n      teamKeys: Array.from({length:12},(_,i)=>matches['r'+(Math.floor(i/2)+1)+'-f'+(i%2+1)]).flatMap(m=>m?[key(m.teamA),key(m.teamB)]:['','']),\n      roundParticipants: Object.fromEntries(rounds.map((row, i) => ['r' + (i + 1), Object.values(matches).filter(m => m.round === i + 1).flatMap(m => [...m.teamA, ...m.teamB])])),\n      lockedPairs: input.lockedPairs.map(entry => ({players:[...entry.players].sort(),games:entry.games})), allowPartnerRepeats: !!input.allowPartnerRepeats,\n      avoidConsecutiveRests: !!input.avoidConsecutiveRests, maxFloorChanges: 2, matches };\n  }\n  function validateDocument(doc, options = {}) {\n    validateInput(doc);\n    if (JSON.stringify(doc.playerNames)!==JSON.stringify(doc.players.map(id=>doc.profiles[id].name))) throw Error('\ucc38\uc11d\uc790 \uc774\ub984 \uc815\ubcf4\uac00 \ub2e4\ub985\ub2c8\ub2e4.');\n    const games = Object.fromEntries(doc.players.map(id => [id, 0]));\n    const byRound = Array.from({ length: 6 }, () => []), pairs = new Map();\n    const limits = repeatLimits(doc), targets = lockedTargets(doc);\n    for (const [matchId, match] of Object.entries(doc.matches).sort(([,a],[,b])=>a.round-b.round || a.floor-b.floor)) {\n      if (!/^r[1-6]-f[12]$/.test(matchId) || match.date !== doc.date || matchId !== 'r' + match.round + '-f' + match.floor\n          || match.teamA.length !== 2 || match.teamB.length !== 2) throw Error('\uacbd\uae30 \uc815\ubcf4\ub97c \ud655\uc778\ud574 \uc8fc\uc138\uc694.');\n      const ids = [...match.teamA, ...match.teamB];\n      if (new Set(ids).size !== 4 || ids.some(id => !doc.players.includes(id))) throw Error('\uac19\uc740 \uacbd\uae30\uc758 \uc120\uc218\uac00 \uc911\ubcf5\ub410\uc2b5\ub2c8\ub2e4.');\n      const kind = type(match.teamA, match.teamB, doc.profiles);\n      if (!kind) throw Error('\ub0a8\ubcf5\u00b7\uc5ec\ubcf5\u00b7\ud63c\ubcf5 \uad6c\uc131\uc744 \ud655\uc778\ud574 \uc8fc\uc138\uc694.');\n      for (const id of ids) {\n        if (match.round <= doc.availability[id].from || match.round > doc.availability[id].to) throw Error('\ucc38\uc11d \uc2dc\uac04 \ubc16\uc5d0 \uacbd\uae30\uac00 \ubc30\uc815\ub410\uc2b5\ub2c8\ub2e4.');\n        games[id]++;\n      }\n      byRound[match.round - 1].push(...ids);\n      for (const pair of [match.teamA, match.teamB]) {\n        const k = key(pair), count = pairs.get(k) || 0;\n        if (count && !doc.allowPartnerRepeats && !(limits.has(k) && count < limits.get(k))) throw Error('\ud5c8\uc6a9\ud558\uc9c0 \uc54a\uc740 \ud398\uc5b4 \ubc18\ubcf5\uc785\ub2c8\ub2e4.');\n        pairs.set(k, count + 1);\n        if (targets.has(k) && count + 1 > targets.get(k)) throw Error('\uace0\uc815 \ud398\uc5b4 \uacbd\uae30 \uc218\ub97c \ub118\uc5c8\uc2b5\ub2c8\ub2e4.');\n      }\n      for (const side of ['A', 'B']) if (JSON.stringify(match['team' + side + 'Names']) !== JSON.stringify(match['team' + side].map(id => doc.profiles[id].name))) throw Error('\uc120\uc218 \uc774\ub984\uc744 \ud655\uc778\ud574 \uc8fc\uc138\uc694.');\n      if (new Set(match.fixedPlayerIds).size !== match.fixedPlayerIds.length || key(match.fixedPlayerIds) !== key(ids.filter(id => doc.fixedPlayerIds.includes(id)))) throw Error('\uacbd\uae30 \ub2f9\uc2dc \ud68c\uc6d0 \uba85\ub2e8\uc774 \ub2e4\ub985\ub2c8\ub2e4.');\n    }\n    if (byRound.some(row => row.length !== new Set(row).size)) throw Error('\uac19\uc740 \ud0c0\uc784\uc5d0 \uc911\ubcf5 \ucd9c\uc804\ud588\uc2b5\ub2c8\ub2e4.');\n    if (doc.players.some(id => games[id] !== doc.quotas[id])) throw Error('\uac1c\uc778 \uacbd\uae30 \uc218\uac00 \uc124\uc815\uacfc \ub2e4\ub985\ub2c8\ub2e4.');\n    if ([...targets].some(([pair, count]) => (pairs.get(pair) || 0) !== count)) throw Error('\uace0\uc815 \ud398\uc5b4 \uacbd\uae30 \uc218\uac00 \uc124\uc815\uacfc \ub2e4\ub985\ub2c8\ub2e4.');\n    for (const id of doc.players) {\n      const plan = Array.from({length:6},(_,r)=>Object.values(doc.matches).find(m=>m.round===r+1 && [...m.teamA,...m.teamB].includes(id))?.floor || 0);\n      if (JSON.stringify(doc.floorPlan[id]) !== JSON.stringify(plan)) throw Error('\uc120\uc218\ubcc4 \uce35 \uc815\ubcf4\uac00 \ub2e4\ub985\ub2c8\ub2e4.');\n    }\n    if (['male','female'].some(g=>new Set(doc.genderPlayers[g]).size !== doc.genderPlayers[g].length || key(doc.genderPlayers[g]) !== key(doc.players.filter(id=>doc.profiles[id].gender===g)))\n      || Object.keys(doc.lockedPairTargets).length !== targets.size || [...targets].some(([k,count])=>doc.lockedPairTargets[k] !== count)) throw Error('\ud398\uc5b4 \uac80\uc99d \uc815\ubcf4\uac00 \ub2e4\ub985\ub2c8\ub2e4.');\n    if (JSON.stringify(doc.lockedPairKeys)!==JSON.stringify([...targets.keys()]) || JSON.stringify(doc.teamKeys)!==JSON.stringify(Array.from({length:12},(_,i)=>doc.matches['r'+(Math.floor(i/2)+1)+'-f'+(i%2+1)]).flatMap(m=>m?[key(m.teamA),key(m.teamB)]:['','']))) throw Error('\ud300 \uac80\uc99d \uc815\ubcf4\uac00 \ub2e4\ub985\ub2c8\ub2e4.');\n    if (byRound.some((row,i)=>JSON.stringify(doc.roundParticipants['r'+(i+1)]) !== JSON.stringify(row))) throw Error('\ud0c0\uc784\ubcc4 \ucc38\uc11d \uba85\ub2e8\uc774 \ub2e4\ub985\ub2c8\ub2e4.');\n    if (Object.values(summary(doc).rows).some(row => row.floorChanges > 2)) throw Error('\uce35 \uc774\ub3d9\uc774 \ub450 \ubc88\uc744 \ub118\uc2b5\ub2c8\ub2e4.');\n    if (options.preferences !== false) for (const id of doc.players) {\n      const window = effectiveWindow(doc, id), active = Array.from({length:6},(_,r)=>byRound[r].includes(id));\n      if (doc.avoidConsecutiveRests && [0,1,2,3,4].some(r=>r>=window.from && r+1<window.to && !active[r] && !active[r+1])) throw Error('\uc5f0\uc18d \ud734\uc2dd \uc870\uac74\uc744 \uc9c0\ud0a4\uc9c0 \uc54a\uc558\uc2b5\ub2c8\ub2e4.');\n      if (window.to-window.from !== doc.quotas[id] && [0,1,2].some(r=>active.slice(r,r+4).every(Boolean))) throw Error('4\uacbd\uae30 \uc5f0\uc18d \ucd9c\uc804 \uc870\uac74\uc744 \ud655\uc778\ud574 \uc8fc\uc138\uc694.');\n    }\n    return doc;\n  }\n  function summary(doc) {\n    const rows = Object.fromEntries(doc.players.map(id => [id, { id, games: 0, men: 0, women: 0, mixed: 0, floors: [], rests: [] }]));\n    const pairs = new Map(), types = { '\ub0a8\ubcf5': 0, '\uc5ec\ubcf5': 0, '\ud63c\ubcf5': 0 };\n    for (const match of Object.values(doc.matches).sort((a,b)=>a.round-b.round || a.floor-b.floor)) {\n      const kind = type(match.teamA, match.teamB, doc.profiles); types[kind]++;\n      for (const pair of [match.teamA, match.teamB]) {\n        pairs.set(key(pair), (pairs.get(key(pair)) || 0) + 1);\n        for (const id of pair) { rows[id].games++; rows[id][{ '\ub0a8\ubcf5': 'men', '\uc5ec\ubcf5': 'women', '\ud63c\ubcf5': 'mixed' }[kind]]++; rows[id].floors.push(match.floor); }\n      }\n    }\n    for (const row of Object.values(rows)) {\n      row.floorChanges = row.floors.reduce((n, floor, i, arr) => n + (i && arr[i - 1] !== floor ? 1 : 0), 0);\n      for (let r = doc.availability[row.id].from; r < doc.availability[row.id].to; r++) {\n        if (!Object.values(doc.matches).some(m => m.round === r + 1 && [...m.teamA, ...m.teamB].includes(row.id))) row.rests.push(r + 1);\n      }\n    }\n    return { rows, types, partnerRepeats: [...pairs.values()].reduce((n, value) => n + Math.max(0, value - 1), 0) };\n  }\n  return { time, minute, today, nextSaturday, validDate, periodForDate, name, validateName, guestId, allocate, key, type, lockedTargets, repeatLimits, effectiveWindow, validateInput, validateDocument, documentOf, summary };\n})();\nif (typeof module !== 'undefined') module.exports = builderModel;\n\nconst builderScheduler = (() => {\n  const M = typeof builderModel !== 'undefined' ? builderModel : require('./builder-model.js');\n  function shuffle(list, random) {\n    const out = [...list];\n    for (let i = out.length - 1; i > 0; i--) { const j = Math.floor(random() * (i + 1)); [out[i], out[j]] = [out[j], out[i]]; }\n    return out;\n  }\n  function pairings(ids) {\n    if (!ids.length) return [[]];\n    const first = ids[0], out = [];\n    for (let i = 1; i < ids.length; i++) {\n      for (const tail of pairings(ids.slice(1).filter((_, j) => j !== i - 1))) out.push([[first, ids[i]], ...tail]);\n    }\n    return out;\n  }\n  function covers(ids, input, forcedPairs) {\n    const out = [], seen = new Set();\n    function legal(a, b) {\n      const kind = M.type(a, b, input.profiles);\n      if (!kind) return false;\n      return true;\n    }\n    const forcedIds = new Set(forcedPairs.flat());\n    for (const tail of pairings(ids.filter(id => !forcedIds.has(id)))) {\n      const pairs = [...forcedPairs, ...tail];\n      const groups = ids.length === 4 ? [[[0, 1]]] : [[[0, 1], [2, 3]], [[0, 2], [1, 3]], [[0, 3], [1, 2]]];\n      for (const groupsOfMatches of groups) {\n        if (!groupsOfMatches.every(([a, b]) => legal(pairs[a], pairs[b]))) continue;\n        const teams = groupsOfMatches.flatMap(([a, b]) => [pairs[a], pairs[b]]);\n        const signature = teams.map(M.key).join('/');\n        if (seen.has(signature)) continue;\n        seen.add(signature);\n        if (ids.length === 4) { out.push([...teams, [], []], [[], [], ...teams]); }\n        else { out.push(teams, [...teams.slice(2), ...teams.slice(0, 2)]); }\n      }\n    }\n    return out;\n  }\n  function capacityVectors(total, courts, random) {\n    const out = [];\n    function visit(row, remaining) {\n      if (row.length === 6) { if (remaining === 0) out.push(row); return; }\n      for (let n = 0; n <= courts; n++) {\n        if (n <= remaining && remaining - n <= (5 - row.length) * courts) visit([...row, n], remaining - n);\n      }\n    }\n    visit([], total);\n    return shuffle(out, random);\n  }\n  function generate(raw, options = {}) {\n    const input = M.validateInput(structuredClone(raw));\n    const random = options.random || Math.random, budget = options.budgetMs || 3500;\n    const clock = options.clock || (() => Date.now()), deadline = clock() + budget;\n    const ids = input.players, slots = ids.reduce((n, id) => n + input.quotas[id], 0);\n    const targets = M.lockedTargets(input), limits = M.repeatLimits(input);\n    const saturatedPairs = input.lockedPairs.filter(entry => entry.players.some(id => input.quotas[id] === targets.get(M.key(entry.players))));\n    const coupledGroups = input.lockedPairs.map(entry => {\n      const gender = input.profiles[entry.players[0]].gender;\n      const pool = input.players.filter(id => input.profiles[id].gender === gender);\n      return { ids: input.profiles[entry.players[1]].gender === gender && pool.length === 4 ? pool : entry.players, count: targets.get(M.key(entry.players)) };\n    });\n    const vectors = capacityVectors(slots / 4, Math.min(2, Math.floor(ids.length / 4)), random);\n    let nodes = 0, timedOut = false;\n    const coverCache = new Map();\n    const getCovers = active => {\n      const key = [...active].sort().join('/');\n      if (!coverCache.has(key)) {\n        const required = saturatedPairs.filter(entry => entry.players.some(id => input.quotas[id] === targets.get(M.key(entry.players)) && active.includes(id)));\n        coverCache.set(key, required.some(entry => entry.players.some(id => !active.includes(id))) ? [] : covers([...active].sort(), input, required.map(entry => entry.players)));\n      }\n      return coverCache.get(key);\n    };\n    function arrange(activeRows) {\n      const partnerCounts = new Map(), lastFloor = {}, moves = {}, mixed = {}, opponents = new Map();\n      const output = []; let arrangementNodes = 0;\n      function round(r) {\n        if (clock() >= deadline) { timedOut = true; return null; }\n        if (++arrangementNodes > 250) return null;\n        if (r === 6) {\n          if ([...targets].some(([pair, count]) => (partnerCounts.get(pair) || 0) !== count)) return null;\n          return output.map(row => row.map(pair => [...pair]));\n        }\n        if (!activeRows[r].length) { output.push([[], [], [], []]); const found = round(r + 1); output.pop(); return found; }\n        const candidates = [];\n        for (const teams of getCovers(activeRows[r])) {\n          let cost = random() * 6, valid = true;\n          for (let floor = 0; floor < 2 && valid; floor++) {\n            const a = teams[floor * 2], b = teams[floor * 2 + 1];\n            if (!a.length) continue;\n            const kind = M.type(a, b, input.profiles);\n            for (const pair of [a, b]) {\n              const previous = partnerCounts.get(M.key(pair)) || 0;\n              if (previous && !input.allowPartnerRepeats && !(limits.has(M.key(pair)) && previous < limits.get(M.key(pair)))) { valid = false; break; }\n              const wanted = targets.get(M.key(pair));\n              if (wanted !== undefined && previous >= wanted) { valid = false; break; }\n              cost += wanted !== undefined ? -40 : previous * 90;\n            }\n            for (const id of [...a, ...b]) {\n              const change = Object.hasOwn(lastFloor, id) && lastFloor[id] !== floor ? 1 : 0;\n              if ((moves[id] || 0) + change > 2) { valid = false; break; }\n              cost += change * 12;\n              if (kind === '\ud63c\ubcf5') cost += (mixed[id] || 0) * 9;\n            }\n            for (const p of a) for (const q of b) cost += (opponents.get(M.key([p, q])) || 0) * 2;\n          }\n          if (valid && input.lockedPairs.some(entry => {\n            const k = M.key(entry.players), used = partnerCounts.get(k) || 0;\n            const playsNow = teams.some(pair => pair.length && M.key(pair) === k) ? 1 : 0;\n            const possibleLater = activeRows.slice(r + 1).filter(row => entry.players.every(id => row.includes(id))).length;\n            return used + playsNow > targets.get(k) || used + playsNow + possibleLater < targets.get(k);\n          })) valid = false;\n          if (valid) candidates.push({ teams, cost });\n        }\n        candidates.sort((a, b) => a.cost - b.cost);\n        for (const { teams } of candidates.slice(0, 18)) {\n          nodes++;\n          const before = { floor: { ...lastFloor }, moves: { ...moves }, mixed: { ...mixed } };\n          const changedPairs = [], changedOpponents = [];\n          for (let floor = 0; floor < 2; floor++) {\n            const a = teams[floor * 2], b = teams[floor * 2 + 1];\n            if (!a.length) continue;\n            const kind = M.type(a, b, input.profiles);\n            for (const pair of [a, b]) { const k = M.key(pair); partnerCounts.set(k, (partnerCounts.get(k) || 0) + 1); changedPairs.push(k); }\n            for (const id of [...a, ...b]) {\n              moves[id] = (moves[id] || 0) + (Object.hasOwn(lastFloor, id) && lastFloor[id] !== floor ? 1 : 0);\n              lastFloor[id] = floor;\n              if (kind === '\ud63c\ubcf5') mixed[id] = (mixed[id] || 0) + 1;\n            }\n            for (const p of a) for (const q of b) { const k = M.key([p, q]); opponents.set(k, (opponents.get(k) || 0) + 1); changedOpponents.push(k); }\n          }\n          output.push(teams);\n          const found = round(r + 1);\n          output.pop();\n          if (found) return found;\n          for (const object of [lastFloor, moves, mixed]) for (const k of Object.keys(object)) delete object[k];\n          Object.assign(lastFloor, before.floor); Object.assign(moves, before.moves); Object.assign(mixed, before.mixed);\n          for (const k of changedPairs) partnerCounts.set(k, partnerCounts.get(k) - 1);\n          for (const k of changedOpponents) opponents.set(k, opponents.get(k) - 1);\n          if (timedOut) return null;\n        }\n        return null;\n      }\n      return round(0);\n    }\n    const run = () => {\n      for (const vector of shuffle(vectors, random)) {\n        if (clock() >= deadline) { timedOut = true; break; }\n        const capacities = vector.map(n => n * 4), patterns = {};\n        for (const id of ids) {\n          const window = M.effectiveWindow(input, id);\n          const forced = window.to - window.from === input.quotas[id] || input.lockedPairs.some(entry => {\n            if (!entry.players.includes(id) || targets.get(M.key(entry.players)) !== input.quotas[id]) return false;\n            const peer = entry.players.find(p => p !== id), other = input.availability[peer];\n            return Math.min(window.to, other.to) - Math.max(window.from, other.from) === input.quotas[id];\n          });\n          patterns[id] = [];\n          for (let mask = 0; mask < 64; mask++) {\n            const bits = Array.from({ length: 6 }, (_, r) => Number(!!(mask & (1 << r))));\n            if (bits.reduce((a, b) => a + b, 0) !== input.quotas[id] || bits.some((value, r) => value && (r < window.from || r >= window.to || !capacities[r]))) continue;\n            if (!forced && [0, 1, 2].some(r => bits.slice(r, r + 4).every(Boolean))) continue;\n            if (input.avoidConsecutiveRests && Array.from({ length: 5 }, (_, r) => r).some(r => r >= window.from && r + 1 < window.to && !bits[r] && !bits[r + 1])) continue;\n            patterns[id].push(bits);\n          }\n        }\n        if (ids.some(id => !patterns[id].length)) continue;\n        const weight = id => coupledGroups.reduce((n, group) => n + (group.ids.includes(id) ? group.count : 0), 0);\n        const ordered = shuffle(ids, random).sort((a, b) => patterns[a].length - patterns[b].length || weight(b) - weight(a));\n        const active = Array.from({ length: 6 }, () => []), femaleCounts = Array(6).fill(0);\n        let assignmentNodes = 0;\n        function assign(index) {\n          if (clock() >= deadline) { timedOut = true; return null; }\n          if (++assignmentNodes > 12000) return null;\n          if (index === ids.length) {\n            if (active.some((row, r) => row.length !== capacities[r] || femaleCounts[r] % 2)) return null;\n            return arrange(active);\n          }\n          const id = ordered[index], female = input.profiles[id].gender === 'female';\n          for (const pattern of shuffle(patterns[id], random)) {\n            if (pattern.some((value, r) => active[r].length + value > capacities[r])) continue;\n            for (let r = 0; r < 6; r++) if (pattern[r]) { active[r].push(id); femaleCounts[r] += Number(female); }\n            const remaining = ordered.slice(index + 1);\n            const pairPossible = coupledGroups.every(group => {\n              if (!group.ids.every(p => ordered.slice(0, index + 1).includes(p))) return true;\n              return active.filter(row => group.ids.every(p => row.includes(p))).length >= group.count;\n            });\n            const possible = pairPossible && active.every((row, r) => row.length + remaining.filter(p => patterns[p].some(bits => bits[r])).length >= capacities[r]);\n            const found = possible ? assign(index + 1) : null;\n            for (let r = 0; r < 6; r++) if (pattern[r]) { active[r].pop(); femaleCounts[r] -= Number(female); }\n            if (found) return found;\n            if (timedOut) return null;\n          }\n          return null;\n        }\n        const rounds = assign(0);\n        if (rounds) return M.documentOf(input, rounds);\n      }\n      return null;\n    };\n    let result = null;\n    while (!result && clock() < deadline) { result = run(); if (!vectors.length) break; }\n    if (!result) throw Error(timedOut ? '\uc2dc\uac04 \uc548\uc5d0 \uc870\uac74\uc5d0 \ub9de\ub294 \ub300\uc9c4\uc744 \ucc3e\uc9c0 \ubabb\ud588\uc5b4\uc694. \ub2e4\uc2dc \ub9cc\ub4e4\uac70\ub098 \uacbd\uae30 \uc218\u00b7\ud734\uc2dd \uc870\uac74\uc744 \uc870\uc815\ud574 \uc8fc\uc138\uc694.' : '\ucc38\uc11d \uc2dc\uac04\u00b7\uacbd\uae30 \uc218\u00b7\uc131\ubcc4 \uad6c\uc131\uc744 \ud655\uc778\ud574 \uc8fc\uc138\uc694. \uc774 \uc870\uac74\uc73c\ub85c \ub300\uc9c4\uc744 \ucc3e\uc9c0 \ubabb\ud588\uc2b5\ub2c8\ub2e4.');\n    result.searchNodes = nodes;\n    return result;\n  }\n  return { generate };\n})();\nif (typeof module !== 'undefined') module.exports = builderScheduler;\n\nonmessage = event => {\n  try { postMessage({ document: builderScheduler.generate(event.data) }); }\n  catch (error) { postMessage({ error: error.message }); }\n};\n";
+const $ = id => document.getElementById(id);
+const esc = value => String(value).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const storageKey = 'daepo-builder-draft-v1';
+let state, draft = null, worker = null, connected = false, saving = false, unsubscribe = null;
+let confirmed = new Map(), connectionAttempt = 0, storageAvailable = true;
+const fresh = () => ({ date: builderModel.nextSaturday(), theme: '', selected: [], guests: {}, availability: {}, quotas: {}, pairs: [], avoidRests: true, repeats: false });
+function roster() {
+  const period = builderModel.periodForDate(state.date, builderData.memberships);
+  return period ? builderData.memberships[period].memberIds.filter(id => builderData.players[id]) : [];
+}
+function profile(id) { return state.guests[id] || builderData.players[id]; }
+function selected() { return state.selected.filter(id => profile(id) && (state.guests[id] || roster().includes(id))); }
+function message(text) { $('error').hidden = !text; $('error').textContent = text || ''; }
+function persist() {
+  try { localStorage.setItem(storageKey, JSON.stringify(state)); }
+  catch { storageAvailable = false; $('connection').textContent = '이 브라우저에 초안을 보관할 수 없습니다. 초안 파일 저장을 이용해 주세요.'; }
+}
+function invalidate() {
+  if (worker) { worker.terminate(); worker = null; }
+  draft = null; $('preview').hidden = true; $('generate').textContent = '대진 만들기'; $('editor').hidden = false;
+  $('saved-link').hidden = true; $('save-status').textContent = ''; message(''); updateButtons(); persist();
+}
+function available(id) { return state.availability[id] || { from: 0, to: 6 }; }
+function quotas() {
+  const ids = selected(), windows = Object.fromEntries(ids.map(id => [id, available(id).to - available(id).from]));
+  let defaultQuotas;
+  try { defaultQuotas = builderModel.allocate(ids, windows); } catch { defaultQuotas = Object.fromEntries(ids.map(id => [id, 4])); }
+  return Object.fromEntries(ids.map(id => [id, Object.hasOwn(state.quotas, id) ? state.quotas[id] : defaultQuotas[id]]));
+}
+function updateButtons() {
+  const period = builderModel.periodForDate(state.date, builderData.memberships);
+  const exists = builderData.legacyDates.includes(state.date) || confirmed.has(state.date);
+  $('generate').disabled = !!worker || saving || !period || exists || selected().length < 4 || selected().length > 16;
+  $('confirm').disabled = !draft || !connected || saving || !navigator.onLine || exists;
+  $('regenerate').disabled = !!worker || saving || exists;
+  $('edit').disabled = saving; $('download').disabled = !draft || saving;
+  $('existing').hidden = !exists;
+  if (exists) {
+    const href = builderData.legacyDates.includes(state.date) ? '../' + state.date + '/' : '../schedule/?date=' + encodeURIComponent(state.date);
+    $('existing').innerHTML = '이미 확정된 날짜입니다. 기존 팀 구성과 점수는 유지됩니다. <a href="' + href + '">대진표 보기 →</a>';
+  }
+}
+function renderOptions() {
+  const ids = selected(), q = quotas();
+  $('player-options').innerHTML = ids.map(id => {
+    const window = available(id);
+    const start = Array.from({ length: 6 }, (_, i) => '<option value="' + i + '"' + (window.from === i ? ' selected' : '') + '>' + builderModel.time(480 + i * 30) + '</option>').join('');
+    const end = Array.from({ length: 6 }, (_, i) => '<option value="' + (i + 1) + '"' + (window.to === i + 1 ? ' selected' : '') + '>' + builderModel.time(510 + i * 30) + '</option>').join('');
+    return '<div class="player-option"><strong>' + esc(profile(id).name) + '</strong><label>경기 수<select data-quota="' + esc(id) + '" aria-label="' + esc(profile(id).name) + ' 경기 수">' + [2, 3, 4].map(n => '<option' + (q[id] === n ? ' selected' : '') + '>' + n + '</option>').join('') + '</select></label><label>시작 가능<select data-from="' + esc(id) + '" aria-label="' + esc(profile(id).name) + ' 시작 가능">' + start + '</select></label><label>종료 시간<select data-to="' + esc(id) + '" aria-label="' + esc(profile(id).name) + ' 종료 시간">' + end + '</select></label></div>';
+  }).join('');
+  const pairCandidates = ids;
+  const option = '<option value="">선수 선택</option>' + pairCandidates.map(id => '<option value="' + esc(id) + '">' + esc(profile(id).name) + '</option>').join('');
+  $('pair-a').innerHTML = option; $('pair-b').innerHTML = option;
+  $('add-pair').disabled = ids.length < 4;
+  $('pairs').innerHTML = state.pairs.map((entry, i) => '<div class="pair-chip"><span>' + entry.players.map(id => esc(profile(id).name)).join(' · ') + ' · ' + (profile(entry.players[0]).gender === profile(entry.players[1]).gender ? (profile(entry.players[0]).gender === 'male' ? '남복' : '여복') : '혼복') + ' · ' + (entry.games === 'all' ? '전체 경기' : entry.games + '경기') + '</span><button type="button" class="remove-button" data-remove-pair="' + i + '" aria-label="' + entry.players.map(id => esc(profile(id).name)).join(' · ') + ' 페어 삭제">×</button></div>').join('');
+}
+function tidy() {
+  state.selected = selected();
+  const ids = new Set(state.selected);
+  for (const map of [state.availability, state.quotas]) for (const id of Object.keys(map)) if (!ids.has(id)) delete map[id];
+  state.pairs = state.pairs.filter(entry => entry.players.every(id => ids.has(id)));
+}
+function card(id, fixed) {
+  const p = profile(id), checked = state.selected.includes(id);
+  return '<label class="member-card"><input type="checkbox" data-attendee="' + esc(id) + '"' + (checked ? ' checked' : '') + '><span><strong>' + esc(p.name) + '</strong><small>' + (p.gender === 'male' ? '남자' : '여자') + (fixed ? '' : ' · 게스트') + '</small></span></label>';
+}
+function render() {
+  tidy(); const period = builderModel.periodForDate(state.date, builderData.memberships), members = roster();
+  $('date').value = state.date;
+  $('theme').value = state.theme || builderData.themePlans[state.date] || 'club';
+  $('membership-note').textContent = period ? builderData.memberships[period].label + ' · 고정 멤버 ' + members.length + '명 중 참석자를 선택하세요.' : '해당 날짜의 회원 회차 명단이 없습니다. 회차 명단을 먼저 등록한 뒤 대진을 만들어 주세요.';
+  $('members').innerHTML = members.map(id => card(id, true)).join('');
+  $('member-count').textContent = state.selected.filter(id => members.includes(id)).length + '명';
+  $('toggle-members').textContent = members.every(id => state.selected.includes(id)) ? '전체 해제' : '전체 선택';
+  $('guests').innerHTML = Object.keys(state.guests).map(id => '<div class="guest-entry">' + card(id, false) + '<button type="button" class="remove-button" data-remove-guest="' + esc(id) + '" aria-label="' + esc(profile(id).name) + ' 게스트 삭제">×</button></div>').join('');
+  $('guest-count').textContent = Object.keys(state.guests).length + '명';
+  const ids = selected(), males = ids.filter(id => profile(id).gender === 'male').length;
+  $('selection-summary').textContent = '참석 ' + ids.length + '명 · 남자 ' + males + ' · 여자 ' + (ids.length - males) + (ids.length < 4 ? ' · 4명 이상 선택해 주세요.' : ids.length > 16 ? ' · 16명 이내로 선택해 주세요.' : '');
+  $('avoid-rests').checked = state.avoidRests; $('allow-repeats').checked = state.repeats;
+  renderOptions(); updateButtons(); persist();
+}
+function inputOf() {
+  const ids = selected(), members = roster();
+  return builderModel.validateInput({ date: state.date, membershipPeriod: builderModel.periodForDate(state.date, builderData.memberships),
+    theme: $('theme').value, players: ids, fixedPlayerIds: ids.filter(id => members.includes(id)),
+    profiles: Object.fromEntries(ids.map(id => [id, { name: profile(id).name, gender: profile(id).gender, memberType: members.includes(id) ? 'fixed' : 'guest' }])),
+    quotas: quotas(), availability: Object.fromEntries(ids.map(id => [id, available(id)])), lockedPairs: state.pairs,
+    avoidConsecutiveRests: state.avoidRests, allowPartnerRepeats: state.repeats });
+}
+function preview(doc) {
+  const stats = builderModel.summary(doc), matches = Object.values(doc.matches);
+  $('preview-summary').textContent = doc.date + ' · ' + builderData.themes[doc.theme].name + ' · ' + doc.players.length + '명 · ' + matches.length + '경기 · 남복 ' + stats.types['남복'] + ' / 혼복 ' + stats.types['혼복'] + ' / 여복 ' + stats.types['여복'];
+  const forced = doc.players.filter(id => [1,2,3].some(r => [r,r+1,r+2,r+3].every(round => matches.some(m => m.round===round && [...m.teamA,...m.teamB].includes(id)))));
+  $('preview-locks').textContent = doc.lockedPairs.map(entry => entry.players.map(id=>doc.profiles[id].name).join(' · ') + ' ' + (doc.profiles[entry.players[0]].gender===doc.profiles[entry.players[1]].gender ? (doc.profiles[entry.players[0]].gender==='male' ? '남복' : '여복') : '혼복') + ' ' + (entry.games==='all' ? '전체 '+doc.quotas[entry.players[0]] : entry.games) + '경기 고정').join(' / ');
+  $('preview-locks').hidden = !doc.lockedPairs.length;
+  $('preview-warning').textContent = (stats.partnerRepeats ? '같은 페어 반복 ' + stats.partnerRepeats + '회. ' : '파트너 중복 없음. ') + (forced.length ? forced.map(id => doc.profiles[id].name).join(' · ') + ' 시간·전체 페어 조건으로 연속 출전·휴식 예외 적용. ' : '') + (doc.avoidConsecutiveRests ? '연속 휴식 피하기 적용. ' : '') + '층 이동 개인 최대 2회.';
+  $('preview-rounds').innerHTML = Array.from({ length: 6 }, (_, r) => {
+    const row = matches.filter(m => m.round === r + 1), active = new Set(row.flatMap(m => [...m.teamA, ...m.teamB]));
+    const rest = doc.players.filter(id => !active.has(id) && r >= doc.availability[id].from && r < doc.availability[id].to);
+    const ended = doc.players.filter(id => doc.availability[id].to <= r);
+    const cards = [1, 2].map(floor => {
+      const m = row.find(match => match.floor === floor);
+      return '<div class="preview-match"><small>' + floor + '층 · ' + (m ? builderModel.type(m.teamA, m.teamB, doc.profiles) : '빈 코트') + '</small>' + (m ? '<strong>' + m.teamANames.map(esc).join(' · ') + '</strong><div class="preview-vs">VS</div><strong>' + m.teamBNames.map(esc).join(' · ') + '</strong>' : '<p class="hint">이 타임은 배정 없음</p>') + '</div>';
+    }).join('');
+    return '<article class="preview-round"><div class="preview-time">' + builderModel.time(480 + r * 30) + ' — ' + builderModel.time(510 + r * 30) + '</div><div class="preview-matches">' + cards + '</div><div class="preview-rests">' + (rest.length ? '휴식 · ' + rest.map(id => esc(doc.profiles[id].name)).join(' · ') : '참석 선수 모두 출전') + (ended.length ? ' / 종료 · ' + ended.map(id => esc(doc.profiles[id].name)).join(' · ') : '') + '</div></article>';
+  }).join('');
+  $('preview-players').innerHTML = doc.players.map(id => {
+    const row = stats.rows[id], window = doc.availability[id];
+    return '<article class="allocation-card"><strong>' + esc(doc.profiles[id].name) + '</strong><p>' + row.games + '경기 · 남복 ' + row.men + ' / 혼복 ' + row.mixed + ' / 여복 ' + row.women + '</p><p>휴식 ' + row.rests.length + '회 · 층 이동 ' + row.floorChanges + '회</p><p>' + builderModel.time(480 + window.from * 30) + '–' + builderModel.time(480 + window.to * 30) + '</p></article>';
+  }).join('');
+  $('preview').hidden = false; $('editor').hidden = true; updateButtons(); $('preview').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+function generate() {
+  try {
+    message(''); const input = inputOf();
+    if (builderData.legacyDates.includes(input.date) || confirmed.has(input.date)) throw Error('이미 확정된 날짜의 대진은 바꾸지 않습니다.');
+    if (worker) worker.terminate();
+    draft = null; $('preview-warning').textContent = '새 대진을 찾는 중…'; const url = URL.createObjectURL(new Blob([workerSource], { type: 'text/javascript' }));
+    worker = new Worker(url); const activeWorker = worker; URL.revokeObjectURL(url); $('generate').textContent = '대진을 찾는 중…'; $('save-status').textContent = ''; updateButtons();
+    worker.onmessage = event => {
+      if (worker !== activeWorker) return;
+      worker.terminate(); worker = null; $('generate').textContent = '대진 만들기';
+      if (event.data.error) { $('editor').hidden = false; message(event.data.error); updateButtons(); return; }
+      draft = event.data.document; preview(draft);
+    };
+    worker.onerror = () => { if (worker !== activeWorker) return; worker.terminate(); worker = null; $('editor').hidden = false; message('대진 생성에 실패했어요. 입력은 유지됩니다. 다시 만들어 주세요.'); updateButtons(); };
+    worker.postMessage(input);
+  } catch (error) { message(error.message); }
+}
+async function connect() {
+  const attempt = ++connectionAttempt;
+  connected = false; updateButtons(); $('connection').textContent = '공유 대진 연결 중…';
+  unsubscribe?.();
+  try {
+    const stop = await builderStore.listen(builderData.firebaseConfig, documents => {
+      if (attempt !== connectionAttempt) return;
+      confirmed = new Map(documents.map(doc => [doc.date, doc])); connected = true;
+      $('connection').textContent = storageAvailable ? '초안은 이 브라우저에 보관 · 확정 후 공유 가능' : '초안 파일을 저장해 보관해 주세요.';
+      updateButtons();
+    }, () => { connected = false; $('connection').innerHTML = '공유 대진 연결 실패. 초안 만들기는 가능합니다. <button type="button" class="text-button" data-retry>다시 연결</button>'; updateButtons(); });
+    if (attempt === connectionAttempt) unsubscribe = stop; else stop();
+  } catch { if (attempt === connectionAttempt) { $('connection').innerHTML = '공유 대진 연결 실패. 초안 만들기는 가능합니다. <button type="button" class="text-button" data-retry>다시 연결</button>'; updateButtons(); } }
+}
+async function confirm() {
+  if (!draft || saving || !connected || !navigator.onLine) return;
+  const target = structuredClone(draft); saving = true; updateButtons(); $('save-status').textContent = '확정 중…';
+  try {
+    const date = await builderStore.save(builderData.firebaseConfig, target);
+    $('save-status').textContent = '대진 확정 완료. 점수는 확정된 대진표에서 입력하세요.';
+    $('saved-link').href = '../schedule/?date=' + encodeURIComponent(date); $('saved-link').hidden = false;
+    confirmed.set(date, target);
+  } catch (error) {
+    $('save-status').textContent = error.code === 'permission-denied' ? '저장 권한을 확인해 주세요. 초안은 유지됩니다.' : error.message;
+  } finally { saving = false; updateButtons(); }
+}
+document.addEventListener('change', event => {
+  if (saving) return;
+  const field = event.target;
+  if (field.id === 'date') {
+    const date = field.value;
+    if (!builderModel.validDate(date)) { message('날짜를 선택해 주세요.'); return; }
+    const oldGuests = Object.entries(state.guests); state.date = date; state.guests = {};
+    for (const [id, p] of oldGuests) { if (!roster().includes(id)) state.guests[builderData.players[id] ? id : builderModel.guestId(date, state.guests)] = p; }
+    state.selected = [...roster(), ...Object.keys(state.guests)]; state.availability = {}; state.quotas = {}; state.pairs = []; state.theme = '';
+  } else if (field.dataset.attendee) {
+    const id = field.dataset.attendee; state.selected = field.checked ? [...new Set([...state.selected, id])] : state.selected.filter(p => p !== id);
+  } else if (field.dataset.quota) state.quotas[field.dataset.quota] = Number(field.value);
+  else if (field.dataset.from || field.dataset.to) {
+    const id = field.dataset.from || field.dataset.to; state.availability[id] = { ...available(id), [field.dataset.from ? 'from' : 'to']: Number(field.value) };
+  } else if (field.id === 'theme') state.theme = field.value;
+  else if (field.id === 'avoid-rests') state.avoidRests = field.checked;
+  else if (field.id === 'allow-repeats') state.repeats = field.checked;
+  else return;
+  invalidate(); render();
+});
+document.addEventListener('click', event => {
+  const button = event.target.closest('button'); if (!button || saving) return;
+  if (button.id === 'toggle-members') { const ids = roster(), all = ids.every(id => state.selected.includes(id)); state.selected = all ? state.selected.filter(id => !ids.includes(id)) : [...new Set([...state.selected, ...ids])]; invalidate(); render(); }
+  else if (button.id === 'open-guest') { $('guest-form').hidden = false; button.setAttribute('aria-expanded', 'true'); $('guest-name').focus(); }
+  else if (button.id === 'cancel-guest') { $('guest-form').hidden = true; $('open-guest').setAttribute('aria-expanded', 'false'); $('open-guest').focus(); }
+  else if (button.dataset.removeGuest) { delete state.guests[button.dataset.removeGuest]; state.selected = state.selected.filter(id => id !== button.dataset.removeGuest); invalidate(); render(); }
+  else if (button.dataset.removePair !== undefined) { state.pairs.splice(Number(button.dataset.removePair), 1); invalidate(); render(); }
+  else if (button.id === 'add-pair') {
+    const pair = [$('pair-a').value, $('pair-b').value];
+    if (!pair[0] || !pair[1] || pair[0] === pair[1] || state.pairs.some(entry => builderModel.key(entry.players) === builderModel.key(pair))) { message('서로 다른 선수 두 명을 선택해 주세요. 같은 페어는 한 번만 등록합니다.'); return; }
+    state.pairs.push({players:pair,games:$('pair-games').value==='all'?'all':Number($('pair-games').value)}); invalidate(); render();
+  } else if (button.id === 'generate' || button.id === 'regenerate') generate();
+  else if (button.id === 'edit') { invalidate(); render(); $('editor').scrollIntoView({ block: 'start' }); }
+  else if (button.id === 'confirm') confirm();
+  else if (button.id === 'clear-draft') { state = fresh(); state.selected = roster(); invalidate(); render(); }
+  else if (button.id === 'download' && draft) { const payload = { ...draft }; delete payload.searchNodes; const url = URL.createObjectURL(new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' })); const link = document.createElement('a'); link.href = url; link.download = 'daepo-' + draft.date + '-draft.json'; link.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); }
+  else if (button.hasAttribute('data-retry')) connect();
+});
+$('guest-form').addEventListener('submit', event => {
+  event.preventDefault();
+  try {
+    const value = builderModel.validateName($('guest-name').value), gender = $('guest-gender').value;
+    const existing = Object.entries(builderData.players).find(([, p]) => p.name === value);
+    if (existing && roster().includes(existing[0])) throw Error('고정 멤버 명단에 있는 이름입니다. 참석 멤버에서 선택해 주세요.');
+    if (Object.values(state.guests).some(p => p.name === value)) throw Error('같은 게스트 이름이 이미 있습니다.');
+    if (Object.keys(state.guests).length >= 8) throw Error('게스트는 모임당 최대 8명까지 추가할 수 있습니다.');
+    if (existing && existing[1].gender !== gender) throw Error('기존 회원 프로필의 성별과 다릅니다. 등록된 성별을 선택해 주세요.');
+    const id = existing ? existing[0] : builderModel.guestId(state.date, state.guests);
+    state.guests[id] = { name: value, gender }; state.selected.push(id); $('guest-name').value = ''; $('guest-form').hidden = true; $('open-guest').setAttribute('aria-expanded', 'false');
+    invalidate(); render(); $('open-guest').focus();
+  } catch (error) { message(error.message); $('guest-name').focus(); }
+});
+window.addEventListener('offline', () => { $('connection').textContent = '인터넷 연결 끊김 · 초안은 유지됩니다.'; updateButtons(); });
+window.addEventListener('online', connect);
+state = fresh();
+let storedDraft = false;
+try { const saved = JSON.parse(localStorage.getItem(storageKey)); storedDraft = !!saved; if (saved && builderModel.validDate(saved.date) && Array.isArray(saved.selected) && saved.guests && typeof saved.guests === 'object' && Array.isArray(saved.pairs) && saved.pairs.every(entry=>entry && Array.isArray(entry.players))) state = { ...state, ...saved }; } catch {}
+if (!storedDraft) state.selected = roster();
+$('theme').innerHTML = Object.entries(builderData.themes).map(([id, theme]) => '<option value="' + esc(id) + '">' + esc(theme.name) + '</option>').join('');
+render(); connect();
+</script></body></html>

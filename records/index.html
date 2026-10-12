@@ -124,16 +124,7 @@ const membershipModel = (() => {
   return { periodForDate, memberIds, fixedPlayerIds, normalize };
 })();
 
-const firebaseConfig = {
-  "apiKey": "AIzaSyBGQn1egO2A-zVNGo40L6QEyuy538Mi9J8",
-  "authDomain": "daepo-b3b51.firebaseapp.com",
-  "projectId": "daepo-b3b51",
-  "storageBucket": "daepo-b3b51.firebasestorage.app",
-  "messagingSenderId": "66452711954",
-  "appId": "1:66452711954:web:b97266b7c3ab4a8756c6cb",
-  "measurementId": "G-2JS3C8XR2Q"
-}
-;
+const firebaseConfig = {"apiKey": "AIzaSyBGQn1egO2A-zVNGo40L6QEyuy538Mi9J8", "authDomain": "daepo-b3b51.firebaseapp.com", "projectId": "daepo-b3b51", "storageBucket": "daepo-b3b51.firebasestorage.app", "messagingSenderId": "66452711954", "appId": "1:66452711954:web:b97266b7c3ab4a8756c6cb", "measurementId": "G-2JS3C8XR2Q"};
 const players = {"p001": {"name": "서명렬", "gender": "male", "memberType": "fixed"}, "p002": {"name": "김영진", "gender": "male", "memberType": "fixed"}, "p003": {"name": "나창은", "gender": "male", "memberType": "fixed"}, "p004": {"name": "박세준", "gender": "male", "memberType": "fixed"}, "p005": {"name": "이재원", "gender": "male", "memberType": "fixed"}, "p006": {"name": "조아라", "gender": "female", "memberType": "fixed"}, "p007": {"name": "성주은", "gender": "female", "memberType": "fixed"}, "p008": {"name": "박정민", "gender": "female", "memberType": "fixed"}, "p009": {"name": "정가영", "gender": "female", "memberType": "fixed"}, "p010": {"name": "김규석", "gender": "male", "memberType": "fixed"}, "p011": {"name": "위형종", "gender": "male", "memberType": "fixed"}};
 const memberships = {"current-members": {"label": "8~10월(임시)", "startsOn": "2026-08-01", "endsBefore": "2026-11-01", "memberIds": ["p001", "p002", "p003", "p004", "p005", "p006", "p007", "p008", "p009", "p010", "p011"]}};
 const dateFilter = document.getElementById('date-filter');
@@ -333,7 +324,7 @@ function render() {
     const top = element('div', undefined, 'history-top');
     top.append(element('span', `${record.date} · ${record.round}타임 · ${record.floor}층`));
     const link = element('a', '대진표 →');
-    link.href = `../${record.date}/`; top.append(link);
+    link.href = `../schedule/?date=${encodeURIComponent(record.date)}`; top.append(link);
     const teams = element('div', undefined, 'history-teams');
     teams.append(element('span', record.teamANames.join(' · ')),
       element('strong', `${record.scoreA} : ${record.scoreB}`), element('span', record.teamBNames.join(' · ')));

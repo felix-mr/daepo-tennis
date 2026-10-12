@@ -449,3 +449,6 @@ setup_dir.joinpath("index.html").write_text((ROOT / "src/setup.html").read_text(
 print("dated schedule:", dated_target.resolve())
 print("records:", records_dir.resolve())
 print("validated:", dict(types), "12 players × 4 matches; partner repeats limited to configured women doubles pairs;", sum(floor_changes.values()), "floor changes total")
+
+from build_builder import build_builder
+build_builder(ROOT)

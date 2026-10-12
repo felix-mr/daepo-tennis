@@ -198,7 +198,7 @@ function render() {
     const top = element('div', undefined, 'history-top');
     top.append(element('span', `${record.date} · ${record.round}타임 · ${record.floor}층`));
     const link = element('a', '대진표 →');
-    link.href = `../${record.date}/`; top.append(link);
+    link.href = `../schedule/?date=${encodeURIComponent(record.date)}`; top.append(link);
     const teams = element('div', undefined, 'history-teams');
     teams.append(element('span', record.teamANames.join(' · ')),
       element('strong', `${record.scoreA} : ${record.scoreB}`), element('span', record.teamBNames.join(' · ')));

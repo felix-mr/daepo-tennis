@@ -100,4 +100,8 @@ service cloud.firestore {
     }
 '''.replace("__PERIODS__", json.dumps(periods, ensure_ascii=False))
     rules = rules.replace("    // Collection-group reads", membership_rules+"    // Collection-group reads")
+    from dynamic_rules import render_dynamic_rules
+    dynamic = render_dynamic_rules(root, manifest)
+    boundary = rules.rfind("  }\n}")
+    rules = rules[:boundary] + dynamic + rules[boundary:]
     (root / "firebase/firestore.rules").write_text(rules, encoding="utf-8")
