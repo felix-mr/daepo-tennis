@@ -18,21 +18,23 @@ def build_builder(root):
     }
     source = lambda name: (root / 'src' / name).read_text()
     model, store = source('builder-model.js'), source('builder-store.js')
+    deletion = source('schedule-delete.js')
     worker = model + '\n' + source('builder-scheduler.js') + '''
 onmessage = event => {
   try { postMessage({ document: builderScheduler.generate(event.data) }); }
   catch (error) { postMessage({ error: error.message }); }
 };
 '''
-    script = model + '\n' + store + '\n' + source('builder.js').replace('__BUILDER_DATA__', json.dumps(data, ensure_ascii=False)).replace('__WORKER_SOURCE__', json.dumps(worker))
+    script = model + '\n' + store + '\n' + deletion + '\n' + source('builder.js').replace('__BUILDER_DATA__', json.dumps(data, ensure_ascii=False)).replace('__WORKER_SOURCE__', json.dumps(worker))
     builder_dir = root / 'builder'
     builder_dir.mkdir(exist_ok=True)
-    builder_dir.joinpath('index.html').write_text(source('builder.html').replace('__CSS__', source('builder.css')).replace('__SCRIPT__', script))
+    builder_dir.joinpath('index.html').write_text(source('builder.html').replace('__CSS__', source('builder.css') + '\n' + source('schedule-delete.css')).replace('__SCRIPT__', script))
     score = source('results.js') + '\n' + source('membership.js') + '\n' + source('scores.js')
     score = score.replace('__MEMBERSHIPS__', json.dumps(data['memberships'], ensure_ascii=False)).replace('__FIREBASE_CONFIG__', 'config').replace('__SCHEDULE_DATE__', 'day').replace('__MATCHES__', 'scoreMatches')
-    mount = '\nfunction startScores(config, day, scoreMatches) {\n' + score + '\n}\n'
-    live_script = model + '\n' + store + '\n' + mount + source('live-schedule.js').replace('__LIVE_DATA__', json.dumps(data, ensure_ascii=False))
+    mount = '\nfunction startScores(config, day, scoreMatches, sourceDraftId) {\n' + score + '\n}\n'
+    live_script = model + '\n' + store + '\n' + deletion + '\n' + mount + source('live-schedule.js').replace('__LIVE_DATA__', json.dumps(data, ensure_ascii=False))
     live_css = (root / 'themes/club.css').read_text() + '\n' + source('scores.css') + '\n.lookup select{width:100%;padding:11px;border-radius:10px;border:1px solid var(--line);background:var(--paper);color:var(--ink);font:inherit}.shell>nav{margin-bottom:20px}[hidden]{display:none!important}'
+    live_css += '\n' + source('schedule-delete.css')
     live_dir = root / 'schedule'
     live_dir.mkdir(exist_ok=True)
     live_dir.joinpath('index.html').write_text(source('live-schedule.html').replace('__CSS__', live_css).replace('__SCRIPT__', live_script))

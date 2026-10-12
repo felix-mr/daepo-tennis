@@ -59,5 +59,40 @@ const builderStore = (() => {
       success(snapshot.docs.map(doc => doc.data()));
     }, failure);
   }
-  return { connection, read, save, listen };
+  async function watch(config, date, success, failure) {
+    const { f, db } = await connection(config);
+    return f.onSnapshot(f.doc(db, 'schedules', date), { includeMetadataChanges: true }, snapshot => {
+      if (snapshot.metadata.hasPendingWrites || snapshot.metadata.fromCache) return;
+      success(snapshot.exists() ? snapshot.data() : null);
+    }, failure);
+  }
+  const removalError = (code, message) => Object.assign(Error(message), {code});
+  async function removalStatus(config, date, sourceDraftId) {
+    if (!builderModel.validDate(date) || !/^[a-zA-Z0-9]{20}$/.test(sourceDraftId || '')) throw removalError('invalid-schedule', '웹에서 확정한 대진만 삭제할 수 있습니다.');
+    if (!navigator.onLine) throw removalError('offline', '인터넷 연결 후 삭제해 주세요.');
+    const { f, db } = await connection(config);
+    const parent = await f.getDocFromServer(f.doc(db, 'schedules', date));
+    if (!parent.exists()) return {exists:false};
+    if (parent.data().sourceDraftId !== sourceDraftId) throw removalError('schedule-changed', '대진이 새로 만들어졌어요. 최신 대진을 확인해 주세요.');
+    const scores = await f.getDocsFromServer(f.query(f.collection(db, 'schedules', date, 'matchResults'), f.limit(1)));
+    if (!scores.empty) throw removalError('has-results', '점수가 입력된 대진은 삭제할 수 없습니다. 기존 경기 기록을 유지합니다.');
+    return {exists:true};
+  }
+  async function remove(config, date, sourceDraftId) {
+    await removalStatus(config, date, sourceDraftId);
+    const { f, db } = await connection(config), parent = f.doc(db, 'schedules', date);
+    try { await f.runTransaction(db, async transaction => {
+      const current = await transaction.get(parent);
+      if (!current.exists()) return;
+      if (current.data().sourceDraftId !== sourceDraftId) throw removalError('schedule-changed', '대진이 새로 만들어졌어요. 최신 대진을 확인해 주세요.');
+      for (const part of ['rounds1','rounds2']) transaction.set(f.doc(db, 'scheduleDeletions', sourceDraftId, 'checks', part),
+        {date,sourceDraftId,createdAt:f.serverTimestamp()});
+      transaction.delete(parent);
+    }); } catch(error) {
+      if(error.code==='permission-denied')await removalStatus(config,date,sourceDraftId);
+      throw error;
+    }
+    return date;
+  }
+  return { connection, read, save, listen, watch, removalStatus, remove };
 })();

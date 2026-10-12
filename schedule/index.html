@@ -61,7 +61,9 @@ h1{font-size:clamp(32px,4.8vw,54px);line-height:1.12;letter-spacing:-.055em;marg
 .score-connection{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:20px 0 12px;padding:12px 16px;border:1px solid var(--line);border-radius:13px;background:var(--white);color:var(--muted);font-size:12px}.score-connection p{margin:0}.score-connection button,.score-actions button{border:1px solid var(--line);border-radius:9px;background:var(--green2);color:#fff;padding:8px 11px;font-weight:750;cursor:pointer}.score-actions button:disabled{opacity:.45;cursor:default}.score-form{margin-top:13px;padding-top:11px;border-top:1px solid var(--line)}.score-result{display:block;color:var(--green2);font-size:13px;font-weight:800;margin-bottom:8px}.score-fields{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px}.score-fields label{display:flex;flex-direction:column;gap:5px;min-width:0;font-size:11px;color:var(--muted)}.score-fields label span{overflow-wrap:anywhere}.score-fields input{width:100%;min-width:0;border:1px solid var(--line);border-radius:8px;padding:8px;background:var(--paper);color:var(--ink);font-size:16px;font-weight:800}.score-fields input:focus{outline:2px solid var(--green2);outline-offset:1px}.score-actions{display:flex;align-items:center;flex-wrap:wrap;gap:7px;margin-top:9px}.score-actions [data-reset-score]{background:transparent;color:var(--muted)}.score-message{display:block;min-height:17px;margin-top:7px;color:var(--muted);font-size:11px;overflow-wrap:anywhere}@media(max-width:700px){.score-actions button{padding:7px 9px;font-size:12px}.score-fields{gap:5px}.score-connection{align-items:flex-start}}@media print{.score-connection,.score-fields,.score-actions,.score-message{display:none}.score-form{margin-top:5px;padding-top:4px}.score-result{margin-bottom:0;font-size:10px}}
 .score-outcome{display:block;color:var(--green2);font-size:12px;font-weight:750;margin:0 0 9px;overflow-wrap:anywhere}.player-summary{color:var(--muted);font-size:13px}.page-links{display:flex;gap:15px;flex-wrap:wrap}.score-result{overflow-wrap:anywhere}
 
-.lookup select{width:100%;padding:11px;border-radius:10px;border:1px solid var(--line);background:var(--paper);color:var(--ink);font:inherit}.shell>nav{margin-bottom:20px}[hidden]{display:none!important}</style></head><body><main class="shell"><nav class="page-links"><a class="archive-back" href="../">← 날짜별 대진표</a><a class="archive-back" href="../records/">기록 · 순위 →</a><a class="archive-back" href="../builder/">대진표 만들기</a></nav><section id="live-status" class="score-connection" role="status">대진표 불러오는 중…</section><div id="live-content" hidden></div></main><script type="module">const builderModel = (() => {
+.lookup select{width:100%;padding:11px;border-radius:10px;border:1px solid var(--line);background:var(--paper);color:var(--ink);font:inherit}.shell>nav{margin-bottom:20px}[hidden]{display:none!important}
+.danger-button{border:1px solid #9c392e;border-radius:10px;background:#fff8f5;color:#9c392e;font:inherit;font-size:13px;font-weight:750;padding:9px 13px;cursor:pointer}.danger-button:disabled{opacity:.5;cursor:default}.danger-button:focus-visible,.delete-dialog button:focus-visible{outline:3px solid #d89071;outline-offset:3px}.delete-dialog{width:min(440px,calc(100% - 32px));max-height:calc(100% - 40px);padding:24px;border:1px solid #d9e5db;border-radius:18px;background:#fff;color:#19352a;font-family:inherit;box-shadow:0 20px 60px #0003}.delete-dialog::backdrop{background:#13282580}.delete-dialog h2{margin:0 0 14px;font-size:21px;line-height:1.4}.delete-dialog p{font-size:14px;line-height:1.7}.delete-dialog-actions{display:flex;gap:12px;justify-content:flex-end;margin-top:22px}.delete-dialog-actions button{font:inherit;font-size:14px;font-weight:750;border:1px solid #b9d0bd;border-radius:10px;background:#f4f8f1;color:#20563b;padding:10px 16px;cursor:pointer}.delete-dialog-actions .danger-button{background:#9c392e;border-color:#9c392e;color:white}.delete-dialog-error{color:#9c392e;background:#fff1e9;border-radius:10px;padding:10px}.schedule-manage{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:12px 0 18px}.schedule-manage p,#schedule-delete-status{color:var(--muted);font-size:12px;line-height:1.6}#schedule-delete-status:empty{display:none}.builder-notice .danger-button{margin:8px 0 0 10px}.delete-hint{display:block;font-size:12px;margin-top:8px}.deleted-action{display:inline-block;margin-top:12px}@media(max-width:480px){.schedule-manage{align-items:flex-start;flex-direction:column}.builder-notice .danger-button{display:block;margin-left:0}}@media print{.schedule-manage,#schedule-delete-status,.delete-dialog{display:none!important}}
+</style></head><body><main class="shell"><nav class="page-links"><a class="archive-back" href="../">← 날짜별 대진표</a><a class="archive-back" href="../records/">기록 · 순위 →</a><a class="archive-back" href="../builder/">대진표 만들기</a></nav><section id="live-status" class="score-connection" role="status">대진표 불러오는 중…</section><p id="schedule-delete-status" role="status" aria-live="polite"></p><section id="schedule-manage" class="schedule-manage" hidden><p>점수 입력 전인 대진만 삭제하고 다시 만들 수 있습니다.</p><button id="delete-schedule" class="danger-button" type="button">대진 삭제</button></section><div id="live-content" hidden></div></main><script type="module">const builderModel = (() => {
   const pad = n => String(n).padStart(2, '0');
   const minute = value => Number(value.slice(0, 2)) * 60 + Number(value.slice(3));
   const time = n => pad(Math.floor(n / 60)) + ':' + pad(n % 60);
@@ -407,11 +409,99 @@ const builderStore = (() => {
       success(snapshot.docs.map(doc => doc.data()));
     }, failure);
   }
-  return { connection, read, save, listen };
+  async function watch(config, date, success, failure) {
+    const { f, db } = await connection(config);
+    return f.onSnapshot(f.doc(db, 'schedules', date), { includeMetadataChanges: true }, snapshot => {
+      if (snapshot.metadata.hasPendingWrites || snapshot.metadata.fromCache) return;
+      success(snapshot.exists() ? snapshot.data() : null);
+    }, failure);
+  }
+  const removalError = (code, message) => Object.assign(Error(message), {code});
+  async function removalStatus(config, date, sourceDraftId) {
+    if (!builderModel.validDate(date) || !/^[a-zA-Z0-9]{20}$/.test(sourceDraftId || '')) throw removalError('invalid-schedule', '웹에서 확정한 대진만 삭제할 수 있습니다.');
+    if (!navigator.onLine) throw removalError('offline', '인터넷 연결 후 삭제해 주세요.');
+    const { f, db } = await connection(config);
+    const parent = await f.getDocFromServer(f.doc(db, 'schedules', date));
+    if (!parent.exists()) return {exists:false};
+    if (parent.data().sourceDraftId !== sourceDraftId) throw removalError('schedule-changed', '대진이 새로 만들어졌어요. 최신 대진을 확인해 주세요.');
+    const scores = await f.getDocsFromServer(f.query(f.collection(db, 'schedules', date, 'matchResults'), f.limit(1)));
+    if (!scores.empty) throw removalError('has-results', '점수가 입력된 대진은 삭제할 수 없습니다. 기존 경기 기록을 유지합니다.');
+    return {exists:true};
+  }
+  async function remove(config, date, sourceDraftId) {
+    await removalStatus(config, date, sourceDraftId);
+    const { f, db } = await connection(config), parent = f.doc(db, 'schedules', date);
+    try { await f.runTransaction(db, async transaction => {
+      const current = await transaction.get(parent);
+      if (!current.exists()) return;
+      if (current.data().sourceDraftId !== sourceDraftId) throw removalError('schedule-changed', '대진이 새로 만들어졌어요. 최신 대진을 확인해 주세요.');
+      for (const part of ['rounds1','rounds2']) transaction.set(f.doc(db, 'scheduleDeletions', sourceDraftId, 'checks', part),
+        {date,sourceDraftId,createdAt:f.serverTimestamp()});
+      transaction.delete(parent);
+    }); } catch(error) {
+      if(error.code==='permission-denied')await removalStatus(config,date,sourceDraftId);
+      throw error;
+    }
+    return date;
+  }
+  return { connection, read, save, listen, watch, removalStatus, remove };
+})();
+
+// The preflight explains eligibility; server rules recheck all results atomically.
+const scheduleDeletion = (() => {
+  function mount({config, getSchedule, onDeleted, onBusy = () => {}}) {
+    const dialog = document.createElement('dialog');
+    dialog.className = 'delete-dialog';
+    dialog.setAttribute('aria-labelledby', 'delete-dialog-title');
+    dialog.setAttribute('aria-describedby', 'delete-dialog-description');
+    dialog.innerHTML = '<h2 id="delete-dialog-title">대진표를 삭제할까요?</h2><p id="delete-dialog-description">삭제하면 공유 링크에서 대진을 볼 수 없습니다. 같은 날짜로 다시 만들 수 있습니다. 점수가 입력된 대진은 삭제할 수 없습니다.</p><p class="delete-dialog-error" role="alert" hidden></p><div class="delete-dialog-actions"><button type="button" data-cancel-delete autofocus>취소</button><button type="button" data-confirm-delete class="danger-button">대진 삭제</button></div>';
+    document.body.append(dialog);
+    const cancel = dialog.querySelector('[data-cancel-delete]'), confirm = dialog.querySelector('[data-confirm-delete]'), error = dialog.querySelector('[role=alert]');
+    let target = null, busy = false, submitting = false, opener, finished = false;
+    const status = text => { const node=document.getElementById('schedule-delete-status'); if(node)node.textContent=text; };
+    const setBusy = value => {busy=value;onBusy(value);};
+    const failureMessage = failure => failure.code === 'permission-denied'
+      ? '점수 입력 여부와 최신 대진을 다시 확인해 주세요. 삭제는 완료되지 않았습니다.'
+      : failure.message || '삭제 확인에 실패했어요. 대진을 다시 확인해 주세요.';
+    dialog.addEventListener('cancel', event => {if(submitting)event.preventDefault();});
+    const restoreFocus=()=>{
+      const next=[document.getElementById(opener?.id),document.getElementById('date'),document.querySelector('nav a')]
+        .find(node=>node && !node.disabled && node.getClientRects().length);
+      next?.focus();
+    };
+    dialog.addEventListener('close', () => {
+      if(dialog.open)return;
+      target=null;setBusy(false);
+      if(finished){const next=document.querySelector('.deleted-action') || document.getElementById('generate');if(next && !next.disabled)next.focus();}
+      else restoreFocus();
+    });
+    cancel.addEventListener('click', () => {if(!submitting)dialog.close();});
+    confirm.addEventListener('click', async () => {
+      if (!target || submitting) return;
+      const submitted={...target};
+      submitting=true;cancel.disabled=confirm.disabled=true;confirm.textContent='삭제 중…';error.hidden=true;
+      try {
+        await builderStore.remove(config,submitted.date,submitted.sourceDraftId);
+        finished=true;dialog.close();status(submitted.date+' 대진표를 삭제했어요. 다시 만들 수 있습니다.');onDeleted(submitted);
+      } catch (failure) {error.textContent=failureMessage(failure);error.hidden=false;}
+      finally {submitting=false;cancel.disabled=confirm.disabled=false;confirm.textContent='대진 삭제';}
+    });
+    return {async open(button) {
+      if(busy)return;
+      const current=getSchedule();if(!current)return;
+      const snapshot={date:current.date,sourceDraftId:current.sourceDraftId};opener=button;finished=false;setBusy(true);status('점수 입력 여부 확인 중…');
+      try {
+        const result=await builderStore.removalStatus(config,snapshot.date,snapshot.sourceDraftId);
+        if(!result.exists){status('이미 삭제된 대진입니다. 다시 만들 수 있습니다.');setBusy(false);onDeleted(snapshot);return;}
+        target=snapshot;dialog.querySelector('h2').textContent=snapshot.date+' 대진표를 삭제할까요?';error.hidden=true;status('');dialog.showModal();cancel.focus();
+      } catch(failure){status(failureMessage(failure));setBusy(false);restoreFocus();}
+    }};
+  }
+  return {mount};
 })();
 
 
-function startScores(config, day, scoreMatches) {
+function startScores(config, day, scoreMatches, sourceDraftId) {
 const resultModel = (() => {
   function outcome(scoreA, scoreB) {
     return scoreA > scoreB ? 'teamA' : scoreA < scoreB ? 'teamB' : 'draw';
@@ -515,6 +605,7 @@ const firebaseConfig = config;
 const scheduleDate = day;
 const matches = scoreMatches;
 const memberships = {"current-members": {"label": "8~10월(임시)", "startsOn": "2026-08-01", "endsBefore": "2026-11-01", "memberIds": ["p001", "p002", "p003", "p004", "p005", "p006", "p007", "p008", "p009", "p010", "p011"]}};
+const scoreEpoch = typeof sourceDraftId === 'string' ? sourceDraftId : null;
 const forms = [...document.querySelectorAll('[data-score-form]')];
 const connection = document.getElementById('score-connection-status');
 const retry = document.getElementById('score-retry');
@@ -673,6 +764,12 @@ forms.forEach(form => {
     try {
       const reference = firestore.doc(db, 'schedules', scheduleDate, 'matchResults', id);
       await firestore.runTransaction(db, async transaction => {
+        if(scoreEpoch) {
+          const parent=await transaction.get(firestore.doc(db,'schedules',scheduleDate));
+          if(!parent.exists() || parent.data().sourceDraftId!==scoreEpoch){
+            const error=Error('Schedule changed while editing');error.code='schedule-changed';throw error;
+          }
+        }
         const current = await transaction.get(reference);
         const record = current.exists() ? current.data() : undefined;
         if (version(record) !== draft.baseVersion) {
@@ -682,6 +779,7 @@ forms.forEach(form => {
           throw error;
         }
         transaction.set(reference, { ...matches[id], scoreA, scoreB,
+          ...(scoreEpoch ? {sourceDraftId:scoreEpoch} : {}),
           outcome: resultModel.outcome(scoreA, scoreB), updatedAt: firestore.serverTimestamp() });
       });
       // Show success only after the server acknowledged the transaction.
@@ -692,6 +790,7 @@ forms.forEach(form => {
     } catch (error) {
       messages.set(id, error.code === 'score-conflict'
         ? '다른 사람이 먼저 저장했어요. 취소 후 최신 점수를 확인해 주세요.'
+        : error.code === 'schedule-changed' ? '대진이 삭제되거나 새로 만들어졌어요. 새로고침 후 최신 대진을 확인해 주세요.'
         : '저장 확인 실패. 입력값은 유지돼요. 연결 후 최신 점수를 확인해 주세요.');
     } finally {
       saving.delete(id);
@@ -713,6 +812,17 @@ const liveData = {"players": {"p001": {"name": "서명렬", "gender": "male", "m
 const escapeLive = value => String(value).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const day = new URL(location.href).searchParams.get('date');
 let documentSchedule;
+function showRemoved(date, removed=true) {
+  document.getElementById('live-content').hidden=true;
+  document.getElementById('schedule-manage').hidden=true;
+  const status=document.getElementById('live-status');status.hidden=false;
+  status.innerHTML=escapeLive(date)+(removed ? ' 대진표가 삭제됐어요.' : ' 확정된 대진표가 없습니다.')+'<br><a class="archive-back deleted-action" href="../builder/?date='+encodeURIComponent(date)+'">같은 날짜로 다시 만들기 →</a>';
+}
+const deletionControl=scheduleDeletion.mount({config:liveData.firebaseConfig,getSchedule:()=>documentSchedule,
+  onBusy:busy=>{document.getElementById('delete-schedule').disabled=busy || !navigator.onLine;},onDeleted:removed=>{showRemoved(removed.date);document.querySelector('.deleted-action').focus();}});
+document.getElementById('delete-schedule').addEventListener('click',event=>deletionControl.open(event.currentTarget));
+window.addEventListener('offline',()=>{document.getElementById('delete-schedule').disabled=true;});
+window.addEventListener('online',()=>{document.getElementById('delete-schedule').disabled=false;});
 function scoreForm(match, ownId = '') {
   if (!match.fixedPlayerIds.length) return '';
   const id = 'r' + match.round + '-f' + match.floor;
@@ -760,18 +870,28 @@ function mount(doc) {
   const wanted = new URL(location.href).searchParams.get('player'); if (doc.players.includes(wanted)) choose(wanted);
   document.getElementById('live-status').hidden = true; document.getElementById('live-content').hidden = false;
   const scoreMatches = Object.fromEntries(Object.entries(doc.matches).filter(([, match]) => match.fixedPlayerIds.length));
-  startScores(liveData.firebaseConfig, doc.date, scoreMatches);
+  startScores(liveData.firebaseConfig, doc.date, scoreMatches, doc.sourceDraftId);
 }
 async function load() {
   try {
     if (!builderModel.validDate(day)) throw Error('대진표 날짜를 확인해 주세요.');
     if (liveData.legacyDates.includes(day)) { location.replace('../' + day + '/'); return; }
     const doc = await builderStore.read(liveData.firebaseConfig, day);
-    if (!doc) throw Error('아직 확정된 대진표가 없습니다. 대진표 만들기에서 확인해 주세요.');
+    if (!doc) {showRemoved(day,false);return;}
     builderModel.validateDocument(doc, {preferences:false});
     const theme = liveData.themes[doc.theme] || liveData.themes.club;
     await new Promise((resolve, reject) => { const link = document.createElement('link'); link.rel = 'stylesheet'; link.href = '../' + theme.stylesheet; link.onload = resolve; link.onerror = () => reject(Error('컨셉 화면을 불러오지 못했어요. 새로고침해 주세요.')); document.head.append(link); });
     mount(doc);
+    document.getElementById('schedule-manage').hidden=false;
+    document.getElementById('delete-schedule').disabled=!navigator.onLine;
+    await builderStore.watch(liveData.firebaseConfig,day,current=>{
+      if(!current){showRemoved(day);return;}
+      if(current.sourceDraftId!==documentSchedule.sourceDraftId){
+        document.getElementById('live-content').hidden=true;document.getElementById('schedule-manage').hidden=true;
+        const status=document.getElementById('live-status');status.hidden=false;
+        status.innerHTML='대진표가 새로 만들어졌어요.<br><a class="archive-back deleted-action" href="?date='+encodeURIComponent(day)+'">최신 대진 다시 보기 →</a>';
+      }
+    },()=>{const status=document.getElementById('live-status');status.hidden=false;status.textContent='대진 상태 연결이 끊겼어요. 새로고침해 주세요.';});
   } catch (error) { document.getElementById('live-status').textContent = error.code === 'permission-denied' ? '대진표 접근 권한을 확인해 주세요.' : error.message; }
 }
 load();

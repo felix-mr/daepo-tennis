@@ -197,26 +197,56 @@ def render_dynamic_rules(root, legacy_dates):
         let d = request.resource.data;
         let draft = get(/databases/$(database)/documents/scheduleDrafts/$(d.sourceDraftId)).data;
         return day == d.date && !(day in browserReservedDates()) && d.sourceDraftId.matches('[a-zA-Z0-9]{20}')
+          && !exists(/databases/$(database)/documents/scheduleDeletions/$(d.sourceDraftId)/checks/rounds1)
           && d.createdAt == request.time && d.diff(draft).affectedKeys().hasOnly(['sourceDraftId','createdAt'])
           && validDraftProof(d.sourceDraftId,day,'roster') && validDraftProof(d.sourceDraftId,day,'rounds')
           && validDraftProof(d.sourceDraftId,day,'locks');
       }
+      function validDeletionCheck(part) {
+        let path = /databases/$(database)/documents/scheduleDeletions/$(resource.data.sourceDraftId)/checks/$(part);
+        return existsAfter(path) && getAfter(path).data.date == day
+          && getAfter(path).data.sourceDraftId == resource.data.sourceDraftId && getAfter(path).data.createdAt == request.time;
+      }
       allow create: if validPublication();
-      allow update, delete: if false;
+      allow update: if false;
+      allow delete: if !(day in browserReservedDates()) && resource.data.sourceDraftId.matches('[a-zA-Z0-9]{20}')
+        && validDeletionCheck('rounds1') && validDeletionCheck('rounds2');
+    }
+    match /scheduleDeletions/{draftId}/checks/{part} {
+      function validDeletionParent(d) {
+        let path = /databases/$(database)/documents/schedules/$(d.date);
+        return exists(path) && get(path).data.date == d.date && get(path).data.sourceDraftId == draftId;
+      }
+      function validDeletionCheck() {
+        let d = request.resource.data;
+        return draftId.matches('[a-zA-Z0-9]{20}') && part in ['rounds1','rounds2']
+          && d.keys().hasAll(['date','sourceDraftId','createdAt']) && d.keys().hasOnly(['date','sourceDraftId','createdAt'])
+          && !(d.date in browserReservedDates()) && validDeletionParent(d)
+          && d.sourceDraftId == draftId && d.createdAt == request.time
+          && !existsAfter(/databases/$(database)/documents/schedules/$(d.date))
+          && ((part == 'rounds1' && (__NO_RESULTS_FIRST__)) || (part == 'rounds2' && (__NO_RESULTS_LAST__)));
+      }
+      allow create: if validDeletionCheck();
+      allow read, update, delete: if false;
     }
     match /schedules/{day}/matchResults/{matchId} {
-      function validDynamicScore() {
-        let parent = get(/databases/$(database)/documents/schedules/$(day)).data;
-        let canonical = parent.matches[matchId];
+      function validDynamicScoreFor(parent) {
+        let canonical = parent.get('matches',{}).get(matchId,{});
         let d = request.resource.data;
-        return !(day in browserReservedDates()) && canonical.fixedPlayerIds.size() > 0
-          && validScore() && d.date == day && d.round == canonical.round && d.floor == canonical.floor
+        return !(day in browserReservedDates()) && canonical.get('fixedPlayerIds',[]).size() > 0
+          && validScoreFields(['date','round','floor','teamA','teamB','teamANames','teamBNames','fixedPlayerIds','scoreA','scoreB','outcome','updatedAt','sourceDraftId'])
+          && d.sourceDraftId == parent.sourceDraftId && d.date == day && d.round == canonical.round && d.floor == canonical.floor
           && d.teamA == canonical.teamA && d.teamB == canonical.teamB
           && d.teamANames == canonical.teamANames && d.teamBNames == canonical.teamBNames
           && d.fixedPlayerIds == canonical.fixedPlayerIds;
       }
+      function validDynamicScore() {
+        let path = /databases/$(database)/documents/schedules/$(day);
+        return !(day in browserReservedDates()) && existsAfter(path) && validDynamicScoreFor(getAfter(path).data);
+      }
       allow create: if validDynamicScore();
-      allow update: if validDynamicScore() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['scoreA', 'scoreB', 'outcome', 'updatedAt']);
+      allow update: if validDynamicScore() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['scoreA', 'scoreB', 'outcome', 'updatedAt', 'sourceDraftId'])
+        && (!('sourceDraftId' in resource.data) || request.resource.data.sourceDraftId == resource.data.sourceDraftId);
       allow delete: if false;
     }
-'''.replace('\\s', '\\\\s').replace('\\x', '\\\\x').replace('__AVAILABLE_PLAN__', ' && '.join([f"(plan[{i}] == 0 || (d.availability[id].from < {i+1} && d.availability[id].to >= {i+1}))" for i in range(6)])).replace('__BROWSER_THEMES__', json.dumps(sorted(path.stem for path in (root / 'themes').glob('*.json')))).replace('__DATES__', json.dumps(dates)).replace('__NAMES__', json.dumps({pid: profile['name'] for pid, profile in profiles.items()}, ensure_ascii=False)).replace('__GENDERS__', json.dumps({pid: profile['gender'] for pid, profile in profiles.items()})).replace('__LEGACY__', json.dumps(sorted(legacy_dates))).replace('__MATCH_KEYS__', json.dumps(keys))
+'''.replace('__NO_RESULTS_FIRST__', ' && '.join(f'!existsAfter(/databases/$(database)/documents/schedules/$(d.date)/matchResults/r{r}-f{f})' for r in range(1,4) for f in range(1,3))).replace('__NO_RESULTS_LAST__', ' && '.join(f'!existsAfter(/databases/$(database)/documents/schedules/$(d.date)/matchResults/r{r}-f{f})' for r in range(4,7) for f in range(1,3))).replace('\\s', '\\\\s').replace('\\x', '\\\\x').replace('__AVAILABLE_PLAN__', ' && '.join([f"(plan[{i}] == 0 || (d.availability[id].from < {i+1} && d.availability[id].to >= {i+1}))" for i in range(6)])).replace('__BROWSER_THEMES__', json.dumps(sorted(path.stem for path in (root / 'themes').glob('*.json')))).replace('__DATES__', json.dumps(dates)).replace('__NAMES__', json.dumps({pid: profile['name'] for pid, profile in profiles.items()}, ensure_ascii=False)).replace('__GENDERS__', json.dumps({pid: profile['gender'] for pid, profile in profiles.items()})).replace('__LEGACY__', json.dumps(sorted(legacy_dates))).replace('__MATCH_KEYS__', json.dumps(keys))

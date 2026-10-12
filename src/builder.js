@@ -73,7 +73,10 @@ function updateButtons() {
   $('existing').hidden = !exists;
   if (exists) {
     const href = builderData.legacyDates.includes(state.date) ? '../' + state.date + '/' : '../schedule/?date=' + encodeURIComponent(state.date);
-    $('existing').innerHTML = '이미 확정된 날짜입니다. 기존 팀 구성과 점수는 유지됩니다. <a href="' + href + '">대진표 보기 →</a>';
+    const removable=!builderData.legacyDates.includes(state.date);
+    $('existing').innerHTML = '이미 확정된 날짜입니다. <a href="' + href + '">대진표 보기 →</a>' + (removable
+      ? '<button id="delete-schedule" type="button" class="danger-button"'+(!connected || saving || !navigator.onLine || !confirmed.get(state.date)?.sourceDraftId ? ' disabled' : '')+'>대진 삭제</button><span class="delete-hint">점수 입력 전인 대진만 삭제하고 다시 만들 수 있습니다.</span>'
+      : '<span class="delete-hint">보관된 지난 대진과 경기 기록은 유지됩니다.</span>');
   }
 }
 function renderOptions() {
@@ -187,12 +190,13 @@ async function connect() {
 }
 async function confirm() {
   if (!draft || saving || !connected || !navigator.onLine) return;
+  $('schedule-delete-status').textContent='';
   const target = structuredClone(draft); saving = true; updateButtons(); $('save-status').textContent = '확정 중…';
   try {
     const date = await builderStore.save(builderData.firebaseConfig, target);
     $('save-status').textContent = '대진 확정 완료. 점수는 확정된 대진표에서 입력하세요.';
     $('saved-link').href = '../schedule/?date=' + encodeURIComponent(date); $('saved-link').hidden = false;
-    confirmed.set(date, target);
+    if(!confirmed.has(date))confirmed.set(date, target);
   } catch (error) {
     $('save-status').textContent = error.code === 'permission-denied' ? '저장 권한을 확인해 주세요. 초안은 유지됩니다.' : error.message;
   } finally { saving = false; updateButtons(); }
@@ -203,6 +207,7 @@ document.addEventListener('change', event => {
   if (field.id === 'date') {
     const date = field.value;
     if (!builderModel.validDate(date)) { message('날짜를 선택해 주세요.'); return; }
+    $('schedule-delete-status').textContent='';
     const oldGuests = Object.entries(state.guests); state.date = date; state.guests = {};
     for (const [id, p] of oldGuests) { if (!roster().includes(id)) state.guests[builderData.players[id] ? id : builderModel.guestId(date, state.guests)] = p; }
     state.selected = [...roster(), ...Object.keys(state.guests)]; state.availability = {}; state.quotas = {}; state.pairs = []; state.theme = ''; state.bonusIds=[];fillCache=null;
@@ -221,6 +226,7 @@ document.addEventListener('change', event => {
 });
 document.addEventListener('click', event => {
   const button = event.target.closest('button'); if (!button || saving) return;
+  if (button.id === 'delete-schedule') {deletionControl.open(button);return;}
   if (button.id === 'redraw-bonus') {state.bonusIds=[];fillCache=null;invalidate();render();return;}
   if (button.id === 'toggle-members') { const ids = roster(), all = ids.every(id => state.selected.includes(id)); state.selected = all ? state.selected.filter(id => !ids.includes(id)) : [...new Set([...state.selected, ...ids])]; invalidate(); render(); }
   else if (button.id === 'open-guest') { $('guest-form').hidden = false; button.setAttribute('aria-expanded', 'true'); $('guest-name').focus(); }
@@ -258,4 +264,11 @@ state = fresh();
 let storedDraft = false;
 try { const saved = JSON.parse(localStorage.getItem(storageKey)); storedDraft = !!saved; if (saved && builderModel.validDate(saved.date) && Array.isArray(saved.selected) && saved.guests && typeof saved.guests === 'object' && Array.isArray(saved.pairs) && saved.pairs.every(entry=>entry && Array.isArray(entry.players))) state = { ...state, ...saved }; } catch {}
 if (!storedDraft) state.selected = roster();
+const requestedDate=new URL(location.href).searchParams.get('date');
+if(builderModel.validDate(requestedDate || '') && requestedDate!==state.date){state=fresh();state.date=requestedDate;state.selected=roster();fillCache=null;}
+const deletionControl=scheduleDeletion.mount({config:builderData.firebaseConfig,getSchedule:()=>confirmed.get(state.date),
+  onBusy:busy=>{saving=busy;updateButtons();},onDeleted:removed=>{
+    if(!confirmed.get(removed.date)?.sourceDraftId || confirmed.get(removed.date).sourceDraftId===removed.sourceDraftId)confirmed.delete(removed.date);
+    if(state.date===removed.date){invalidate();render();if(!saving && !$('generate').disabled)$('generate').focus();}
+  }});
 render(); connect();

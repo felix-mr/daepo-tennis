@@ -2,6 +2,7 @@ const firebaseConfig = __FIREBASE_CONFIG__;
 const scheduleDate = __SCHEDULE_DATE__;
 const matches = __MATCHES__;
 const memberships = __MEMBERSHIPS__;
+const scoreEpoch = typeof sourceDraftId === 'string' ? sourceDraftId : null;
 const forms = [...document.querySelectorAll('[data-score-form]')];
 const connection = document.getElementById('score-connection-status');
 const retry = document.getElementById('score-retry');
@@ -160,6 +161,12 @@ forms.forEach(form => {
     try {
       const reference = firestore.doc(db, 'schedules', scheduleDate, 'matchResults', id);
       await firestore.runTransaction(db, async transaction => {
+        if(scoreEpoch) {
+          const parent=await transaction.get(firestore.doc(db,'schedules',scheduleDate));
+          if(!parent.exists() || parent.data().sourceDraftId!==scoreEpoch){
+            const error=Error('Schedule changed while editing');error.code='schedule-changed';throw error;
+          }
+        }
         const current = await transaction.get(reference);
         const record = current.exists() ? current.data() : undefined;
         if (version(record) !== draft.baseVersion) {
@@ -169,6 +176,7 @@ forms.forEach(form => {
           throw error;
         }
         transaction.set(reference, { ...matches[id], scoreA, scoreB,
+          ...(scoreEpoch ? {sourceDraftId:scoreEpoch} : {}),
           outcome: resultModel.outcome(scoreA, scoreB), updatedAt: firestore.serverTimestamp() });
       });
       // Show success only after the server acknowledged the transaction.
@@ -179,6 +187,7 @@ forms.forEach(form => {
     } catch (error) {
       messages.set(id, error.code === 'score-conflict'
         ? '다른 사람이 먼저 저장했어요. 취소 후 최신 점수를 확인해 주세요.'
+        : error.code === 'schedule-changed' ? '대진이 삭제되거나 새로 만들어졌어요. 새로고침 후 최신 대진을 확인해 주세요.'
         : '저장 확인 실패. 입력값은 유지돼요. 연결 후 최신 점수를 확인해 주세요.');
     } finally {
       saving.delete(id);

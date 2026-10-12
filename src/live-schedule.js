@@ -2,6 +2,17 @@ const liveData = __LIVE_DATA__;
 const escapeLive = value => String(value).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const day = new URL(location.href).searchParams.get('date');
 let documentSchedule;
+function showRemoved(date, removed=true) {
+  document.getElementById('live-content').hidden=true;
+  document.getElementById('schedule-manage').hidden=true;
+  const status=document.getElementById('live-status');status.hidden=false;
+  status.innerHTML=escapeLive(date)+(removed ? ' 대진표가 삭제됐어요.' : ' 확정된 대진표가 없습니다.')+'<br><a class="archive-back deleted-action" href="../builder/?date='+encodeURIComponent(date)+'">같은 날짜로 다시 만들기 →</a>';
+}
+const deletionControl=scheduleDeletion.mount({config:liveData.firebaseConfig,getSchedule:()=>documentSchedule,
+  onBusy:busy=>{document.getElementById('delete-schedule').disabled=busy || !navigator.onLine;},onDeleted:removed=>{showRemoved(removed.date);document.querySelector('.deleted-action').focus();}});
+document.getElementById('delete-schedule').addEventListener('click',event=>deletionControl.open(event.currentTarget));
+window.addEventListener('offline',()=>{document.getElementById('delete-schedule').disabled=true;});
+window.addEventListener('online',()=>{document.getElementById('delete-schedule').disabled=false;});
 function scoreForm(match, ownId = '') {
   if (!match.fixedPlayerIds.length) return '';
   const id = 'r' + match.round + '-f' + match.floor;
@@ -49,18 +60,28 @@ function mount(doc) {
   const wanted = new URL(location.href).searchParams.get('player'); if (doc.players.includes(wanted)) choose(wanted);
   document.getElementById('live-status').hidden = true; document.getElementById('live-content').hidden = false;
   const scoreMatches = Object.fromEntries(Object.entries(doc.matches).filter(([, match]) => match.fixedPlayerIds.length));
-  startScores(liveData.firebaseConfig, doc.date, scoreMatches);
+  startScores(liveData.firebaseConfig, doc.date, scoreMatches, doc.sourceDraftId);
 }
 async function load() {
   try {
     if (!builderModel.validDate(day)) throw Error('대진표 날짜를 확인해 주세요.');
     if (liveData.legacyDates.includes(day)) { location.replace('../' + day + '/'); return; }
     const doc = await builderStore.read(liveData.firebaseConfig, day);
-    if (!doc) throw Error('아직 확정된 대진표가 없습니다. 대진표 만들기에서 확인해 주세요.');
+    if (!doc) {showRemoved(day,false);return;}
     builderModel.validateDocument(doc, {preferences:false});
     const theme = liveData.themes[doc.theme] || liveData.themes.club;
     await new Promise((resolve, reject) => { const link = document.createElement('link'); link.rel = 'stylesheet'; link.href = '../' + theme.stylesheet; link.onload = resolve; link.onerror = () => reject(Error('컨셉 화면을 불러오지 못했어요. 새로고침해 주세요.')); document.head.append(link); });
     mount(doc);
+    document.getElementById('schedule-manage').hidden=false;
+    document.getElementById('delete-schedule').disabled=!navigator.onLine;
+    await builderStore.watch(liveData.firebaseConfig,day,current=>{
+      if(!current){showRemoved(day);return;}
+      if(current.sourceDraftId!==documentSchedule.sourceDraftId){
+        document.getElementById('live-content').hidden=true;document.getElementById('schedule-manage').hidden=true;
+        const status=document.getElementById('live-status');status.hidden=false;
+        status.innerHTML='대진표가 새로 만들어졌어요.<br><a class="archive-back deleted-action" href="?date='+encodeURIComponent(day)+'">최신 대진 다시 보기 →</a>';
+      }
+    },()=>{const status=document.getElementById('live-status');status.hidden=false;status.textContent='대진 상태 연결이 끊겼어요. 새로고침해 주세요.';});
   } catch (error) { document.getElementById('live-status').textContent = error.code === 'permission-denied' ? '대진표 접근 권한을 확인해 주세요.' : error.message; }
 }
 load();

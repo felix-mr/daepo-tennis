@@ -42,14 +42,16 @@ def write_rules(root, schedule_date, matches):
     rules = '''rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    function validScore() {
+    function validScoreFields(fields) {
       let data = request.resource.data;
-      let fields = ['date', 'round', 'floor', 'teamA', 'teamB', 'teamANames', 'teamBNames', 'fixedPlayerIds', 'scoreA', 'scoreB', 'outcome', 'updatedAt'];
       return data.keys().hasAll(fields) && data.keys().hasOnly(fields)
         && data.scoreA is int && data.scoreA >= 0 && data.scoreA <= 99
         && data.scoreB is int && data.scoreB >= 0 && data.scoreB <= 99
         && data.outcome == (data.scoreA > data.scoreB ? 'teamA' : (data.scoreA < data.scoreB ? 'teamB' : 'draw'))
         && data.updatedAt is timestamp && data.updatedAt == request.time;
+    }
+    function validScore() {
+      return validScoreFields(['date', 'round', 'floor', 'teamA', 'teamB', 'teamANames', 'teamBNames', 'fixedPlayerIds', 'scoreA', 'scoreB', 'outcome', 'updatedAt']);
     }
     // Collection-group reads power cumulative records; writes are limited below.
     match /{path=**}/matchResults/{matchId} {
