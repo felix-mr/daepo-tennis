@@ -39,6 +39,55 @@ const builderModel = (() => {
     if (slots % 4) throw Error('전체 출전 횟수가 4의 배수가 되도록 개인 경기 수를 맞춰 주세요.');
     return quotas;
   }
+  // Fill idle courts with one extra game for randomly chosen current members.
+  // Guest and manual quotas are never changed; ALL pairs move together.
+  function fillCourts(input, options = {}) {
+    const ids = input.players, original = { ...input.quotas };
+    const slots = quotas => ids.reduce((sum, id) => sum + quotas[id], 0);
+    const result = (quotas, bonusIds) => {
+      const unfilledSlots = Math.max(0, 48 - slots(quotas));
+      return { quotas, bonusIds, unfilledSlots, reason: unfilledSlots ? '게스트 경기 수·참석 시간·고정 페어를 유지하면 ' + (unfilledSlots / 4) + '개 코트를 채울 수 없습니다. 회원은 최대 5경기까지 배정합니다.' : '' };
+    };
+    if (ids.length >= 12) return result(original, []);
+    const random = options.random || Math.random;
+    const allowed = new Set(input.eligibleIds ?? ids);
+    const eligible = ids.filter(id => input.fixedPlayerIds.includes(id) && input.profiles[id].memberType === 'fixed'
+      && allowed.has(id) && original[id] === 4 && input.availability[id].to - input.availability[id].from >= 5);
+    const preferred = new Set(input.preferredBonusIds || []);
+    const ranked = eligible;
+    const capacity = Array.from({length:6},(_,r)=>{
+      const present = ids.filter(id => input.availability[id].from <= r && r < input.availability[id].to).length;
+      return Math.min(2, Math.floor(present / 4)) * 4;
+    }).reduce((sum,value)=>sum+value,0);
+    let best = original, bonus = [], score = -1, ties = 0, bestSlots = slots(original);
+    for (let mask = 1; mask < 2 ** ranked.length; mask++) {
+      const selected = ranked.filter((id,index) => mask & (1 << index));
+      const quotas = { ...original };
+      selected.forEach(id => quotas[id] = 5);
+      const count = slots(quotas);
+      if (count > capacity || count % 4 || count < bestSlots) continue;
+      // ALL pairs must retain equal quotas and overlap for every game. A four-
+      // player same-gender pool also requires both opponents for every such game.
+      if ((input.lockedPairs || []).some(entry => {
+        if (entry.games !== 'all') return false;
+        const pair = entry.players, target = quotas[pair[0]];
+        const pool = ids.filter(id => input.profiles[id].gender === input.profiles[pair[0]].gender);
+        const group = input.profiles[pair[0]].gender === input.profiles[pair[1]].gender && pool.length === 4 ? pool : pair;
+        return quotas[pair[1]] !== target || group.some(id => quotas[id] < target)
+          || Math.min(...group.map(id => input.availability[id].to)) - Math.max(...group.map(id => input.availability[id].from)) < target;
+      })) continue;
+      try { validateInput({ ...input, quotas }); } catch { continue; }
+      // Reservoir sampling is uniform among equally full, equally preferred
+      // valid subsets. Previous bonus members stay stable while still eligible.
+      const candidateScore = selected.filter(id => preferred.has(id)).length;
+      if (count > bestSlots || candidateScore > score) {
+        best = quotas; bonus = selected; bestSlots = count; score = candidateScore; ties = 1;
+      } else if (count === bestSlots && candidateScore === score && random() < 1 / ++ties) {
+        best = quotas; bonus = selected;
+      }
+    }
+    return result(best, bonus);
+  }
   const key = pair => [...pair].sort().join('|');
   function type(a, b, profiles) {
     const kinds = [a, b].map(team => team.filter(id => profiles[id].gender === 'female').length);
@@ -87,7 +136,8 @@ const builderModel = (() => {
       const window = input.availability[id];
       if (!window || !Number.isInteger(window.from) || !Number.isInteger(window.to) || window.from < 0 || window.to > 6 || window.from >= window.to) throw Error(profile.name + ' 참석 시간을 확인해 주세요.');
       const quota = input.quotas[id];
-      if (!Number.isInteger(quota) || quota < 2 || quota > 4 || quota > window.to - window.from) throw Error(profile.name + ' 경기 수가 참석 가능 시간을 넘습니다.');
+      if (quota === 5 && (ids.length >= 12 || !input.fixedPlayerIds.includes(id) || profile.memberType !== 'fixed')) throw Error('5경기는 참석자 12명 미만일 때 고정 회원에게만 배정할 수 있습니다.');
+      if (!Number.isInteger(quota) || quota < 2 || quota > 5 || quota > window.to - window.from) throw Error(profile.name + ' 경기 수가 참석 가능 시간을 넘습니다.');
     }
     const slots = ids.reduce((sum, id) => sum + input.quotas[id], 0);
     if (slots % 4 || slots > Math.min(2, Math.floor(ids.length / 4)) * 24) throw Error('전체 출전 횟수를 4의 배수, 최대 48회로 맞춰 주세요.');
@@ -181,7 +231,7 @@ const builderModel = (() => {
     if (options.preferences !== false) for (const id of doc.players) {
       const window = effectiveWindow(doc, id), active = Array.from({length:6},(_,r)=>byRound[r].includes(id));
       if (doc.avoidConsecutiveRests && [0,1,2,3,4].some(r=>r>=window.from && r+1<window.to && !active[r] && !active[r+1])) throw Error('연속 휴식 조건을 지키지 않았습니다.');
-      if (window.to-window.from !== doc.quotas[id] && [0,1,2].some(r=>active.slice(r,r+4).every(Boolean))) throw Error('4경기 연속 출전 조건을 확인해 주세요.');
+      if (doc.quotas[id] < 5 && window.to-window.from !== doc.quotas[id] && [0,1,2].some(r=>active.slice(r,r+4).every(Boolean))) throw Error('4경기 연속 출전 조건을 확인해 주세요.');
     }
     return doc;
   }
@@ -203,6 +253,6 @@ const builderModel = (() => {
     }
     return { rows, types, partnerRepeats: [...pairs.values()].reduce((n, value) => n + Math.max(0, value - 1), 0) };
   }
-  return { time, minute, today, nextSaturday, validDate, periodForDate, name, validateName, guestId, allocate, key, type, lockedTargets, repeatLimits, effectiveWindow, validateInput, validateDocument, documentOf, summary };
+  return { time, minute, today, nextSaturday, validDate, periodForDate, name, validateName, guestId, allocate, fillCourts, key, type, lockedTargets, repeatLimits, effectiveWindow, validateInput, validateDocument, documentOf, summary };
 })();
 if (typeof module !== 'undefined') module.exports = builderModel;

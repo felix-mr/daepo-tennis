@@ -157,7 +157,7 @@ const builderScheduler = (() => {
           for (let mask = 0; mask < 64; mask++) {
             const bits = Array.from({ length: 6 }, (_, r) => Number(!!(mask & (1 << r))));
             if (bits.reduce((a, b) => a + b, 0) !== input.quotas[id] || bits.some((value, r) => value && (r < window.from || r >= window.to || !capacities[r]))) continue;
-            if (!forced && [0, 1, 2].some(r => bits.slice(r, r + 4).every(Boolean))) continue;
+            if (input.quotas[id] < 5 && !forced && [0, 1, 2].some(r => bits.slice(r, r + 4).every(Boolean))) continue;
             if (input.avoidConsecutiveRests && Array.from({ length: 5 }, (_, r) => r).some(r => r >= window.from && r + 1 < window.to && !bits[r] && !bits[r + 1])) continue;
             patterns[id].push(bits);
           }

@@ -38,7 +38,8 @@ def render_dynamic_rules(root, legacy_dates):
           || (!(id in names) && id.matches('guest-' + d.date + '-[0-9]{2}') && p.memberType == 'guest'))
         && window.keys().hasOnly(['from', 'to']) && window.from is int && window.to is int
         && window.from >= 0 && window.to <= 6 && window.from < window.to
-        && d.quotas[id] is int && d.quotas[id] >= 2 && d.quotas[id] <= 4
+        && d.quotas[id] is int && d.quotas[id] >= 2
+        && (d.quotas[id] <= 4 || (d.quotas[id] == 5 && d.players.size() < 12 && id in d.fixedPlayerIds && p.memberType == 'fixed'))
         && d.quotas[id] == playerGames(d, id)
         && id in d.genderPlayers[p.gender] && validFloorPlan(d, id);
     }
@@ -48,7 +49,10 @@ def render_dynamic_rules(root, legacy_dates):
       return plan is list && plan.size() == 6 && plan.toSet().difference([0,1,2].toSet()).size() == 0
         && active.size() == d.quotas[id]
         && __AVAILABLE_PLAN__
-        && (active.size() <= 3 || active[0] == active[1] || active[1] == active[2] || active[2] == active[3]);
+        && (active.size() <= 3
+          || (active.size() == 4 && (active[0] == active[1] || active[1] == active[2] || active[2] == active[3]))
+          || (active.size() == 5 && (active[0] == active[1] ? 0 : 1) + (active[1] == active[2] ? 0 : 1)
+            + (active[2] == active[3] ? 0 : 1) + (active[3] == active[4] ? 0 : 1) <= 2));
     }
     function validBrowserMatch(d, m, round, floor) {
       let ids = m.teamA.concat(m.teamB);
