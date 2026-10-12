@@ -1,0 +1,27 @@
+{
+  "name": "코쵸 시노부",
+  "romanizedName": "Shinobu Kochou",
+  "palette": {
+    "primary": "#9463bb",
+    "accent": "#ead6ff",
+    "background": "#1f102e"
+  },
+  "tagline": "가볍게 움직여 정교한 코스를 찌르다",
+  "sourceUrl": "https://kimetsu.com/anime/character/",
+  "characterSourceUrl": "https://anilist.co/character/136070",
+  "sourceName": "Shinobu Kochou",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b136070-MC9LLxJsHyHE.png",
+  "heroAlt": "코쵸 시노부 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/shinobu.png",
+  "imageSha256": "2cb363f2d3316e310c4bbbc83a28c507ce6ac98ad450a03b840243ce79b21a9e",
+  "seriesId": "demon-slayer",
+  "seriesName": "귀멸의 칼날",
+  "stylesheet": "themes/shinobu.css",
+  "eyebrow": "귀멸의 칼날 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "코쵸 시노부",
+  "characterPortrait": true
+}

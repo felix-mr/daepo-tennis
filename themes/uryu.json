@@ -1,0 +1,27 @@
+{
+  "name": "이시다 우류",
+  "romanizedName": "Uryuu Ishida",
+  "palette": {
+    "primary": "#668dc6",
+    "accent": "#e4efff",
+    "background": "#172438"
+  },
+  "tagline": "정확한 조준으로 코트의 모서리를 찾다",
+  "sourceUrl": "https://bleach-anime.com/character/",
+  "characterSourceUrl": "https://anilist.co/character/564",
+  "sourceName": "Uryuu Ishida",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b564-a6LJitrjSfKC.jpg",
+  "heroAlt": "이시다 우류 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/uryu.jpg",
+  "imageSha256": "ed00d41848d7113e56f6d709f8e6c467b0a9c06e7d3b84a6e5ef06f67cb0258e",
+  "seriesId": "bleach",
+  "seriesName": "블리치",
+  "stylesheet": "themes/uryu.css",
+  "eyebrow": "블리치 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "이시다 우류",
+  "characterPortrait": true
+}

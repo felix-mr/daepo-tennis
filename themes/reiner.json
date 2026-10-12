@@ -1,0 +1,27 @@
+{
+  "name": "라이너 브라운",
+  "romanizedName": "Reiner Braun",
+  "palette": {
+    "primary": "#b59561",
+    "accent": "#efdfb9",
+    "background": "#2b2014"
+  },
+  "tagline": "무게 있는 샷으로 수비의 벽을 세우다",
+  "sourceUrl": "https://shingeki.tv/final/character/",
+  "characterSourceUrl": "https://anilist.co/character/46484",
+  "sourceName": "Reiner Braun",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b46484-P6A2GjNQn49F.png",
+  "heroAlt": "라이너 브라운 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/reiner.png",
+  "imageSha256": "3112e00ee8c5773c62eac15181fa0158e223ba01bd88247636a6e1036262a6d9",
+  "seriesId": "attack-on-titan",
+  "seriesName": "진격의 거인",
+  "stylesheet": "themes/reiner.css",
+  "eyebrow": "진격의 거인 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "라이너 브라운",
+  "characterPortrait": true
+}

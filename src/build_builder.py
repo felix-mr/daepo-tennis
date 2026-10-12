@@ -5,6 +5,8 @@ from pathlib import Path
 
 def build_builder(root):
     root = Path(root)
+    from build_character_themes import build_character_themes
+    build_character_themes(root)
     themes = {path.stem: json.loads(path.read_text()) for path in (root / 'themes').glob('*.json')}
     data = {
         'players': json.loads((root / 'data/players.json').read_text()),

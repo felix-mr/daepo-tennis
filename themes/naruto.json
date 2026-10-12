@@ -1,0 +1,27 @@
+{
+  "name": "우즈마키 나루토",
+  "romanizedName": "Naruto Uzumaki",
+  "palette": {
+    "primary": "#e78c32",
+    "accent": "#ffe6b8",
+    "background": "#2e1e0b"
+  },
+  "tagline": "포기하지 않는 랠리로 코트에 길을 내다",
+  "sourceUrl": "https://narutop99.naruto-official.com/en/archive/",
+  "characterSourceUrl": "https://anilist.co/character/17",
+  "sourceName": "Naruto Uzumaki",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b17-phjcWCkRuIhu.png",
+  "heroAlt": "우즈마키 나루토 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/naruto.png",
+  "imageSha256": "619cb2110126fb07e5aa9d8e3c5c7c0d6578e23a9f6eadc53975b89eb923a793",
+  "seriesId": "naruto",
+  "seriesName": "나루토",
+  "stylesheet": "themes/naruto.css",
+  "eyebrow": "나루토 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "우즈마키 나루토",
+  "characterPortrait": true
+}

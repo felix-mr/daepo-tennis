@@ -104,7 +104,8 @@ service cloud.firestore {
           || (!(id in names) && id.matches('guest-' + d.date + '-[0-9]{2}') && p.memberType == 'guest'))
         && window.keys().hasOnly(['from', 'to']) && window.from is int && window.to is int
         && window.from >= 0 && window.to <= 6 && window.from < window.to
-        && d.quotas[id] is int && d.quotas[id] >= 2 && d.quotas[id] <= 4
+        && d.quotas[id] is int && d.quotas[id] >= 2
+        && (d.quotas[id] <= 4 || (d.quotas[id] == 5 && d.players.size() < 12 && id in d.fixedPlayerIds && p.memberType == 'fixed'))
         && d.quotas[id] == playerGames(d, id)
         && id in d.genderPlayers[p.gender] && validFloorPlan(d, id);
     }
@@ -114,7 +115,10 @@ service cloud.firestore {
       return plan is list && plan.size() == 6 && plan.toSet().difference([0,1,2].toSet()).size() == 0
         && active.size() == d.quotas[id]
         && (plan[0] == 0 || (d.availability[id].from < 1 && d.availability[id].to >= 1)) && (plan[1] == 0 || (d.availability[id].from < 2 && d.availability[id].to >= 2)) && (plan[2] == 0 || (d.availability[id].from < 3 && d.availability[id].to >= 3)) && (plan[3] == 0 || (d.availability[id].from < 4 && d.availability[id].to >= 4)) && (plan[4] == 0 || (d.availability[id].from < 5 && d.availability[id].to >= 5)) && (plan[5] == 0 || (d.availability[id].from < 6 && d.availability[id].to >= 6))
-        && (active.size() <= 3 || active[0] == active[1] || active[1] == active[2] || active[2] == active[3]);
+        && (active.size() <= 3
+          || (active.size() == 4 && (active[0] == active[1] || active[1] == active[2] || active[2] == active[3]))
+          || (active.size() == 5 && (active[0] == active[1] ? 0 : 1) + (active[1] == active[2] ? 0 : 1)
+            + (active[2] == active[3] ? 0 : 1) + (active[3] == active[4] ? 0 : 1) <= 2));
     }
     function validBrowserMatch(d, m, round, floor) {
       let ids = m.teamA.concat(m.teamB);
@@ -174,7 +178,7 @@ service cloud.firestore {
         && d.keys().hasAll(['schemaVersion', 'date', 'membershipPeriod', 'theme', 'startMinutes', 'roundMinutes', 'roundCount', 'players', 'fixedPlayerIds', 'profiles', 'quotas', 'availability', 'roundParticipants', 'lockedPairs', 'allowPartnerRepeats', 'avoidConsecutiveRests', 'maxFloorChanges', 'matches', 'floorPlan', 'genderPlayers', 'lockedPairTargets', 'lockedPairKeys', 'teamKeys', 'playerNames', 'createdAt'])
         && d.keys().hasOnly(['schemaVersion', 'date', 'membershipPeriod', 'theme', 'startMinutes', 'roundMinutes', 'roundCount', 'players', 'fixedPlayerIds', 'profiles', 'quotas', 'availability', 'roundParticipants', 'lockedPairs', 'allowPartnerRepeats', 'avoidConsecutiveRests', 'maxFloorChanges', 'matches', 'floorPlan', 'genderPlayers', 'lockedPairTargets', 'lockedPairKeys', 'teamKeys', 'playerNames', 'createdAt'])
         && d.schemaVersion == 1 && d.startMinutes == 480 && d.roundMinutes == 30 && d.roundCount == 6
-        && d.theme in ["club", "geto", "gojo", "toji"] && d.maxFloorChanges == 2
+        && d.theme in ["ace", "aizen", "annie", "armin", "biscuit", "byakuya", "chopper", "chrollo", "club", "eren", "erwin", "gaara", "geto", "giyu", "gojo", "gon", "hancock", "hange", "hinata", "hisoka", "historia", "ichigo", "inosuke", "itachi", "itadori", "jiraiya", "kakashi", "kenpachi", "killua", "kurapika", "law", "leorio", "levi", "luffy", "madara", "maki", "megumi", "meruem", "mikasa", "mitsuri", "muzan", "nami", "nanami", "naruto", "neferpitou", "netero", "nezuko", "nobara", "orihime", "reiner", "rengoku", "renji", "robin", "rukia", "sakura", "sanji", "sasuke", "shanks", "shinobu", "sukuna", "tanjiro", "tengen", "toji", "toshiro", "tsunade", "uryu", "yoruichi", "yuta", "zeke", "zenitsu", "zoro"] && d.maxFloorChanges == 2
         && d.createdAt == request.time && d.allowPartnerRepeats is bool && d.avoidConsecutiveRests is bool
         && d.playerNames is list && d.playerNames.size() == d.players.size() && d.playerNames.toSet().size() == d.players.size()
         && d.players is list && d.players.size() >= 4 && d.players.size() <= 16 && d.players.toSet().size() == d.players.size();

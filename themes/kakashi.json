@@ -1,0 +1,27 @@
+{
+  "name": "하타케 카카시",
+  "romanizedName": "Kakashi Hatake",
+  "palette": {
+    "primary": "#698b7b",
+    "accent": "#dceee4",
+    "background": "#17261f"
+  },
+  "tagline": "상대의 구질을 읽고 유연하게 대응하다",
+  "sourceUrl": "https://narutop99.naruto-official.com/en/archive/",
+  "characterSourceUrl": "https://anilist.co/character/85",
+  "sourceName": "Kakashi Hatake",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b85-mkVBh2yjxjmx.png",
+  "heroAlt": "하타케 카카시 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/kakashi.png",
+  "imageSha256": "e86f0ddd76194c8d99affd31f711b56799b995b80440e66df82198869fbe70f2",
+  "seriesId": "naruto",
+  "seriesName": "나루토",
+  "stylesheet": "themes/kakashi.css",
+  "eyebrow": "나루토 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "하타케 카카시",
+  "characterPortrait": true
+}

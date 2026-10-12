@@ -5,5 +5,19 @@
   "title": "대포클럽",
   "accent": "토요일 대진표",
   "heroImage": "src/gojo.webp",
-  "heroAlt": "푸른 기운에 둘러싸여 테니스 라켓을 든 고죠 사토루"
+  "heroAlt": "푸른 기운에 둘러싸여 테니스 라켓을 든 고죠 사토루",
+  "romanizedName": "Satoru Gojo",
+  "palette": {
+    "primary": "#4a9fff",
+    "accent": "#ccf7ff",
+    "background": "#071627"
+  },
+  "tagline": "빈틈 없는 리턴으로 코트를 지배하다",
+  "sourceUrl": "https://jujutsukaisen.jp/character/",
+  "characterSourceUrl": "https://anilist.co/character/127691",
+  "sourceName": "Satoru Gojou",
+  "imageSourceUrl": null,
+  "imageOrigin": "existing-project-art",
+  "seriesId": "jujutsu-kaisen",
+  "seriesName": "주술회전"
 }

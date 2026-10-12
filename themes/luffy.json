@@ -1,0 +1,27 @@
+{
+  "name": "몽키 D. 루피",
+  "romanizedName": "Monkey D. Luffy",
+  "palette": {
+    "primary": "#d5443f",
+    "accent": "#ffe59a",
+    "background": "#2a1012"
+  },
+  "tagline": "자유로운 스윙으로 코트를 넓게 쓰다",
+  "sourceUrl": "https://one-piece.com/character/",
+  "characterSourceUrl": "https://anilist.co/character/40",
+  "sourceName": "Luffy Monkey",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b40-MNypXsxSRb1R.png",
+  "heroAlt": "몽키 D. 루피 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/luffy.png",
+  "imageSha256": "5396c441a8a64ff1620712282d82d4f272c5da90f7a9a2eb9ee0b95c3eb92d84",
+  "seriesId": "one-piece",
+  "seriesName": "원피스",
+  "stylesheet": "themes/luffy.css",
+  "eyebrow": "원피스 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "몽키 D. 루피",
+  "characterPortrait": true
+}

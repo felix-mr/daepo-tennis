@@ -1,0 +1,27 @@
+{
+  "name": "아바라이 렌지",
+  "romanizedName": "Renji Abarai",
+  "palette": {
+    "primary": "#c74e47",
+    "accent": "#ffd4c7",
+    "background": "#2f1110"
+  },
+  "tagline": "강한 드라이브로 상대 수비를 밀어내다",
+  "sourceUrl": "https://bleach-anime.com/character/",
+  "characterSourceUrl": "https://anilist.co/character/906",
+  "sourceName": "Renji Abarai",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b906-ImRjx5HFM8X6.png",
+  "heroAlt": "아바라이 렌지 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 346,
+  "heroImage": "src/characters/renji.png",
+  "imageSha256": "786da65d5bddca7045df2db93d93daf674df6a5e6dcbc1d4049c1d43fd69a81b",
+  "seriesId": "bleach",
+  "seriesName": "블리치",
+  "stylesheet": "themes/renji.css",
+  "eyebrow": "블리치 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "아바라이 렌지",
+  "characterPortrait": true
+}

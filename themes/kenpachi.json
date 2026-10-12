@@ -1,0 +1,27 @@
+{
+  "name": "자라키 켄파치",
+  "romanizedName": "Kenpachi Zaraki",
+  "palette": {
+    "primary": "#b0a24c",
+    "accent": "#f4edb4",
+    "background": "#28250e"
+  },
+  "tagline": "강한 스윙으로 긴 랠리를 정면 돌파하다",
+  "sourceUrl": "https://bleach-anime.com/character/",
+  "characterSourceUrl": "https://anilist.co/character/909",
+  "sourceName": "Kenpachi Zaraki",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b909-slhoFBon7oiH.jpg",
+  "heroAlt": "자라키 켄파치 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 363,
+  "heroImage": "src/characters/kenpachi.jpg",
+  "imageSha256": "526f46f94360fdf0a5cac595b0e1de61fd5ca0208a3d30cbfde0f636d9ab15c3",
+  "seriesId": "bleach",
+  "seriesName": "블리치",
+  "stylesheet": "themes/kenpachi.css",
+  "eyebrow": "블리치 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "자라키 켄파치",
+  "characterPortrait": true
+}

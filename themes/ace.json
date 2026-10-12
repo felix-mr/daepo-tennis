@@ -1,0 +1,27 @@
+{
+  "name": "포트거스 D. 에이스",
+  "romanizedName": "Portgas D. Ace",
+  "palette": {
+    "primary": "#dc6b31",
+    "accent": "#ffd697",
+    "background": "#31170a"
+  },
+  "tagline": "뜨거운 샷으로 경기의 흐름을 당기다",
+  "sourceUrl": "https://one-piece.com/character/",
+  "characterSourceUrl": "https://anilist.co/character/2072",
+  "sourceName": "Ace Portgas",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b2072-Lc6jEdsueJUK.jpg",
+  "heroAlt": "포트거스 D. 에이스 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/ace.jpg",
+  "imageSha256": "26bbba6e66bcac38cc5a9e7c41a7eef565e2c247597964b26fecc59bbaa9f23e",
+  "seriesId": "one-piece",
+  "seriesName": "원피스",
+  "stylesheet": "themes/ace.css",
+  "eyebrow": "원피스 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "포트거스 D. 에이스",
+  "characterPortrait": true
+}

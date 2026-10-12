@@ -1,0 +1,27 @@
+{
+  "name": "에르빈 스미스",
+  "romanizedName": "Erwin Smith",
+  "palette": {
+    "primary": "#958046",
+    "accent": "#efe0ad",
+    "background": "#272111"
+  },
+  "tagline": "분명한 판단으로 파트너의 방향을 잡다",
+  "sourceUrl": "https://shingeki.tv/final/character/",
+  "characterSourceUrl": "https://anilist.co/character/46496",
+  "sourceName": "Erwin Smith",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b46496-Mu86MENd5wNB.png",
+  "heroAlt": "에르빈 스미스 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/erwin.png",
+  "imageSha256": "57a32c7378845dfeb2f50a231f40b15c6e8efc1b65d6b34deb8670be06661947",
+  "seriesId": "attack-on-titan",
+  "seriesName": "진격의 거인",
+  "stylesheet": "themes/erwin.css",
+  "eyebrow": "진격의 거인 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "에르빈 스미스",
+  "characterPortrait": true
+}

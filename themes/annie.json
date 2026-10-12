@@ -1,0 +1,27 @@
+{
+  "name": "애니 레온하트",
+  "romanizedName": "Annie Leonhart",
+  "palette": {
+    "primary": "#7c95b3",
+    "accent": "#ddeafa",
+    "background": "#152131"
+  },
+  "tagline": "절제된 스텝으로 정확한 각도를 만들다",
+  "sourceUrl": "https://shingeki.tv/final/character/",
+  "characterSourceUrl": "https://anilist.co/character/46490",
+  "sourceName": "Annie Leonhart",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b46490-tan274Ifc1Jf.jpg",
+  "heroAlt": "애니 레온하트 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 359,
+  "heroImage": "src/characters/annie.jpg",
+  "imageSha256": "f115c2f670a831db906993c66ae94bf224a830bc8f13569bf96fbf4c27752871",
+  "seriesId": "attack-on-titan",
+  "seriesName": "진격의 거인",
+  "stylesheet": "themes/annie.css",
+  "eyebrow": "진격의 거인 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "애니 레온하트",
+  "characterPortrait": true
+}

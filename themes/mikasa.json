@@ -1,0 +1,27 @@
+{
+  "name": "미카사 아커만",
+  "romanizedName": "Mikasa Ackerman",
+  "palette": {
+    "primary": "#b3424b",
+    "accent": "#f4d2d3",
+    "background": "#261216"
+  },
+  "tagline": "단단한 수비로 파트너의 코트를 지키다",
+  "sourceUrl": "https://shingeki.tv/final/character/",
+  "characterSourceUrl": "https://anilist.co/character/40881",
+  "sourceName": "Mikasa Ackerman",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b40881-F3gr1PkreDvj.png",
+  "heroAlt": "미카사 아커만 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/mikasa.png",
+  "imageSha256": "7e1da2c584eb34a9d75f6ca719d5aa952156fe59c9c5406aa5211c317cf3d4a7",
+  "seriesId": "attack-on-titan",
+  "seriesName": "진격의 거인",
+  "stylesheet": "themes/mikasa.css",
+  "eyebrow": "진격의 거인 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "미카사 아커만",
+  "characterPortrait": true
+}

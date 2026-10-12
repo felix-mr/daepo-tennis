@@ -5,5 +5,19 @@
   "title": "대포클럽",
   "accent": "토요일 대진표",
   "heroImage": "src/toji.webp",
-  "heroAlt": "테니스 라켓을 든 젠인 토우지"
+  "heroAlt": "테니스 라켓을 든 젠인 토우지",
+  "romanizedName": "Toji Fushiguro",
+  "palette": {
+    "primary": "#568d6a",
+    "accent": "#d3e99c",
+    "background": "#101b18"
+  },
+  "tagline": "한 번의 가속으로 승부를 끝내다",
+  "sourceUrl": "https://jujutsukaisen.jp/character/",
+  "characterSourceUrl": "https://anilist.co/character/162722",
+  "sourceName": "Touji Fushiguro",
+  "imageSourceUrl": null,
+  "imageOrigin": "existing-project-art",
+  "seriesId": "jujutsu-kaisen",
+  "seriesName": "주술회전"
 }

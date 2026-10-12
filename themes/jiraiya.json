@@ -1,0 +1,27 @@
+{
+  "name": "지라이야",
+  "romanizedName": "Jiraiya",
+  "palette": {
+    "primary": "#b65c52",
+    "accent": "#f6dcd3",
+    "background": "#2d1510"
+  },
+  "tagline": "노련한 변화구로 경기의 여유를 만들다",
+  "sourceUrl": "https://narutop99.naruto-official.com/en/archive/",
+  "characterSourceUrl": "https://anilist.co/character/2423",
+  "sourceName": "Jiraiya",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b2423-RO5MyoXSA9OL.png",
+  "heroAlt": "지라이야 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/jiraiya.png",
+  "imageSha256": "f03678f1ed93161ebfbb1159279067d34e3f9d4f33fd85a710aaa70e46ac1420",
+  "seriesId": "naruto",
+  "seriesName": "나루토",
+  "stylesheet": "themes/jiraiya.css",
+  "eyebrow": "나루토 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "지라이야",
+  "characterPortrait": true
+}

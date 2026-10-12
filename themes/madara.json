@@ -1,0 +1,27 @@
+{
+  "name": "우치하 마다라",
+  "romanizedName": "Madara Uchiha",
+  "palette": {
+    "primary": "#8d445b",
+    "accent": "#efcbd8",
+    "background": "#230d19"
+  },
+  "tagline": "묵직한 압박으로 코트의 주도권을 잡다",
+  "sourceUrl": "https://narutop99.naruto-official.com/en/archive/",
+  "characterSourceUrl": "https://anilist.co/character/53901",
+  "sourceName": "Madara Uchiha",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b53901-HnRKSoHMG5Vg.png",
+  "heroAlt": "우치하 마다라 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/madara.png",
+  "imageSha256": "57ac95713d9beef45212a79ef06677b3b70584e205ece03de19254496ae259c9",
+  "seriesId": "naruto",
+  "seriesName": "나루토",
+  "stylesheet": "themes/madara.css",
+  "eyebrow": "나루토 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "우치하 마다라",
+  "characterPortrait": true
+}

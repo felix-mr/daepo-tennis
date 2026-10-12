@@ -1,0 +1,27 @@
+{
+  "name": "나미",
+  "romanizedName": "Nami",
+  "palette": {
+    "primary": "#db8c37",
+    "accent": "#ffdf9d",
+    "background": "#2d1c0d"
+  },
+  "tagline": "바람을 읽듯 공의 흐름을 짚다",
+  "sourceUrl": "https://one-piece.com/character/",
+  "characterSourceUrl": "https://anilist.co/character/723",
+  "sourceName": "Nami",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b723-vp5hPptgnNEC.png",
+  "heroAlt": "나미 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/nami.png",
+  "imageSha256": "b9800c0082039c9741e361a9289626f6801fb8ff4192caae62570e8daeea8cf6",
+  "seriesId": "one-piece",
+  "seriesName": "원피스",
+  "stylesheet": "themes/nami.css",
+  "eyebrow": "원피스 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "나미",
+  "characterPortrait": true
+}

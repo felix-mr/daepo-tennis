@@ -1,0 +1,27 @@
+{
+  "name": "휴우가 히나타",
+  "romanizedName": "Hinata Hyuuga",
+  "palette": {
+    "primary": "#978bc7",
+    "accent": "#f0e9ff",
+    "background": "#221d35"
+  },
+  "tagline": "넓은 시야와 정확한 타점으로 공을 잇다",
+  "sourceUrl": "https://narutop99.naruto-official.com/en/archive/",
+  "characterSourceUrl": "https://anilist.co/character/1555",
+  "sourceName": "Hinata Hyuuga",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b1555-Q41GLTV3FvYF.png",
+  "heroAlt": "휴우가 히나타 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/hinata.png",
+  "imageSha256": "56c83b72b6f76eb7e451c75b2e7a50ea1a254eebd0dd1d0bb00f9aebd3b779fb",
+  "seriesId": "naruto",
+  "seriesName": "나루토",
+  "stylesheet": "themes/hinata.css",
+  "eyebrow": "나루토 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "휴우가 히나타",
+  "characterPortrait": true
+}

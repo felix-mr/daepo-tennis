@@ -1,0 +1,27 @@
+{
+  "name": "쿠로사키 이치고",
+  "romanizedName": "Ichigo Kurosaki",
+  "palette": {
+    "primary": "#e18139",
+    "accent": "#ffe0b8",
+    "background": "#2e190b"
+  },
+  "tagline": "큰 스윙과 빠른 판단으로 정면을 돌파하다",
+  "sourceUrl": "https://bleach-anime.com/character/",
+  "characterSourceUrl": "https://anilist.co/character/5",
+  "sourceName": "Ichigo Kurosaki",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b5-a7bkJgjhhigE.png",
+  "heroAlt": "쿠로사키 이치고 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/ichigo.png",
+  "imageSha256": "aabc55564fe1b0d8cc5f193c98f2c9310982d776f3f49ab7870c872152e0b500",
+  "seriesId": "bleach",
+  "seriesName": "블리치",
+  "stylesheet": "themes/ichigo.css",
+  "eyebrow": "블리치 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "쿠로사키 이치고",
+  "characterPortrait": true
+}

@@ -1,0 +1,27 @@
+{
+  "name": "하루노 사쿠라",
+  "romanizedName": "Sakura Haruno",
+  "palette": {
+    "primary": "#d9799e",
+    "accent": "#ffe0ec",
+    "background": "#301521"
+  },
+  "tagline": "단단한 중심으로 힘 있는 샷을 보내다",
+  "sourceUrl": "https://narutop99.naruto-official.com/en/archive/",
+  "characterSourceUrl": "https://anilist.co/character/145",
+  "sourceName": "Sakura Haruno",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b145-IorfpI8arxeX.png",
+  "heroAlt": "하루노 사쿠라 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/sakura.png",
+  "imageSha256": "4b25912b1dc05b6607a208a12eadb01a0ec43ea814615c360db74b007cf2a368",
+  "seriesId": "naruto",
+  "seriesName": "나루토",
+  "stylesheet": "themes/sakura.css",
+  "eyebrow": "나루토 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "하루노 사쿠라",
+  "characterPortrait": true
+}

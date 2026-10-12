@@ -1,0 +1,27 @@
+{
+  "name": "나나미 켄토",
+  "romanizedName": "Kento Nanami",
+  "palette": {
+    "primary": "#b49449",
+    "accent": "#f5e4b0",
+    "background": "#242018"
+  },
+  "tagline": "계산된 코스와 안정된 템포로 승부하다",
+  "sourceUrl": "https://jujutsukaisen.jp/character/",
+  "characterSourceUrl": "https://anilist.co/character/133704",
+  "sourceName": "Kento Nanami",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b133704-8wLTGjc234q2.png",
+  "heroAlt": "나나미 켄토 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/nanami.png",
+  "imageSha256": "1647aa415e45d4dbca1c1928e1be101eebeca126a48f7263c77311b42939b25e",
+  "seriesId": "jujutsu-kaisen",
+  "seriesName": "주술회전",
+  "stylesheet": "themes/nanami.css",
+  "eyebrow": "주술회전 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "나나미 켄토",
+  "characterPortrait": true
+}

@@ -1,0 +1,27 @@
+{
+  "name": "보아 핸콕",
+  "romanizedName": "Boa Hancock",
+  "palette": {
+    "primary": "#ba508d",
+    "accent": "#f4d4e8",
+    "background": "#301326"
+  },
+  "tagline": "우아한 스윙으로 네트 앞 흐름을 바꾸다",
+  "sourceUrl": "https://one-piece.com/character/",
+  "characterSourceUrl": "https://anilist.co/character/16342",
+  "sourceName": "Hancock Boa",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b16342-kVOF6V5Q94go.png",
+  "heroAlt": "보아 핸콕 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/hancock.png",
+  "imageSha256": "2ca81549495ccf688b58830c782d30524131fe18b1835a76c68157fe0f58f1c6",
+  "seriesId": "one-piece",
+  "seriesName": "원피스",
+  "stylesheet": "themes/hancock.css",
+  "eyebrow": "원피스 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "보아 핸콕",
+  "characterPortrait": true
+}

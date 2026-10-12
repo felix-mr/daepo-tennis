@@ -30,6 +30,29 @@ test('ten members need eight bonus games; five-game runs remain valid', () => {
   assert.equal(result.bonusIds.length,8);assert.equal(result.unfilledSlots,0);
   const doc=generate({...data,quotas:result.quotas},11);M.validateDocument(doc);assert.equal(Object.keys(doc.matches).length,12);
 });
+test('seven men and three women fill eleven games without impossible female slots', () => {
+  const excluded=Object.keys(registry).find(id=>registry[id].gender==='female');
+  const data=input(Object.keys(registry).filter(id=>id!==excluded)),result=fill(data,4);
+  assert.equal(result.bonusIds.length,4);assert.equal(result.unfilledSlots,4);
+  assert.ok(result.bonusIds.every(id=>data.profiles[id].gender==='male'));
+  const doc=generate({...data,quotas:result.quotas},4);M.validateDocument(doc);
+  assert.equal(Object.keys(doc.matches).length,11);
+});
+test('ALL pair shared rests limit odd gender pools before bonus draw', () => {
+  const data=input(Object.keys(registry).filter(id=>!['p010','p011'].includes(id)));
+  data.lockedPairs=[{players:['p001','p002'],games:'all'}];data.allowPartnerRepeats=true;
+  const result=fill(data,4);assert.equal(result.bonusIds.length,4);assert.equal(result.unfilledSlots,8);
+  const doc=generate({...data,quotas:result.quotas},7);M.validateDocument(doc);
+  assert.equal(Object.keys(doc.matches).length,10);
+});
+test('five men need repeat permission before fifth games can fill the available court', () => {
+  const data=input(Object.keys(registry).filter(id=>registry[id].gender==='male').slice(0,5));
+  data.avoidConsecutiveRests=false;
+  const result=fill(data);assert.equal(result.bonusIds.length,0);
+  const doc=generate({...data,quotas:result.quotas});M.validateDocument(doc);assert.equal(Object.keys(doc.matches).length,5);
+  data.allowPartnerRepeats=true;const repeated=fill(data);assert.equal(repeated.bonusIds.length,4);
+  const full=generate({...data,quotas:repeated.quotas});M.validateDocument(full);assert.equal(Object.keys(full.matches).length,6);
+});
 test('guests and former members never receive a fifth game', () => {
   const data=input(Object.keys(registry).filter(id=>id!=='p002'&&id!=='p003'));const guest=addGuest(data);
   data.fixedPlayerIds=data.fixedPlayerIds.filter(id=>id!=='p001');data.profiles.p001.memberType='guest';

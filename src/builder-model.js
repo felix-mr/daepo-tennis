@@ -46,7 +46,7 @@ const builderModel = (() => {
     const slots = quotas => ids.reduce((sum, id) => sum + quotas[id], 0);
     const result = (quotas, bonusIds) => {
       const unfilledSlots = Math.max(0, 48 - slots(quotas));
-      return { quotas, bonusIds, unfilledSlots, reason: unfilledSlots ? '게스트 경기 수·참석 시간·고정 페어를 유지하면 ' + (unfilledSlots / 4) + '개 코트를 채울 수 없습니다. 회원은 최대 5경기까지 배정합니다.' : '' };
+      return { quotas, bonusIds, unfilledSlots, reason: unfilledSlots ? '성별 구성·게스트 경기 수·참석 시간·고정 페어·파트너 반복 조건을 유지하면 ' + Math.ceil(unfilledSlots / 4) + '개 코트를 채울 수 없습니다. 회원은 최대 5경기까지 배정합니다.' : '' };
     };
     if (ids.length >= 12) return result(original, []);
     const random = options.random || Math.random;
@@ -59,6 +59,9 @@ const builderModel = (() => {
       const present = ids.filter(id => input.availability[id].from <= r && r < input.availability[id].to).length;
       return Math.min(2, Math.floor(present / 4)) * 4;
     }).reduce((sum,value)=>sum+value,0);
+    const genderCapacity = Object.fromEntries(['male','female'].map(gender=>[gender,
+      Array.from({length:6},(_,r)=>Math.min(8,2*Math.floor(ids.filter(id=>input.profiles[id].gender===gender
+        && input.availability[id].from<=r && r<input.availability[id].to).length/2))).reduce((sum,value)=>sum+value,0)]));
     let best = original, bonus = [], score = -1, ties = 0, bestSlots = slots(original);
     for (let mask = 1; mask < 2 ** ranked.length; mask++) {
       const selected = ranked.filter((id,index) => mask & (1 << index));
@@ -66,6 +69,29 @@ const builderModel = (() => {
       selected.forEach(id => quotas[id] = 5);
       const count = slots(quotas);
       if (count > capacity || count % 4 || count < bestSlots) continue;
+      if (['male','female'].some(gender=>ids.filter(id=>input.profiles[id].gender===gender).reduce((sum,id)=>sum+quotas[id],0)>genderCapacity[gender])) continue;
+      if (!input.allowPartnerRepeats) {
+        const limits=repeatLimits({...input,lockedPairs:input.lockedPairs || [],quotas});
+        const pools=Object.fromEntries(['male','female'].map(gender=>[gender,ids.filter(id=>input.profiles[id].gender===gender).length]));
+        if(ids.some(id=>{
+          const gender=input.profiles[id].gender;
+          const partners=ids.filter(other=>other!==id && (input.profiles[other].gender===gender ? pools[gender]>=4 : pools.male>=2 && pools.female>=2));
+          return quotas[id]>partners.reduce((sum,other)=>sum+(limits.get(key([id,other])) || 1),0);
+        })) continue;
+      }
+      // ALL partners also rest together. Their absence can leave an odd pool;
+      // the game they play consumes one court of the corresponding doubles type.
+      if ((input.lockedPairs || []).some(entry=>{
+        if(entry.games!=='all')return false;
+        const pair=entry.players,target=quotas[pair[0]],same=input.profiles[pair[0]].gender===input.profiles[pair[1]].gender;
+        return ['male','female'].some(gender=>{
+          const pool=ids.filter(id=>input.profiles[id].gender===gender),own=pair.filter(id=>input.profiles[id].gender===gender).length;
+          const absent=Math.min(8,2*Math.floor((pool.length-own)/2));
+          const present=same ? (own ? Math.min(8,2+2*Math.floor((pool.length-2)/2)) : Math.min(4,2*Math.floor(pool.length/2)))
+            : Math.min(6,2+2*Math.floor((pool.length-2)/2));
+          return pool.reduce((sum,id)=>sum+quotas[id],0)>target*present+(6-target)*absent;
+        });
+      })) continue;
       // ALL pairs must retain equal quotas and overlap for every game. A four-
       // player same-gender pool also requires both opponents for every such game.
       if ((input.lockedPairs || []).some(entry => {

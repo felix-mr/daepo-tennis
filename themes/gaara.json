@@ -1,0 +1,27 @@
+{
+  "name": "가아라",
+  "romanizedName": "Gaara",
+  "palette": {
+    "primary": "#b27852",
+    "accent": "#f4dcba",
+    "background": "#2c1b10"
+  },
+  "tagline": "흔들리지 않는 수비로 긴 승부를 버티다",
+  "sourceUrl": "https://narutop99.naruto-official.com/en/archive/",
+  "characterSourceUrl": "https://anilist.co/character/1662",
+  "sourceName": "Gaara",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b1662-4E5J0LX9jZKZ.png",
+  "heroAlt": "가아라 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/gaara.png",
+  "imageSha256": "871e2bb036bc170481ac39daf3abdb2968c060c13eef956942233a04b3d76e1e",
+  "seriesId": "naruto",
+  "seriesName": "나루토",
+  "stylesheet": "themes/gaara.css",
+  "eyebrow": "나루토 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "가아라",
+  "characterPortrait": true
+}

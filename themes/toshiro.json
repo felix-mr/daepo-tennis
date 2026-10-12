@@ -1,0 +1,27 @@
+{
+  "name": "히츠가야 토시로",
+  "romanizedName": "Toushirou Hitsugaya",
+  "palette": {
+    "primary": "#65b1c7",
+    "accent": "#e1fbff",
+    "background": "#102c34"
+  },
+  "tagline": "차가운 집중력으로 흔들리는 공을 잡다",
+  "sourceUrl": "https://bleach-anime.com/character/",
+  "characterSourceUrl": "https://anilist.co/character/245",
+  "sourceName": "Toushirou Hitsugaya",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b245-buy3Cfn6IFSB.jpg",
+  "heroAlt": "히츠가야 토시로 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 360,
+  "heroImage": "src/characters/toshiro.jpg",
+  "imageSha256": "498da91ca8393c53ba382d3485fa80ab52780d9e3b1b52f0592bf0869d18aba7",
+  "seriesId": "bleach",
+  "seriesName": "블리치",
+  "stylesheet": "themes/toshiro.css",
+  "eyebrow": "블리치 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "히츠가야 토시로",
+  "characterPortrait": true
+}

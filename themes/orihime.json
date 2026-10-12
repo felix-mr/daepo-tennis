@@ -1,0 +1,27 @@
+{
+  "name": "이노우에 오리히메",
+  "romanizedName": "Orihime Inoue",
+  "palette": {
+    "primary": "#d69a5d",
+    "accent": "#ffeccc",
+    "background": "#302111"
+  },
+  "tagline": "따뜻한 호흡으로 파트너의 흐름을 지키다",
+  "sourceUrl": "https://bleach-anime.com/character/",
+  "characterSourceUrl": "https://anilist.co/character/7",
+  "sourceName": "Orihime Inoue",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b7-JdR4betokDjR.jpg",
+  "heroAlt": "이노우에 오리히메 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/orihime.jpg",
+  "imageSha256": "883c574783b5cea924f204568c558e803861f91981376d0373a67f93ed6dc204",
+  "seriesId": "bleach",
+  "seriesName": "블리치",
+  "stylesheet": "themes/orihime.css",
+  "eyebrow": "블리치 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "이노우에 오리히메",
+  "characterPortrait": true
+}

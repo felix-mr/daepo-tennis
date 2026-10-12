@@ -1,0 +1,27 @@
+{
+  "name": "아이젠 소스케",
+  "romanizedName": "Sousuke Aizen",
+  "palette": {
+    "primary": "#8971a6",
+    "accent": "#eadcfb",
+    "background": "#23162e"
+  },
+  "tagline": "침착한 선택으로 경기의 흐름을 설계하다",
+  "sourceUrl": "https://bleach-anime.com/character/",
+  "characterSourceUrl": "https://anilist.co/character/1086",
+  "sourceName": "Sousuke Aizen",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b1086-qR9218BjZTC0.png",
+  "heroAlt": "아이젠 소스케 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/aizen.png",
+  "imageSha256": "e7515d6d7c463b6a42da5d0af867103eeb7deabbbe003b59e7f19569516f242a",
+  "seriesId": "bleach",
+  "seriesName": "블리치",
+  "stylesheet": "themes/aizen.css",
+  "eyebrow": "블리치 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "아이젠 소스케",
+  "characterPortrait": true
+}

@@ -1,0 +1,27 @@
+{
+  "name": "한지 조에",
+  "romanizedName": "Hange Zoe",
+  "palette": {
+    "primary": "#9e704a",
+    "accent": "#f1dabd",
+    "background": "#2c1d13"
+  },
+  "tagline": "새로운 전술을 시험하며 해답을 찾다",
+  "sourceUrl": "https://shingeki.tv/final/character/",
+  "characterSourceUrl": "https://anilist.co/character/71121",
+  "sourceName": "Hange Zoe",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b71121-7R7CnQd3lHgt.png",
+  "heroAlt": "한지 조에 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 349,
+  "heroImage": "src/characters/hange.png",
+  "imageSha256": "6785080b21ba34bfb2cec8964edad5b36f415da08dcf63e1adef6b68e080a264",
+  "seriesId": "attack-on-titan",
+  "seriesName": "진격의 거인",
+  "stylesheet": "themes/hange.css",
+  "eyebrow": "진격의 거인 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "한지 조에",
+  "characterPortrait": true
+}

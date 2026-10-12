@@ -1,0 +1,27 @@
+{
+  "name": "료멘 스쿠나",
+  "romanizedName": "Sukuna",
+  "palette": {
+    "primary": "#b52647",
+    "accent": "#ffc1ba",
+    "background": "#21090f"
+  },
+  "tagline": "날카로운 코스로 상대 수비를 가르다",
+  "sourceUrl": "https://jujutsukaisen.jp/character/",
+  "characterSourceUrl": "https://anilist.co/character/133701",
+  "sourceName": "Sukuna",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b133701-rCQuDpHr3UZL.png",
+  "heroAlt": "료멘 스쿠나 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/sukuna.png",
+  "imageSha256": "2f76211b862eb4e44b56f19bf4cc39470efeff26a91f4d10c2662d89aaf16cb4",
+  "seriesId": "jujutsu-kaisen",
+  "seriesName": "주술회전",
+  "stylesheet": "themes/sukuna.css",
+  "eyebrow": "주술회전 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "료멘 스쿠나",
+  "characterPortrait": true
+}

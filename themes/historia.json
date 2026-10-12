@@ -1,0 +1,27 @@
+{
+  "name": "히스토리아 레이스",
+  "romanizedName": "Historia Reiss",
+  "palette": {
+    "primary": "#b89d67",
+    "accent": "#fff0cf",
+    "background": "#292219"
+  },
+  "tagline": "침착한 선택으로 어려운 포인트를 넘다",
+  "sourceUrl": "https://shingeki.tv/final/character/",
+  "characterSourceUrl": "https://anilist.co/character/62481",
+  "sourceName": "Krista Lenz",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b62481-ZZDa7vn17lMU.png",
+  "heroAlt": "히스토리아 레이스 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/historia.png",
+  "imageSha256": "14a099aa729e8f4bb91e209f43b15f682d0cc41d4b34e521b3282858dc8e5cbb",
+  "seriesId": "attack-on-titan",
+  "seriesName": "진격의 거인",
+  "stylesheet": "themes/historia.css",
+  "eyebrow": "진격의 거인 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "히스토리아 레이스",
+  "characterPortrait": true
+}

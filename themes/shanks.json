@@ -1,0 +1,27 @@
+{
+  "name": "샹크스",
+  "romanizedName": "Shanks",
+  "palette": {
+    "primary": "#a54351",
+    "accent": "#f7d8d8",
+    "background": "#2c1017"
+  },
+  "tagline": "여유 있는 템포로 중요한 공을 잡다",
+  "sourceUrl": "https://one-piece.com/character/",
+  "characterSourceUrl": "https://anilist.co/character/727",
+  "sourceName": "Shanks",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b727-wUJx7M1z5xON.png",
+  "heroAlt": "샹크스 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/shanks.png",
+  "imageSha256": "362d083edbb240a0b24e27d89217f41635d69209081e51840524cbee68b5b32e",
+  "seriesId": "one-piece",
+  "seriesName": "원피스",
+  "stylesheet": "themes/shanks.css",
+  "eyebrow": "원피스 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "샹크스",
+  "characterPortrait": true
+}

@@ -1,0 +1,27 @@
+{
+  "name": "크라피카",
+  "romanizedName": "Kurapika",
+  "palette": {
+    "primary": "#d4b048",
+    "accent": "#fff0bf",
+    "background": "#2b230f"
+  },
+  "tagline": "흔들리지 않는 집중력으로 코스를 묶다",
+  "sourceUrl": "https://www.ntv.co.jp/hunterhunter/character/index.html",
+  "characterSourceUrl": "https://anilist.co/character/28",
+  "sourceName": "Kurapika",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b28-ivA7UGnfE40a.png",
+  "heroAlt": "크라피카 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/kurapika.png",
+  "imageSha256": "e77d037fb2479be452cfb7dddad4c5dd08d010e740832bbfa6fc19a3287c8302",
+  "seriesId": "hunter-x-hunter",
+  "seriesName": "헌터×헌터",
+  "stylesheet": "themes/kurapika.css",
+  "eyebrow": "헌터×헌터 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "크라피카",
+  "characterPortrait": true
+}

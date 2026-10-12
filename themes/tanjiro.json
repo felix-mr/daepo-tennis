@@ -1,0 +1,27 @@
+{
+  "name": "카마도 탄지로",
+  "romanizedName": "Tanjirou Kamado",
+  "palette": {
+    "primary": "#2d946e",
+    "accent": "#aaf4cb",
+    "background": "#092b23"
+  },
+  "tagline": "깊게 호흡하고 다음 포인트를 잇다",
+  "sourceUrl": "https://kimetsu.com/anime/character/",
+  "characterSourceUrl": "https://anilist.co/character/126071",
+  "sourceName": "Tanjirou Kamado",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b126071-BTNEc1nRIv68.png",
+  "heroAlt": "카마도 탄지로 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/tanjiro.png",
+  "imageSha256": "ff081a5f5a09942ec734d43ab3d7a80a703a8e2f26b98bf5ad03102b2af7850b",
+  "seriesId": "demon-slayer",
+  "seriesName": "귀멸의 칼날",
+  "stylesheet": "themes/tanjiro.css",
+  "eyebrow": "귀멸의 칼날 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "카마도 탄지로",
+  "characterPortrait": true
+}

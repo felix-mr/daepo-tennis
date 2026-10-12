@@ -1,0 +1,27 @@
+{
+  "name": "크롤로 루실후르",
+  "romanizedName": "Chrollo Lucilfer",
+  "palette": {
+    "primary": "#6b72a6",
+    "accent": "#e3e2f8",
+    "background": "#171927"
+  },
+  "tagline": "상대의 패턴을 읽고 다음 수를 준비하다",
+  "sourceUrl": "https://www.ntv.co.jp/hunterhunter/character/index.html",
+  "characterSourceUrl": "https://anilist.co/character/58",
+  "sourceName": "Chrollo Lucilfer",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b58-USOmsz3nursi.jpg",
+  "heroAlt": "크롤로 루실후르 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/chrollo.jpg",
+  "imageSha256": "1df48e75052f7ae56dbe8c0a202f2467a30f8e5ccdaac2e95e17d8725481ce03",
+  "seriesId": "hunter-x-hunter",
+  "seriesName": "헌터×헌터",
+  "stylesheet": "themes/chrollo.css",
+  "eyebrow": "헌터×헌터 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "크롤로 루실후르",
+  "characterPortrait": true
+}

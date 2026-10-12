@@ -1,6 +1,7 @@
 import base64
 import argparse
 import json
+import mimetypes
 from collections import Counter
 from datetime import date
 from html import escape
@@ -284,7 +285,8 @@ def personal_html(player):
 personal_sections = "\n".join(personal_html(p) for p in MEN+WOMEN)
 lookup_buttons = "\n".join(f'<button type="button" data-select-player="{escape(p)}">{escape(p)}</button>' for p in MEN+WOMEN)
 hero_image_data = base64.b64encode((ROOT / theme["heroImage"]).read_bytes()).decode("ascii") if theme["heroImage"] else ""
-hero_art = f'<img class="hero-art" src="data:image/webp;base64,{hero_image_data}" alt="{escape(theme["heroAlt"])}">' if hero_image_data else ""
+hero_mime = mimetypes.guess_type(theme["heroImage"])[0] if theme["heroImage"] else ""
+hero_art = f'<img class="hero-art" src="data:{hero_mime};base64,{hero_image_data}" alt="{escape(theme["heroAlt"])}">' if hero_image_data else ""
 score_script = (ROOT / "src/results.js").read_text(encoding="utf-8") + "\n" + (ROOT / "src/membership.js").read_text(encoding="utf-8") + "\n" + (ROOT / "src/scores.js").read_text(encoding="utf-8")
 score_script = score_script.replace("__MEMBERSHIPS__", json.dumps(MEMBERSHIPS, ensure_ascii=False))
 score_script = score_script.replace("__FIREBASE_CONFIG__", (ROOT / "firebase/firebase-config.json").read_text(encoding="utf-8"))

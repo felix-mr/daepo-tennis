@@ -1,0 +1,27 @@
+{
+  "name": "하시비라 이노스케",
+  "romanizedName": "Inosuke Hashibira",
+  "palette": {
+    "primary": "#578dcc",
+    "accent": "#b5dfff",
+    "background": "#0d1e32"
+  },
+  "tagline": "거침없는 돌파로 코트에 길을 내다",
+  "sourceUrl": "https://kimetsu.com/anime/character/",
+  "characterSourceUrl": "https://anilist.co/character/129130",
+  "sourceName": "Inosuke Hashibira",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/n129130-SJC0Kn1DU39E.jpg",
+  "heroAlt": "하시비라 이노스케 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 344,
+  "heroImage": "src/characters/inosuke.jpg",
+  "imageSha256": "95bd19235e803dfbb01eec1219f3e2f7eb6a1e6b79f35d4bd3a1a440edbc2b70",
+  "seriesId": "demon-slayer",
+  "seriesName": "귀멸의 칼날",
+  "stylesheet": "themes/inosuke.css",
+  "eyebrow": "귀멸의 칼날 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "하시비라 이노스케",
+  "characterPortrait": true
+}

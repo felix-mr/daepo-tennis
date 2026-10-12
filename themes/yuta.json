@@ -1,0 +1,27 @@
+{
+  "name": "옷코츠 유타",
+  "romanizedName": "Yuuta Okkotsu",
+  "palette": {
+    "primary": "#5388ba",
+    "accent": "#dcf2ff",
+    "background": "#111f2e"
+  },
+  "tagline": "파트너를 믿고 마지막 공까지 지키다",
+  "sourceUrl": "https://jujutsukaisen.jp/character/",
+  "characterSourceUrl": "https://anilist.co/character/129571",
+  "sourceName": "Yuuta Okkotsu",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b129571-GHJk7gviHOOw.jpg",
+  "heroAlt": "옷코츠 유타 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/yuta.jpg",
+  "imageSha256": "82947af3997d342a972f0c6447b2832dee93f99586fbe1ec22e5f5ec2a5c87d1",
+  "seriesId": "jujutsu-kaisen",
+  "seriesName": "주술회전",
+  "stylesheet": "themes/yuta.css",
+  "eyebrow": "주술회전 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "옷코츠 유타",
+  "characterPortrait": true
+}

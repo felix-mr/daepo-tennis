@@ -1,0 +1,27 @@
+{
+  "name": "젠인 마키",
+  "romanizedName": "Maki Zenin",
+  "palette": {
+    "primary": "#408765",
+    "accent": "#b7e4be",
+    "background": "#10251d"
+  },
+  "tagline": "정확한 스윙으로 단단한 수비를 깨다",
+  "sourceUrl": "https://jujutsukaisen.jp/character/",
+  "characterSourceUrl": "https://anilist.co/character/134167",
+  "sourceName": "Maki Zenin",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b134167-5TCytk45YByD.png",
+  "heroAlt": "젠인 마키 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/maki.png",
+  "imageSha256": "887bbe332cce9d1dc10186d27ddcc3446b55680a6e46ac3567c896fb81721f0b",
+  "seriesId": "jujutsu-kaisen",
+  "seriesName": "주술회전",
+  "stylesheet": "themes/maki.css",
+  "eyebrow": "주술회전 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "젠인 마키",
+  "characterPortrait": true
+}

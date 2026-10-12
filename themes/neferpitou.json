@@ -1,0 +1,27 @@
+{
+  "name": "네페르피트",
+  "romanizedName": "Neferpitou",
+  "palette": {
+    "primary": "#ab81c4",
+    "accent": "#eae0ff",
+    "background": "#241930"
+  },
+  "tagline": "민첩한 발놀림으로 네트 가까이 파고들다",
+  "sourceUrl": "https://www.ntv.co.jp/hunterhunter/character/index.html",
+  "characterSourceUrl": "https://anilist.co/character/12300",
+  "sourceName": "Neferpitou",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b12300-kYzopQUTLa9A.png",
+  "heroAlt": "네페르피트 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/neferpitou.png",
+  "imageSha256": "00efbaf7e54d75cf5c70957cdb7c9b1476b62731e0ed42cfb7f85446628ec27b",
+  "seriesId": "hunter-x-hunter",
+  "seriesName": "헌터×헌터",
+  "stylesheet": "themes/neferpitou.css",
+  "eyebrow": "헌터×헌터 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "네페르피트",
+  "characterPortrait": true
+}

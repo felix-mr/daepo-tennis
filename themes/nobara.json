@@ -1,0 +1,27 @@
+{
+  "name": "쿠기사키 노바라",
+  "romanizedName": "Nobara Kugisaki",
+  "palette": {
+    "primary": "#cc7c47",
+    "accent": "#ffd1a0",
+    "background": "#25140d"
+  },
+  "tagline": "망설임 없는 발리로 포인트를 박다",
+  "sourceUrl": "https://jujutsukaisen.jp/character/",
+  "characterSourceUrl": "https://anilist.co/character/133700",
+  "sourceName": "Nobara Kugisaki",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b133700-f6sOO3TcgLV6.png",
+  "heroAlt": "쿠기사키 노바라 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/nobara.png",
+  "imageSha256": "2d24a3e9b8e6d3dda53b05e5c5dab5dfdd5ee9bbed87da45a07bea9beb5f8ccb",
+  "seriesId": "jujutsu-kaisen",
+  "seriesName": "주술회전",
+  "stylesheet": "themes/nobara.css",
+  "eyebrow": "주술회전 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "쿠기사키 노바라",
+  "characterPortrait": true
+}

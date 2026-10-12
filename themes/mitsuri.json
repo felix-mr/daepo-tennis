@@ -1,0 +1,27 @@
+{
+  "name": "칸로지 미츠리",
+  "romanizedName": "Mitsuri Kanroji",
+  "palette": {
+    "primary": "#d16ca1",
+    "accent": "#d2f5bd",
+    "background": "#291a29"
+  },
+  "tagline": "유연한 스윙과 따뜻한 호흡을 맞추다",
+  "sourceUrl": "https://kimetsu.com/anime/character/",
+  "characterSourceUrl": "https://anilist.co/character/136072",
+  "sourceName": "Mitsuri Kanroji",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b136072-xVwyRUKdpybi.png",
+  "heroAlt": "칸로지 미츠리 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/mitsuri.png",
+  "imageSha256": "873a337c7fb8c0396063fd723c8231484780c40f48f63c0298142ace23f569cf",
+  "seriesId": "demon-slayer",
+  "seriesName": "귀멸의 칼날",
+  "stylesheet": "themes/mitsuri.css",
+  "eyebrow": "귀멸의 칼날 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "칸로지 미츠리",
+  "characterPortrait": true
+}

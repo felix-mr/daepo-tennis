@@ -1,0 +1,27 @@
+{
+  "name": "롤로노아 조로",
+  "romanizedName": "Roronoa Zoro",
+  "palette": {
+    "primary": "#46a06d",
+    "accent": "#d0f3ad",
+    "background": "#0d291d"
+  },
+  "tagline": "날카로운 각도로 상대 수비를 가르다",
+  "sourceUrl": "https://one-piece.com/character/",
+  "characterSourceUrl": "https://anilist.co/character/62",
+  "sourceName": "Zoro Roronoa",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b62-S7oAeA9WInjV.png",
+  "heroAlt": "롤로노아 조로 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/zoro.png",
+  "imageSha256": "b681cfc932f46b311a283c70097ae2bd66211d25ad17f208182175ff7d2f362c",
+  "seriesId": "one-piece",
+  "seriesName": "원피스",
+  "stylesheet": "themes/zoro.css",
+  "eyebrow": "원피스 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "롤로노아 조로",
+  "characterPortrait": true
+}

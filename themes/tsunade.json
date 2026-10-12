@@ -1,0 +1,27 @@
+{
+  "name": "츠나데",
+  "romanizedName": "Tsunade",
+  "palette": {
+    "primary": "#7da462",
+    "accent": "#e7f2bd",
+    "background": "#1c2914"
+  },
+  "tagline": "튼튼한 기본기로 파트너에게 힘을 보태다",
+  "sourceUrl": "https://narutop99.naruto-official.com/en/archive/",
+  "characterSourceUrl": "https://anilist.co/character/2767",
+  "sourceName": "Tsunade Senju",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b2767-r61Cj9v8I0wl.png",
+  "heroAlt": "츠나데 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/tsunade.png",
+  "imageSha256": "00f5d717d07941333e229d9302cef966fc1c9d0e4f41b6efd9519d73654b4caa",
+  "seriesId": "naruto",
+  "seriesName": "나루토",
+  "stylesheet": "themes/tsunade.css",
+  "eyebrow": "나루토 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "츠나데",
+  "characterPortrait": true
+}

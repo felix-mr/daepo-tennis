@@ -1,0 +1,27 @@
+{
+  "name": "토니토니 쵸파",
+  "romanizedName": "Tony Tony Chopper",
+  "palette": {
+    "primary": "#ce7696",
+    "accent": "#ffe0ea",
+    "background": "#2c1421"
+  },
+  "tagline": "작은 움직임으로 파트너의 빈틈을 메우다",
+  "sourceUrl": "https://one-piece.com/character/",
+  "characterSourceUrl": "https://anilist.co/character/309",
+  "sourceName": "Chopper Tony Tony",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b309-H64NhbJ2ywIQ.jpg",
+  "heroAlt": "토니토니 쵸파 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 360,
+  "heroImage": "src/characters/chopper.jpg",
+  "imageSha256": "2b08a21e163f6eb4205b7811dbff3875b498b27cff4c0930f61373d52e2b0d98",
+  "seriesId": "one-piece",
+  "seriesName": "원피스",
+  "stylesheet": "themes/chopper.css",
+  "eyebrow": "원피스 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "토니토니 쵸파",
+  "characterPortrait": true
+}

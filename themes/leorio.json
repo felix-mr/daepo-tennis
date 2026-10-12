@@ -1,0 +1,27 @@
+{
+  "name": "레오리오 파라디나이트",
+  "romanizedName": "Leorio Paladiknight",
+  "palette": {
+    "primary": "#456bab",
+    "accent": "#c8dcff",
+    "background": "#14243e"
+  },
+  "tagline": "든든한 파트너로 긴 랠리를 버티다",
+  "sourceUrl": "https://www.ntv.co.jp/hunterhunter/character/index.html",
+  "characterSourceUrl": "https://anilist.co/character/29",
+  "sourceName": "Leorio Paradinight",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b29-RgzoSeKmDYzl.jpg",
+  "heroAlt": "레오리오 파라디나이트 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/leorio.jpg",
+  "imageSha256": "bed6fc6926a6e7f39abbccab69e2f1b266759e08ca81211f4c028fcbffc5ccb7",
+  "seriesId": "hunter-x-hunter",
+  "seriesName": "헌터×헌터",
+  "stylesheet": "themes/leorio.css",
+  "eyebrow": "헌터×헌터 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "레오리오 파라디나이트",
+  "characterPortrait": true
+}

@@ -1,0 +1,27 @@
+{
+  "name": "곤 프릭스",
+  "romanizedName": "Gon Freecss",
+  "palette": {
+    "primary": "#57a439",
+    "accent": "#dbf49d",
+    "background": "#162a0f"
+  },
+  "tagline": "새로운 코스를 찾아 힘껏 뛰어들다",
+  "sourceUrl": "https://www.ntv.co.jp/hunterhunter/character/index.html",
+  "characterSourceUrl": "https://anilist.co/character/30",
+  "sourceName": "Gon Freecss",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b30-lyFExKyDhefc.jpg",
+  "heroAlt": "곤 프릭스 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/gon.jpg",
+  "imageSha256": "11342513d96efa65a25a216edef3bded2dde583b97a744c07abb048ae38225b2",
+  "seriesId": "hunter-x-hunter",
+  "seriesName": "헌터×헌터",
+  "stylesheet": "themes/gon.css",
+  "eyebrow": "헌터×헌터 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "곤 프릭스",
+  "characterPortrait": true
+}

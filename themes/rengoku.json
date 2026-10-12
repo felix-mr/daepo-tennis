@@ -1,0 +1,27 @@
+{
+  "name": "렌고쿠 쿄쥬로",
+  "romanizedName": "Kyoujurou Rengoku",
+  "palette": {
+    "primary": "#e66c29",
+    "accent": "#ffe08a",
+    "background": "#321609"
+  },
+  "tagline": "뜨거운 집중력으로 랠리에 불을 붙이다",
+  "sourceUrl": "https://kimetsu.com/anime/character/",
+  "characterSourceUrl": "https://anilist.co/character/129133",
+  "sourceName": "Kyoujurou Rengoku",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b129133-VlTPowwt68rJ.png",
+  "heroAlt": "렌고쿠 쿄쥬로 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/rengoku.png",
+  "imageSha256": "37feb2e6af85ae19f211d91a47c2e78e07001c358cfeccc2768cdc36ee98b04b",
+  "seriesId": "demon-slayer",
+  "seriesName": "귀멸의 칼날",
+  "stylesheet": "themes/rengoku.css",
+  "eyebrow": "귀멸의 칼날 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "렌고쿠 쿄쥬로",
+  "characterPortrait": true
+}

@@ -1,0 +1,27 @@
+{
+  "name": "아이작 네테로",
+  "romanizedName": "Isaac Netero",
+  "palette": {
+    "primary": "#bb9d55",
+    "accent": "#f7eabc",
+    "background": "#252011"
+  },
+  "tagline": "쌓아온 감각으로 빠른 공도 받아내다",
+  "sourceUrl": "https://www.ntv.co.jp/hunterhunter/character/index.html",
+  "characterSourceUrl": "https://anilist.co/character/14489",
+  "sourceName": "Isaac Netero",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b14489-WgGsdlQJka65.jpg",
+  "heroAlt": "아이작 네테로 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/netero.jpg",
+  "imageSha256": "944339242a5d139e7492945e28bb24a3d0a9345be75b0cc68850b4c5e4e04267",
+  "seriesId": "hunter-x-hunter",
+  "seriesName": "헌터×헌터",
+  "stylesheet": "themes/netero.css",
+  "eyebrow": "헌터×헌터 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "아이작 네테로",
+  "characterPortrait": true
+}

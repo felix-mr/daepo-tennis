@@ -1,0 +1,27 @@
+{
+  "name": "니코 로빈",
+  "romanizedName": "Nico Robin",
+  "palette": {
+    "primary": "#9560bc",
+    "accent": "#e9cfff",
+    "background": "#22132f"
+  },
+  "tagline": "침착한 시선으로 숨은 빈틈을 찾다",
+  "sourceUrl": "https://one-piece.com/character/",
+  "characterSourceUrl": "https://anilist.co/character/61",
+  "sourceName": "Robin Nico",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b61-ywXUyyocEEqt.png",
+  "heroAlt": "니코 로빈 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/robin.png",
+  "imageSha256": "76d05197138e181f2e9409e1e7b504cb3711fba91418b573a85e5eb0595afc64",
+  "seriesId": "one-piece",
+  "seriesName": "원피스",
+  "stylesheet": "themes/robin.css",
+  "eyebrow": "원피스 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "니코 로빈",
+  "characterPortrait": true
+}

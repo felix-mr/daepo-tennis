@@ -1,0 +1,27 @@
+{
+  "name": "후시구로 메구미",
+  "romanizedName": "Megumi Fushiguro",
+  "palette": {
+    "primary": "#427092",
+    "accent": "#b9d6de",
+    "background": "#0b1925"
+  },
+  "tagline": "그림자처럼 조용히 빈 코스를 찾다",
+  "sourceUrl": "https://jujutsukaisen.jp/character/",
+  "characterSourceUrl": "https://anilist.co/character/126635",
+  "sourceName": "Megumi Fushiguro",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b126635-L0y3I92JSUkN.png",
+  "heroAlt": "후시구로 메구미 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/megumi.png",
+  "imageSha256": "727bd621ff18841e91653022d170652ff272173bf7b683b821096aa710d8e7a8",
+  "seriesId": "jujutsu-kaisen",
+  "seriesName": "주술회전",
+  "stylesheet": "themes/megumi.css",
+  "eyebrow": "주술회전 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "후시구로 메구미",
+  "characterPortrait": true
+}

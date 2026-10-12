@@ -1,0 +1,27 @@
+{
+  "name": "아르민 알레르토",
+  "romanizedName": "Armin Arlert",
+  "palette": {
+    "primary": "#bb9e55",
+    "accent": "#f9e9bb",
+    "background": "#292114"
+  },
+  "tagline": "넓은 시야로 다음 포인트를 설계하다",
+  "sourceUrl": "https://shingeki.tv/final/character/",
+  "characterSourceUrl": "https://anilist.co/character/46494",
+  "sourceName": "Armin Arlert",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b46494-g7xYYuBtYPnO.png",
+  "heroAlt": "아르민 알레르토 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/armin.png",
+  "imageSha256": "0fd857a4082ddd9d12e5bda604350f95de90743f586d6c2e7d33b74f0b641a8c",
+  "seriesId": "attack-on-titan",
+  "seriesName": "진격의 거인",
+  "stylesheet": "themes/armin.css",
+  "eyebrow": "진격의 거인 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "아르민 알레르토",
+  "characterPortrait": true
+}

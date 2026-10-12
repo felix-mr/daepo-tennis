@@ -1,0 +1,27 @@
+{
+  "name": "토미오카 기유",
+  "romanizedName": "Giyuu Tomioka",
+  "palette": {
+    "primary": "#3b79c2",
+    "accent": "#d5e7ff",
+    "background": "#0e1c34"
+  },
+  "tagline": "잔잔한 리듬으로 상대의 파도를 넘다",
+  "sourceUrl": "https://kimetsu.com/anime/character/",
+  "characterSourceUrl": "https://anilist.co/character/130050",
+  "sourceName": "Giyuu Tomioka",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b130050-qsLThJs5VIbz.png",
+  "heroAlt": "토미오카 기유 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/giyu.png",
+  "imageSha256": "28524add23b046eeb20b608a30602fff2ef71472dc2220d63abd85b00306604f",
+  "seriesId": "demon-slayer",
+  "seriesName": "귀멸의 칼날",
+  "stylesheet": "themes/giyu.css",
+  "eyebrow": "귀멸의 칼날 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "토미오카 기유",
+  "characterPortrait": true
+}

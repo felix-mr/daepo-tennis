@@ -5,5 +5,19 @@
   "title": "대포클럽",
   "accent": "토요일 대진표",
   "heroImage": "src/geto.webp",
-  "heroAlt": "보라색 주력에 둘러싸여 테니스 라켓을 든 게토 스구루"
+  "heroAlt": "보라색 주력에 둘러싸여 테니스 라켓을 든 게토 스구루",
+  "romanizedName": "Suguru Getou",
+  "palette": {
+    "primary": "#9860ce",
+    "accent": "#f3d48e",
+    "background": "#17121f"
+  },
+  "tagline": "다양한 구질을 모아 흐름을 바꾸다",
+  "sourceUrl": "https://jujutsukaisen.jp/character/",
+  "characterSourceUrl": "https://anilist.co/character/133699",
+  "sourceName": "Suguru Getou",
+  "imageSourceUrl": null,
+  "imageOrigin": "existing-project-art",
+  "seriesId": "jujutsu-kaisen",
+  "seriesName": "주술회전"
 }

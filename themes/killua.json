@@ -1,0 +1,27 @@
+{
+  "name": "키르아 조르딕",
+  "romanizedName": "Killua Zoldyck",
+  "palette": {
+    "primary": "#79aee1",
+    "accent": "#e6f7ff",
+    "background": "#132337"
+  },
+  "tagline": "빠른 반응으로 다음 공을 먼저 잡다",
+  "sourceUrl": "https://www.ntv.co.jp/hunterhunter/character/index.html",
+  "characterSourceUrl": "https://anilist.co/character/27",
+  "sourceName": "Killua Zoldyck",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b27-Z5O02kQUydpT.jpg",
+  "heroAlt": "키르아 조르딕 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/killua.jpg",
+  "imageSha256": "c055ab3441c4a38e955842931d87ef3342b00d89fd3257191fa68b2fa195367d",
+  "seriesId": "hunter-x-hunter",
+  "seriesName": "헌터×헌터",
+  "stylesheet": "themes/killua.css",
+  "eyebrow": "헌터×헌터 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "키르아 조르딕",
+  "characterPortrait": true
+}

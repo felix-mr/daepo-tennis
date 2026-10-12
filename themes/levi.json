@@ -1,0 +1,27 @@
+{
+  "name": "리바이 아커만",
+  "romanizedName": "Levi",
+  "palette": {
+    "primary": "#4c8b80",
+    "accent": "#d3eee5",
+    "background": "#0d2524"
+  },
+  "tagline": "작고 빠른 움직임으로 빈틈을 정리하다",
+  "sourceUrl": "https://shingeki.tv/final/character/",
+  "characterSourceUrl": "https://anilist.co/character/45627",
+  "sourceName": "Levi",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b45627-CR68RyZmddGG.png",
+  "heroAlt": "리바이 아커만 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/levi.png",
+  "imageSha256": "d8ee6604c5c51dc53a394156a74d9cd1f0263c1b14455dadc999a96ce4eaab52",
+  "seriesId": "attack-on-titan",
+  "seriesName": "진격의 거인",
+  "stylesheet": "themes/levi.css",
+  "eyebrow": "진격의 거인 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "리바이 아커만",
+  "characterPortrait": true
+}

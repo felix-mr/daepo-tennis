@@ -1,0 +1,27 @@
+{
+  "name": "에렌 예거",
+  "romanizedName": "Eren Yeager",
+  "palette": {
+    "primary": "#549072",
+    "accent": "#d5edd3",
+    "background": "#12251b"
+  },
+  "tagline": "막힌 코스 너머로 새로운 길을 열다",
+  "sourceUrl": "https://shingeki.tv/final/character/",
+  "characterSourceUrl": "https://anilist.co/character/40882",
+  "sourceName": "Eren Yeager",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b40882-dsj7IP943WFF.jpg",
+  "heroAlt": "에렌 예거 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/eren.jpg",
+  "imageSha256": "4c4da1731c536503a5223439a7fcdd074d9557ec0041bd29130cdc3071963e71",
+  "seriesId": "attack-on-titan",
+  "seriesName": "진격의 거인",
+  "stylesheet": "themes/eren.css",
+  "eyebrow": "진격의 거인 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "에렌 예거",
+  "characterPortrait": true
+}

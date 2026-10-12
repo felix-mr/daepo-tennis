@@ -1,0 +1,27 @@
+{
+  "name": "비스켓 크루거",
+  "romanizedName": "Biscuit Krueger",
+  "palette": {
+    "primary": "#c877a0",
+    "accent": "#ffdfed",
+    "background": "#2f1726"
+  },
+  "tagline": "기본을 다듬어 한층 단단한 플레이를 만들다",
+  "sourceUrl": "https://www.ntv.co.jp/hunterhunter/character/index.html",
+  "characterSourceUrl": "https://anilist.co/character/13898",
+  "sourceName": "Biscuit Krueger",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b13898-nHq3fRmp9uPD.png",
+  "heroAlt": "비스켓 크루거 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/biscuit.png",
+  "imageSha256": "eff1fa5e9390b5a7474d0112944bcbe5d7a45499d78be2715acf547d011b5123",
+  "seriesId": "hunter-x-hunter",
+  "seriesName": "헌터×헌터",
+  "stylesheet": "themes/biscuit.css",
+  "eyebrow": "헌터×헌터 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "비스켓 크루거",
+  "characterPortrait": true
+}

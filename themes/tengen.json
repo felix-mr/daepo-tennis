@@ -1,0 +1,27 @@
+{
+  "name": "우즈이 텐겐",
+  "romanizedName": "Tengen Uzui",
+  "palette": {
+    "primary": "#bc659a",
+    "accent": "#ffe0ef",
+    "background": "#2b1727"
+  },
+  "tagline": "화려한 템포 변화로 코트를 흔들다",
+  "sourceUrl": "https://kimetsu.com/anime/character/",
+  "characterSourceUrl": "https://anilist.co/character/136071",
+  "sourceName": "Tengen Uzui",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b136071-99Kexnnn2PiV.png",
+  "heroAlt": "우즈이 텐겐 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/tengen.png",
+  "imageSha256": "0d86037f449cfeaa9a67216fb1197d78c143f2e631e6d3bd125026e6a805a4f4",
+  "seriesId": "demon-slayer",
+  "seriesName": "귀멸의 칼날",
+  "stylesheet": "themes/tengen.css",
+  "eyebrow": "귀멸의 칼날 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "우즈이 텐겐",
+  "characterPortrait": true
+}

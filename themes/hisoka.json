@@ -1,0 +1,27 @@
+{
+  "name": "히소카 모로",
+  "romanizedName": "Hisoka Morow",
+  "palette": {
+    "primary": "#c14e89",
+    "accent": "#ffd4e8",
+    "background": "#2b1021"
+  },
+  "tagline": "예측하기 힘든 구질로 흐름을 바꾸다",
+  "sourceUrl": "https://www.ntv.co.jp/hunterhunter/character/index.html",
+  "characterSourceUrl": "https://anilist.co/character/31",
+  "sourceName": "Hisoka Morow",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b31-FZckOuu7L1un.png",
+  "heroAlt": "히소카 모로 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/hisoka.png",
+  "imageSha256": "94f58b640ad35de70c5008756e2352d7873259dce5f2993b56076dc7a907be2b",
+  "seriesId": "hunter-x-hunter",
+  "seriesName": "헌터×헌터",
+  "stylesheet": "themes/hisoka.css",
+  "eyebrow": "헌터×헌터 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "히소카 모로",
+  "characterPortrait": true
+}

@@ -1,0 +1,27 @@
+{
+  "name": "카마도 네즈코",
+  "romanizedName": "Nezuko Kamado",
+  "palette": {
+    "primary": "#d47f9d",
+    "accent": "#ffe0e9",
+    "background": "#2b1220"
+  },
+  "tagline": "작은 기회를 끝까지 놓치지 않다",
+  "sourceUrl": "https://kimetsu.com/anime/character/",
+  "characterSourceUrl": "https://anilist.co/character/127518",
+  "sourceName": "Nezuko Kamado",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b127518-NRlq1CQ1v1ro.png",
+  "heroAlt": "카마도 네즈코 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/nezuko.png",
+  "imageSha256": "6b6a06b9682516cee710979da041788fbc0f6c5720d40b117fce7fbcf69be7ec",
+  "seriesId": "demon-slayer",
+  "seriesName": "귀멸의 칼날",
+  "stylesheet": "themes/nezuko.css",
+  "eyebrow": "귀멸의 칼날 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "카마도 네즈코",
+  "characterPortrait": true
+}

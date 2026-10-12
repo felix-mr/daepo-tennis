@@ -1,0 +1,27 @@
+{
+  "name": "트라팔가 D. 워텔 로",
+  "romanizedName": "Trafalgar Law",
+  "palette": {
+    "primary": "#548f9e",
+    "accent": "#d9f1ef",
+    "background": "#0e282d"
+  },
+  "tagline": "정밀한 코스 선택으로 승부를 정리하다",
+  "sourceUrl": "https://one-piece.com/character/",
+  "characterSourceUrl": "https://anilist.co/character/13767",
+  "sourceName": "Law Trafalgar",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b13767-U604OJN9dxCn.jpg",
+  "heroAlt": "트라팔가 D. 워텔 로 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/law.jpg",
+  "imageSha256": "9b0e7b1e5f65a20ca6038092abc7b2868273ee009d6120bfcc6c3f4e7975bd58",
+  "seriesId": "one-piece",
+  "seriesName": "원피스",
+  "stylesheet": "themes/law.css",
+  "eyebrow": "원피스 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "트라팔가 D. 워텔 로",
+  "characterPortrait": true
+}

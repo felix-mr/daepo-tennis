@@ -1,0 +1,27 @@
+{
+  "name": "쿠치키 뱌쿠야",
+  "romanizedName": "Byakuya Kuchiki",
+  "palette": {
+    "primary": "#b987b2",
+    "accent": "#f3dfef",
+    "background": "#2a1c29"
+  },
+  "tagline": "절제된 움직임으로 우아한 코스를 만들다",
+  "sourceUrl": "https://bleach-anime.com/character/",
+  "characterSourceUrl": "https://anilist.co/character/907",
+  "sourceName": "Byakuya Kuchiki",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b907-kgnDKeMtEN5y.png",
+  "heroAlt": "쿠치키 뱌쿠야 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/byakuya.png",
+  "imageSha256": "7de310e31e14ef1456bfbdb64b1111c8ec4c8853d4280fce32d308a7e4548104",
+  "seriesId": "bleach",
+  "seriesName": "블리치",
+  "stylesheet": "themes/byakuya.css",
+  "eyebrow": "블리치 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "쿠치키 뱌쿠야",
+  "characterPortrait": true
+}

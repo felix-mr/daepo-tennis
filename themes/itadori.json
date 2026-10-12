@@ -1,0 +1,27 @@
+{
+  "name": "이타도리 유지",
+  "romanizedName": "Yuuji Itadori",
+  "palette": {
+    "primary": "#d64c69",
+    "accent": "#ffbeaf",
+    "background": "#241016"
+  },
+  "tagline": "끝까지 달리는 랠리로 기회를 만들다",
+  "sourceUrl": "https://jujutsukaisen.jp/character/",
+  "characterSourceUrl": "https://anilist.co/character/127212",
+  "sourceName": "Yuuji Itadori",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b127212-FVm2tD0erQ5B.png",
+  "heroAlt": "이타도리 유지 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/itadori.png",
+  "imageSha256": "8ee287a1387f798835ec6208b4e6de10bf3982439f5fc468787205d7dd1e4595",
+  "seriesId": "jujutsu-kaisen",
+  "seriesName": "주술회전",
+  "stylesheet": "themes/itadori.css",
+  "eyebrow": "주술회전 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "이타도리 유지",
+  "characterPortrait": true
+}

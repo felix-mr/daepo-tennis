@@ -1,0 +1,27 @@
+{
+  "name": "키부츠지 무잔",
+  "romanizedName": "Muzan Kibutsuji",
+  "palette": {
+    "primary": "#aa3c54",
+    "accent": "#efd9db",
+    "background": "#210e17"
+  },
+  "tagline": "차분한 압박으로 상대의 선택을 좁히다",
+  "sourceUrl": "https://kimetsu.com/anime/character/",
+  "characterSourceUrl": "https://anilist.co/character/129132",
+  "sourceName": "Muzan Kibutsuji",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b129132-4nIZakUZ1o8W.jpg",
+  "heroAlt": "키부츠지 무잔 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/muzan.jpg",
+  "imageSha256": "4b60f446e436c154470e95df812d524ba3c27465b63f20ceedadcfd67ec326fc",
+  "seriesId": "demon-slayer",
+  "seriesName": "귀멸의 칼날",
+  "stylesheet": "themes/muzan.css",
+  "eyebrow": "귀멸의 칼날 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "키부츠지 무잔",
+  "characterPortrait": true
+}

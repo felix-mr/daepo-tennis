@@ -1,0 +1,27 @@
+{
+  "name": "상디",
+  "romanizedName": "Sanji",
+  "palette": {
+    "primary": "#ccab57",
+    "accent": "#f8edbe",
+    "background": "#2b2516"
+  },
+  "tagline": "빠른 발과 부드러운 터치로 기회를 잇다",
+  "sourceUrl": "https://one-piece.com/character/",
+  "characterSourceUrl": "https://anilist.co/character/305",
+  "sourceName": "Sanji",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b305-6lisPmHtCnLT.png",
+  "heroAlt": "상디 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 350,
+  "heroImage": "src/characters/sanji.png",
+  "imageSha256": "18b29e672b9c184fc0923b2200e8c8f321f9ffddf24380ec8f110f1e02a43c0f",
+  "seriesId": "one-piece",
+  "seriesName": "원피스",
+  "stylesheet": "themes/sanji.css",
+  "eyebrow": "원피스 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "상디",
+  "characterPortrait": true
+}

@@ -1,0 +1,27 @@
+{
+  "name": "메르엠",
+  "romanizedName": "Meruem",
+  "palette": {
+    "primary": "#779959",
+    "accent": "#e2efac",
+    "background": "#18251a"
+  },
+  "tagline": "정확한 판단으로 코트의 빈틈을 읽다",
+  "sourceUrl": "https://www.ntv.co.jp/hunterhunter/character/index.html",
+  "characterSourceUrl": "https://anilist.co/character/23277",
+  "sourceName": "Meruem",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b23277-EYmIxzL64Mji.png",
+  "heroAlt": "메르엠 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/meruem.png",
+  "imageSha256": "6e51c1a3f677463699cacece527159acbc2dcbb00180445fdafa77928cc86af1",
+  "seriesId": "hunter-x-hunter",
+  "seriesName": "헌터×헌터",
+  "stylesheet": "themes/meruem.css",
+  "eyebrow": "헌터×헌터 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "메르엠",
+  "characterPortrait": true
+}

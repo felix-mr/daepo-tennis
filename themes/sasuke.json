@@ -1,0 +1,27 @@
+{
+  "name": "우치하 사스케",
+  "romanizedName": "Sasuke Uchiha",
+  "palette": {
+    "primary": "#7774c4",
+    "accent": "#e0deff",
+    "background": "#16162e"
+  },
+  "tagline": "날카로운 판단으로 한 수 앞을 노리다",
+  "sourceUrl": "https://narutop99.naruto-official.com/en/archive/",
+  "characterSourceUrl": "https://anilist.co/character/13",
+  "sourceName": "Sasuke Uchiha",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b13-SISLEw1oAD7a.png",
+  "heroAlt": "우치하 사스케 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/sasuke.png",
+  "imageSha256": "daa8536c430c44b7bd16253a3cc5185a052ed7c070168f2bc30b5e5d3a670a5f",
+  "seriesId": "naruto",
+  "seriesName": "나루토",
+  "stylesheet": "themes/sasuke.css",
+  "eyebrow": "나루토 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "우치하 사스케",
+  "characterPortrait": true
+}

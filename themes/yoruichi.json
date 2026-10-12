@@ -1,0 +1,27 @@
+{
+  "name": "시호인 요루이치",
+  "romanizedName": "Yoruichi Shihouin",
+  "palette": {
+    "primary": "#aa78c8",
+    "accent": "#ecd8ff",
+    "background": "#2a163b"
+  },
+  "tagline": "빠른 첫발로 네트 앞 공간을 선점하다",
+  "sourceUrl": "https://bleach-anime.com/character/",
+  "characterSourceUrl": "https://anilist.co/character/908",
+  "sourceName": "Yoruichi Shihouin",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b908-JSYUkJLCw1f0.png",
+  "heroAlt": "시호인 요루이치 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/yoruichi.png",
+  "imageSha256": "e8c41d764a68fda020bdda32c27175b370b93fb8ddf987cfbd7f961d656c3b64",
+  "seriesId": "bleach",
+  "seriesName": "블리치",
+  "stylesheet": "themes/yoruichi.css",
+  "eyebrow": "블리치 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "시호인 요루이치",
+  "characterPortrait": true
+}

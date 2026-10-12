@@ -1,0 +1,27 @@
+{
+  "name": "쿠치키 루키아",
+  "romanizedName": "Rukia Kuchiki",
+  "palette": {
+    "primary": "#7ea7c6",
+    "accent": "#e7f5ff",
+    "background": "#172735"
+  },
+  "tagline": "맑고 차분한 터치로 랠리를 정돈하다",
+  "sourceUrl": "https://bleach-anime.com/character/",
+  "characterSourceUrl": "https://anilist.co/character/6",
+  "sourceName": "Rukia Kuchiki",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b6-25WoBeWMZXBc.png",
+  "heroAlt": "쿠치키 루키아 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/rukia.png",
+  "imageSha256": "1b290f0754ef90d44652ea462704e2e782aa9d6726b773906fc7f41d9df19f18",
+  "seriesId": "bleach",
+  "seriesName": "블리치",
+  "stylesheet": "themes/rukia.css",
+  "eyebrow": "블리치 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "쿠치키 루키아",
+  "characterPortrait": true
+}

@@ -1,0 +1,27 @@
+{
+  "name": "우치하 이타치",
+  "romanizedName": "Itachi Uchiha",
+  "palette": {
+    "primary": "#af4358",
+    "accent": "#f5d4dc",
+    "background": "#290e17"
+  },
+  "tagline": "조용한 집중력으로 흐름을 먼저 읽다",
+  "sourceUrl": "https://narutop99.naruto-official.com/en/archive/",
+  "characterSourceUrl": "https://anilist.co/character/14",
+  "sourceName": "Itachi Uchiha",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b14-9Kb1E5oel1ke.png",
+  "heroAlt": "우치하 이타치 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/itachi.png",
+  "imageSha256": "85f0aa837eef41bd19af2fee6d04aa7de52797d393af718f97ff5c159e65456f",
+  "seriesId": "naruto",
+  "seriesName": "나루토",
+  "stylesheet": "themes/itachi.css",
+  "eyebrow": "나루토 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "우치하 이타치",
+  "characterPortrait": true
+}

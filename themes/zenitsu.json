@@ -1,0 +1,27 @@
+{
+  "name": "아가츠마 젠이츠",
+  "romanizedName": "Zenitsu Agatsuma",
+  "palette": {
+    "primary": "#d4a42c",
+    "accent": "#fff0a3",
+    "background": "#2c230b"
+  },
+  "tagline": "번개 같은 첫발로 네트를 선점하다",
+  "sourceUrl": "https://kimetsu.com/anime/character/",
+  "characterSourceUrl": "https://anilist.co/character/129131",
+  "sourceName": "Zenitsu Agatsuma",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b129131-FZrQ7lSlxmEr.png",
+  "heroAlt": "아가츠마 젠이츠 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/zenitsu.png",
+  "imageSha256": "d50b55138805140a2cabb8020d9ba7ff25b11f93fbfb2d7e022dc466c4ba8c73",
+  "seriesId": "demon-slayer",
+  "seriesName": "귀멸의 칼날",
+  "stylesheet": "themes/zenitsu.css",
+  "eyebrow": "귀멸의 칼날 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "아가츠마 젠이츠",
+  "characterPortrait": true
+}

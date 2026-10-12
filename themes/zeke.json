@@ -1,0 +1,27 @@
+{
+  "name": "지크 예거",
+  "romanizedName": "Zeke Yeager",
+  "palette": {
+    "primary": "#958a68",
+    "accent": "#e9e1c4",
+    "background": "#262217"
+  },
+  "tagline": "멀리 보는 시선으로 코트 전체를 읽다",
+  "sourceUrl": "https://shingeki.tv/final/character/",
+  "characterSourceUrl": "https://anilist.co/character/125661",
+  "sourceName": "Zeke",
+  "imageSourceUrl": "https://s4.anilist.co/file/anilistcdn/character/large/b125661-FiqFvAtNlL0v.png",
+  "heroAlt": "지크 예거 캐릭터 초상화",
+  "imageOrigin": "anilist-character-portrait",
+  "imageWidth": 230,
+  "imageHeight": 345,
+  "heroImage": "src/characters/zeke.png",
+  "imageSha256": "468d0e4284dd88432949afe725b76654dfe76036069b2bc4674d8f96aad2ae3c",
+  "seriesId": "attack-on-titan",
+  "seriesName": "진격의 거인",
+  "stylesheet": "themes/zeke.css",
+  "eyebrow": "진격의 거인 // DAEPO TENNIS",
+  "title": "대포클럽",
+  "accent": "지크 예거",
+  "characterPortrait": true
+}
