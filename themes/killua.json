@@ -19,6 +19,13 @@
   "imageSha256": "c055ab3441c4a38e955842931d87ef3342b00d89fd3257191fa68b2fa195367d",
   "seriesId": "hunter-x-hunter",
   "seriesName": "헌터×헌터",
+  "scene": {
+    "primary": "#79aee1",
+    "accent": "#e6f7ff",
+    "background": "#132337",
+    "pattern": "url(\"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22160%22%20height%3D%22160%22%20viewBox%3D%220%200%20160%20160%22%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%2379aee1%22%20stroke-opacity%3D%22.075%22%20stroke-width%3D%221.2%22%3E%3Cpath%20d%3D%22m80%2010%2060%2070-60%2070L20%2080ZM80%2035l40%2045-40%2045-40-45ZM0%200l160%20160M160%200%200%20160%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E\")",
+    "name": "KILLUA ZOLDYCK"
+  },
   "stylesheet": "themes/killua.css",
   "eyebrow": "헌터×헌터 // DAEPO TENNIS",
   "title": "대포클럽",

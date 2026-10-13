@@ -19,6 +19,13 @@
   "imageSha256": "2d24a3e9b8e6d3dda53b05e5c5dab5dfdd5ee9bbed87da45a07bea9beb5f8ccb",
   "seriesId": "jujutsu-kaisen",
   "seriesName": "주술회전",
+  "scene": {
+    "primary": "#cc7c47",
+    "accent": "#ffd1a0",
+    "background": "#25140d",
+    "pattern": "url(\"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22160%22%20height%3D%22160%22%20viewBox%3D%220%200%20160%20160%22%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23cc7c47%22%20stroke-opacity%3D%22.075%22%20stroke-width%3D%221.2%22%3E%3Ccircle%20cx%3D%2280%22%20cy%3D%2280%22%20r%3D%2262%22%2F%3E%3Ccircle%20cx%3D%2280%22%20cy%3D%2280%22%20r%3D%2245%22%2F%3E%3Cpath%20d%3D%22M80%205v26m0%2098v26M5%2080h26m98%200h26M26%2026l19%2019m70%2070%2019%2019M26%20134l19-19m70-70%2019-19%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E\")",
+    "name": "NOBARA KUGISAKI"
+  },
   "stylesheet": "themes/nobara.css",
   "eyebrow": "주술회전 // DAEPO TENNIS",
   "title": "대포클럽",

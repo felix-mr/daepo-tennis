@@ -19,6 +19,13 @@
   "imageSha256": "d50b55138805140a2cabb8020d9ba7ff25b11f93fbfb2d7e022dc466c4ba8c73",
   "seriesId": "demon-slayer",
   "seriesName": "귀멸의 칼날",
+  "scene": {
+    "primary": "#d4a42c",
+    "accent": "#fff0a3",
+    "background": "#2c230b",
+    "pattern": "url(\"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22160%22%20height%3D%22160%22%20viewBox%3D%220%200%20160%20160%22%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23d4a42c%22%20stroke-opacity%3D%22.075%22%20stroke-width%3D%221.2%22%3E%3Cpath%20d%3D%22M-40%2040q40-50%2080%200t80%200t80%200M-40%2080q40-50%2080%200t80%200t80%200M-40%20120q40-50%2080%200t80%200t80%200M-40%20160q40-50%2080%200t80%200t80%200%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E\")",
+    "name": "ZENITSU AGATSUMA"
+  },
   "stylesheet": "themes/zenitsu.css",
   "eyebrow": "귀멸의 칼날 // DAEPO TENNIS",
   "title": "대포클럽",

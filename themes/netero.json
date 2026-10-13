@@ -19,6 +19,13 @@
   "imageSha256": "944339242a5d139e7492945e28bb24a3d0a9345be75b0cc68850b4c5e4e04267",
   "seriesId": "hunter-x-hunter",
   "seriesName": "헌터×헌터",
+  "scene": {
+    "primary": "#bb9d55",
+    "accent": "#f7eabc",
+    "background": "#252011",
+    "pattern": "url(\"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22160%22%20height%3D%22160%22%20viewBox%3D%220%200%20160%20160%22%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23bb9d55%22%20stroke-opacity%3D%22.075%22%20stroke-width%3D%221.2%22%3E%3Cpath%20d%3D%22m80%2010%2060%2070-60%2070L20%2080ZM80%2035l40%2045-40%2045-40-45ZM0%200l160%20160M160%200%200%20160%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E\")",
+    "name": "ISAAC NETERO"
+  },
   "stylesheet": "themes/netero.css",
   "eyebrow": "헌터×헌터 // DAEPO TENNIS",
   "title": "대포클럽",

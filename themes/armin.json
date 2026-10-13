@@ -19,6 +19,13 @@
   "imageSha256": "0fd857a4082ddd9d12e5bda604350f95de90743f586d6c2e7d33b74f0b641a8c",
   "seriesId": "attack-on-titan",
   "seriesName": "진격의 거인",
+  "scene": {
+    "primary": "#bb9e55",
+    "accent": "#f9e9bb",
+    "background": "#292114",
+    "pattern": "url(\"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22160%22%20height%3D%22160%22%20viewBox%3D%220%200%20160%20160%22%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23bb9e55%22%20stroke-opacity%3D%22.075%22%20stroke-width%3D%221.2%22%3E%3Cpath%20d%3D%22M0%2010h160M0%2060h160M0%20110h160M40%2010v50m80-50v50M80%2060v50M40%20110v50m80-50v50M0%200l160%20160M160%200%200%20160%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E\")",
+    "name": "ARMIN ARLERT"
+  },
   "stylesheet": "themes/armin.css",
   "eyebrow": "진격의 거인 // DAEPO TENNIS",
   "title": "대포클럽",

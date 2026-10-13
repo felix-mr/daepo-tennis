@@ -19,6 +19,13 @@
   "imageSha256": "daa8536c430c44b7bd16253a3cc5185a052ed7c070168f2bc30b5e5d3a670a5f",
   "seriesId": "naruto",
   "seriesName": "나루토",
+  "scene": {
+    "primary": "#7774c4",
+    "accent": "#e0deff",
+    "background": "#16162e",
+    "pattern": "url(\"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22160%22%20height%3D%22160%22%20viewBox%3D%220%200%20160%20160%22%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%237774c4%22%20stroke-opacity%3D%22.075%22%20stroke-width%3D%221.2%22%3E%3Cpath%20d%3D%22M80%2080c-28-32-45%2017-10%2026%2049%2013%2062-61%2011-72C3%2017%209%20137%2084%20140c56%202%2078-36%2076-83M0%200l35%2035M125%20125l35%2035%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E\")",
+    "name": "SASUKE UCHIHA"
+  },
   "stylesheet": "themes/sasuke.css",
   "eyebrow": "나루토 // DAEPO TENNIS",
   "title": "대포클럽",

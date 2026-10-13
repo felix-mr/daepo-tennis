@@ -19,6 +19,13 @@
   "imageSha256": "1b290f0754ef90d44652ea462704e2e782aa9d6726b773906fc7f41d9df19f18",
   "seriesId": "bleach",
   "seriesName": "블리치",
+  "scene": {
+    "primary": "#7ea7c6",
+    "accent": "#e7f5ff",
+    "background": "#172735",
+    "pattern": "url(\"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22160%22%20height%3D%22160%22%20viewBox%3D%220%200%20160%20160%22%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%237ea7c6%22%20stroke-opacity%3D%22.075%22%20stroke-width%3D%221.2%22%3E%3Cpath%20d%3D%22m0%20160%2070-90M50%20160%20100%2060M110%20140%20160%2040M0%2070%2050%200M20%20150%20150%2020M20%20130%20130%2020%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E\")",
+    "name": "RUKIA KUCHIKI"
+  },
   "stylesheet": "themes/rukia.css",
   "eyebrow": "블리치 // DAEPO TENNIS",
   "title": "대포클럽",

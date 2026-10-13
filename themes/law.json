@@ -19,6 +19,13 @@
   "imageSha256": "9b0e7b1e5f65a20ca6038092abc7b2868273ee009d6120bfcc6c3f4e7975bd58",
   "seriesId": "one-piece",
   "seriesName": "원피스",
+  "scene": {
+    "primary": "#548f9e",
+    "accent": "#d9f1ef",
+    "background": "#0e282d",
+    "pattern": "url(\"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22160%22%20height%3D%22160%22%20viewBox%3D%220%200%20160%20160%22%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23548f9e%22%20stroke-opacity%3D%22.075%22%20stroke-width%3D%221.2%22%3E%3Ccircle%20cx%3D%2280%22%20cy%3D%2280%22%20r%3D%2252%22%2F%3E%3Cpath%20d%3D%22m80%2010%2013%2057%2057%2013-57%2013-13%2057-13-57-57-13%2057-13ZM0%20150q20-15%2040%200t40%200t40%200t40%200%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E\")",
+    "name": "TRAFALGAR LAW"
+  },
   "stylesheet": "themes/law.css",
   "eyebrow": "원피스 // DAEPO TENNIS",
   "title": "대포클럽",

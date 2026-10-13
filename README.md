@@ -106,7 +106,7 @@ schedules/{YYYY-MM-DD}/matchResults/{r타임-f층}
 - `data/schedules/날짜.json`: 참가 ID, 고정/게스트 구분, 대진, 시간 조건, 검증 조건, `theme`.
 - `data/character-catalog.json`: 7개 작품별 주요 캐릭터 70명, 색상·테니스 문구·이미지 출처. 기존 고죠·게토·토우지 포함.
 - `src/characters/`: 원본 초상화 67장. 실행 중 외부 이미지 서버에 의존하지 않는다.
-- `src/build_character_themes.py`, `src/character-theme.css`: 카탈로그에서 새 컨셉 JSON/CSS 생성. 기존 세 컨셉의 디자인·이미지 유지.
+- `src/build_character_themes.py`, `src/concept-scene.css`, `src/character-theme.css`: 작품별 배경 무늬와 캐릭터별 색을 포함한 컨셉 JSON/CSS 생성. 빌더·확정 대진의 배경, 경기 카드, 개인 대진, 점수 입력까지 적용하며 인쇄에서는 경기 정보를 밝은 바탕으로 표시한다. 기존 세 컨셉의 디자인·이미지 유지.
 - `themes/컨셉.json`: 이름, 작품, 제목, 부제, 이미지, 스타일 파일.
 - `themes/컨셉.css`: 컨셉별 디자인.
 - `src/scores.css`: 모든 컨셉에서 쓰는 점수 입력 스타일.

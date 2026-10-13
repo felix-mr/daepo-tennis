@@ -50,11 +50,17 @@ function fillText() {
 function conceptCard(id) {
   const t=builderData.themes[id] || builderData.themes.club;
   const image=t.heroImage ? '<img src="../'+esc(t.heroImage)+'" alt="'+esc(t.heroAlt)+'">' : '<span class="theme-ball" aria-hidden="true">◉</span>';
-  return '<div class="concept-art" style="background:'+esc(t.palette?.primary || '#14644a')+'">'+image+'</div><div><small>'+esc(t.seriesName || '대포클럽')+'</small><strong>'+esc(t.name)+'</strong><p>'+esc(t.tagline || '함께 뛰는 토요일, 대포클럽 테니스.')+'</p></div>';
+  return '<div class="concept-art"'+(t.imageOrigin==='existing-project-art'?' data-original-art':'')+'>'+image+'</div><div class="concept-copy"><small>'+esc(t.seriesName || '대포클럽')+'</small><strong>'+esc(t.name)+'</strong><p>'+esc(t.tagline || '함께 뛰는 토요일, 대포클럽 테니스.')+'</p></div>';
 }
 function renderThemes() {
   const id=state.theme || builderData.themePlans[state.date] || 'club', theme=builderData.themes[id] || builderData.themes.club;
   const series=theme.seriesId || 'club';
+  if(theme.scene) document.body.dataset.concept=id; else delete document.body.dataset.concept;
+  for(const key of ['primary','accent','background','pattern']) {
+    if(theme.scene) document.body.style.setProperty('--concept-'+key,theme.scene[key]);
+    else document.body.style.removeProperty('--concept-'+key);
+  }
+  for(const card of document.querySelectorAll('.theme-preview')) card.dataset.sceneName=theme.scene?.name || '';
   const groups=new Map([['club','클럽 기본']]);
   for (const t of Object.values(builderData.themes)) if(t.seriesId) groups.set(t.seriesId,t.seriesName);
   $('theme-series').innerHTML=[...groups].map(([key,name])=>'<option value="'+esc(key)+'">'+esc(name)+'</option>').join('');

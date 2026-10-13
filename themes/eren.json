@@ -19,6 +19,13 @@
   "imageSha256": "4c4da1731c536503a5223439a7fcdd074d9557ec0041bd29130cdc3071963e71",
   "seriesId": "attack-on-titan",
   "seriesName": "진격의 거인",
+  "scene": {
+    "primary": "#549072",
+    "accent": "#d5edd3",
+    "background": "#12251b",
+    "pattern": "url(\"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22160%22%20height%3D%22160%22%20viewBox%3D%220%200%20160%20160%22%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23549072%22%20stroke-opacity%3D%22.075%22%20stroke-width%3D%221.2%22%3E%3Cpath%20d%3D%22M0%2010h160M0%2060h160M0%20110h160M40%2010v50m80-50v50M80%2060v50M40%20110v50m80-50v50M0%200l160%20160M160%200%200%20160%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E\")",
+    "name": "EREN YEAGER"
+  },
   "stylesheet": "themes/eren.css",
   "eyebrow": "진격의 거인 // DAEPO TENNIS",
   "title": "대포클럽",

@@ -303,7 +303,7 @@ html = f'''<!doctype html>
   <title>대포클럽 {date_label} 대진표</title>
   <style>{CSS}</style>
 </head>
-<body>
+<body{(' data-concept="' + escape(theme_id) + '"') if theme.get('characterPortrait') else ''}>
 <div class="shell">
   <section class="lookup" aria-label="내 대진 찾기">
     <div class="lookup-head"><div><h2>대포클럽 · 내 대진 찾기</h2><p>{date_label} · 이름 입력 후 선택하면 내 경기와 휴식만 표시됩니다.</p></div><div class="page-links"><a class="archive-back" href="../">← 날짜별 목록</a><a class="archive-back" href="../records/">기록 · 순위 →</a></div></div>
@@ -312,7 +312,7 @@ html = f'''<!doctype html>
     <p class="lookup-empty" id="player-empty" role="status" hidden>일치하는 이름이 없습니다.</p>
   </section>
   <section class="score-connection" aria-label="점수 공유 상태"><p id="score-connection-status" role="status" aria-live="polite">점수 연결 중…</p><button id="score-retry" type="button" hidden>다시 연결</button></section>
-  <header class="hero">
+  <header class="hero" data-concept-name="{escape(theme.get('scene', {}).get('name', ''))}">
     <div class="topline"><div class="eyebrow">{escape(theme["eyebrow"])}</div><button class="print" type="button" onclick="window.print()">인쇄 / PDF 저장</button></div>
     <h1>{escape(theme["title"])}<br><span class="accent">{escape(theme["accent"])}</span></h1>
     <p class="subtitle">{date_label} &nbsp;·&nbsp; {fmt(start_minutes)} — {fmt(start_minutes+len(ROUNDS)*round_minutes)} &nbsp;·&nbsp; 1층 / 2층 코트</p>

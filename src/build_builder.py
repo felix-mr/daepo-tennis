@@ -28,7 +28,7 @@ onmessage = event => {
     script = model + '\n' + store + '\n' + deletion + '\n' + source('builder.js').replace('__BUILDER_DATA__', json.dumps(data, ensure_ascii=False)).replace('__WORKER_SOURCE__', json.dumps(worker))
     builder_dir = root / 'builder'
     builder_dir.mkdir(exist_ok=True)
-    builder_dir.joinpath('index.html').write_text(source('builder.html').replace('__CSS__', source('builder.css') + '\n' + source('schedule-delete.css')).replace('__SCRIPT__', script))
+    builder_dir.joinpath('index.html').write_text(source('builder.html').replace('__CSS__', source('builder.css') + '\n' + source('concept-scene.css') + '\n' + source('schedule-delete.css')).replace('__SCRIPT__', script))
     score = source('results.js') + '\n' + source('membership.js') + '\n' + source('scores.js')
     score = score.replace('__MEMBERSHIPS__', json.dumps(data['memberships'], ensure_ascii=False)).replace('__FIREBASE_CONFIG__', 'config').replace('__SCHEDULE_DATE__', 'day').replace('__MATCHES__', 'scoreMatches')
     mount = '\nfunction startScores(config, day, scoreMatches, sourceDraftId) {\n' + score + '\n}\n'
