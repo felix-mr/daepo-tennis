@@ -72,6 +72,7 @@ class October17ScheduleTests(unittest.TestCase):
         self.assertNotIn('data-score-form', html)
         self.assertNotIn('firebasejs', html)
         self.assertNotIn('setDoc(', html)
+        self.assertNotIn('기록 연결 중', html)
 
     def test_read_only_rebuild_preserves_rules_and_archives(self):
         with tempfile.TemporaryDirectory() as directory:

@@ -276,10 +276,11 @@ def personal_html(player):
     available_rounds = [(i, r) for i, r in enumerate(ROUNDS) if availability_status(player, i) is None]
     rounds = "\n".join(personal_round_html(player, i, r) for i, r in available_rounds)
     rest_count = sum(player in rests[i] for i, _ in available_rounds)
+    record_summary = "" if read_only else f'<p class="player-summary" data-player-summary="{pid}" data-member-status="{member_status}">기록 연결 중…</p>'
     return f'''<section class="personal-schedule" data-personal="{escape(player)}" aria-label="{escape(player)} 개인 대진표" hidden>
       <div class="personal-head"><div><h2>{escape(player)} 대진표</h2><p>{fmt(personal_start)}–{fmt(personal_end)} · 경기 {games[player]}회 / 휴식 {rest_count}회</p></div><button class="all-button" type="button" data-show-all>전체 대진표 보기</button></div>
       <div class="personal-meta"><span>{role}</span><span>층 이동 {floor_changes[player]}회</span><span>{round_minutes}분 × {len(available_rounds)}타임</span></div>
-      <p class="player-summary" data-player-summary="{pid}" data-member-status="{member_status}">기록 연결 중…</p><a class="archive-back" href="../records/{records_query}">{records_label} →</a>
+      {record_summary}<a class="archive-back" href="../records/{records_query}">{records_label} →</a>
       {rounds}
     </section>'''
 
