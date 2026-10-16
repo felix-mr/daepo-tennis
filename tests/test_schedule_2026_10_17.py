@@ -62,19 +62,22 @@ class October17ScheduleTests(unittest.TestCase):
         self.assertEqual(self.schedule['conditions']['lateArrival'], {'p002': 510})
         self.assertEqual(self.schedule['conditions']['earlyDeparture'], {'p005': 600, 'p006': 600, 'p008': 600})
 
-    def test_read_only_page_has_departure_labels_and_no_score_writes(self):
+    def test_score_page_has_departure_labels_and_sukuna_theme(self):
         html = (ROOT / '2026-10-17/index.html').read_text()
-        self.assertTrue(self.schedule['display']['readOnly'])
+        self.assertFalse(self.schedule.get('display', {}).get('readOnly', False))
+        self.assertEqual(self.schedule['theme'], 'sukuna')
         for name in ['조아라', '이재원', '박정민']:
             self.assertIn(name + ' 10:00 종료', html)
         self.assertIn('김영진 08:30 시작', html)
-        self.assertIn('대진 조회 전용', html)
-        self.assertNotIn('data-score-form', html)
-        self.assertNotIn('firebasejs', html)
-        self.assertNotIn('setDoc(', html)
-        self.assertNotIn('기록 연결 중', html)
+        self.assertNotIn('대진 조회 전용', html)
+        self.assertIn('data-score-form', html)
+        self.assertIn('firebasejs', html)
+        self.assertIn('transaction.set(reference', html)
+        self.assertIn('const sourceDraftId = "' + self.schedule['sourceDraftId'] + '";', html)
+        self.assertIn('료멘 스쿠나', html)
+        self.assertIn('data-concept="sukuna"', html)
 
-    def test_read_only_rebuild_preserves_rules_and_archives(self):
+    def test_web_backed_rebuild_preserves_rules_and_archives(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory) / 'repo'
             shutil.copytree(ROOT, root, ignore=shutil.ignore_patterns('.git', 'output', '__pycache__'))
@@ -84,8 +87,28 @@ class October17ScheduleTests(unittest.TestCase):
                            check=True, capture_output=True)
             for p in paths:
                 self.assertEqual((root / p).read_bytes(), original[p], p)
-            self.assertIn('"legacyDates": ["2026-10-03", "2026-10-10", "2026-10-17"]',
+            self.assertIn('"legacyDates": ["2026-10-03", "2026-10-10"]',
                           (root / 'builder/index.html').read_text())
+
+    def test_static_score_metadata_matches_normal_builder_document(self):
+        script = r'''
+const fs=require('node:fs'),M=require('./src/builder-model.js');
+const s=require('./data/schedules/2026-10-17.json'),fixed=require('./data/players.json');
+const input={date:s.date,theme:s.theme,membershipPeriod:'current-members',players:s.players,fixedPlayerIds:s.fixedPlayers,
+ profiles:Object.fromEntries(s.players.map(id=>[id,{...(fixed[id]||s.guests[id]),memberType:fixed[id]?'fixed':'guest'}])),
+ quotas:Object.fromEntries(s.players.map(id=>[id,4])),
+ availability:Object.fromEntries(s.players.map(id=>[id,{from:s.conditions.lateArrival[id]===510?1:0,to:s.conditions.earlyDeparture[id]===600?4:6}])),
+ lockedPairs:[],allowPartnerRepeats:false,avoidConsecutiveRests:true};
+console.log(JSON.stringify(M.validateDocument(M.documentOf(input,s.rounds))));
+'''
+        result = subprocess.run(['node', '-e', script], cwd=ROOT, check=True, capture_output=True, text=True)
+        document = json.loads(result.stdout)
+        html = (ROOT / '2026-10-17/index.html').read_text()
+        encoded = html.rsplit('const matches = ', 1)[1].split(';', 1)[0]
+        matches = json.loads(encoded)
+        self.assertEqual(matches, {k: m for k, m in document['matches'].items() if m['fixedPlayerIds']})
+        self.assertEqual(len(matches), 11)
+        self.assertNotIn('r1-f2', matches)  # Existing guest-only exclusion.
 
     def test_mixed_only_on_first_floor_and_attachment_game_counts_preserved(self):
         counts = {p: Counter() for p in self.ids}

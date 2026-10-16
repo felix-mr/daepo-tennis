@@ -85,7 +85,7 @@ class WeeklyPairsTest(unittest.TestCase):
         result = self.build()
         self.assertNotEqual(result.returncode, 0)
 
-    def test_next_week_uses_reserved_geto_theme(self):
+    def test_next_week_uses_reserved_sukuna_theme(self):
         following = json.loads(json.dumps(self.schedule).replace(DAY, '2026-10-17'))
         following.pop('theme')
         path = self.root / 'data/schedules/2026-10-17.json'
@@ -94,8 +94,8 @@ class WeeklyPairsTest(unittest.TestCase):
                                 capture_output=True, text=True)
         self.assertEqual(result.returncode, 0, result.stderr)
         html = self.root.joinpath('2026-10-17/index.html').read_text()
-        self.assertIn('GETO SUGURU', html)
-        self.assertIn('테니스 라켓을 든 게토 스구루', html)
+        self.assertIn('SUKUNA', html)
+        self.assertIn('료멘 스쿠나 캐릭터 초상화', html)
         self.assertNotIn('TOJI ZENIN', html)
 
     def test_display_note_cannot_claim_unconfigured_pair(self):

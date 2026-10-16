@@ -1,6 +1,6 @@
 {
   "date": "2026-10-17",
-  "theme": "geto",
+  "theme": "sukuna",
   "players": [
     "p002",
     "p003",
@@ -165,9 +165,6 @@
     "maxFloorChanges": 1,
     "fixedWomenDoublesPairs": []
   },
-  "display": {
-    "readOnly": true
-  },
   "guests": {
     "guest-2026-10-17-01": {
       "name": "정상현",
@@ -193,5 +190,6 @@
       "name": "권정민",
       "gender": "male"
     }
-  }
+  },
+  "sourceDraftId": "7mNvvUwqAkGxt1jzLqJ7"
 }

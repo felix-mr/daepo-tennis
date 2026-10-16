@@ -2,6 +2,7 @@ import base64
 import argparse
 import json
 import mimetypes
+import re
 from collections import Counter
 from datetime import date
 from html import escape
@@ -52,6 +53,9 @@ PEOPLE = set(MEN + WOMEN)
 ROUNDS = [tuple(tuple(PLAYERS[pid]["name"] for pid in team) for team in round_) for round_ in settings["rounds"]]
 conditions = settings["conditions"]
 read_only = settings.get("display", {}).get("readOnly", False)
+source_draft_id = settings.get("sourceDraftId")
+assert source_draft_id is None or (isinstance(source_draft_id, str) and re.fullmatch(r"[a-zA-Z0-9]{20}", source_draft_id)), "웹 대진 원본 ID를 확인해야 합니다"
+assert not (read_only and source_draft_id), "웹 대진 점수 연결과 조회 전용 설정은 함께 사용할 수 없습니다"
 start_minutes = conditions["startMinutes"]
 round_minutes = conditions["roundMinutes"]
 exceptions = {PLAYERS[pid]["name"] for pid in conditions["consecutiveExceptions"]}
@@ -294,6 +298,8 @@ score_script = score_script.replace("__MEMBERSHIPS__", json.dumps(MEMBERSHIPS, e
 score_script = score_script.replace("__FIREBASE_CONFIG__", (ROOT / "firebase/firebase-config.json").read_text(encoding="utf-8"))
 score_script = score_script.replace("__SCHEDULE_DATE__", json.dumps(SCHEDULE_DATE))
 score_script = score_script.replace("__MATCHES__", json.dumps(score_matches, ensure_ascii=False))
+if source_draft_id:
+    score_script = f"const sourceDraftId = {json.dumps(source_draft_id)};\n" + score_script
 if read_only:
     score_script = ""
 score_connection_html = ('<section class="score-connection" aria-label="대진 조회 안내"><p>대진 조회 전용 · 점수 입력은 제공하지 않습니다.</p></section>'
@@ -414,7 +420,7 @@ dated_target.parent.mkdir(parents=True, exist_ok=True)
 dated_target.write_text(html, encoding="utf-8")
 
 from firebase_rules import write_rules
-if not read_only:
+if not read_only and not source_draft_id:
     write_rules(ROOT, SCHEDULE_DATE, score_matches)
 
 archive_dates = {SCHEDULE_DATE}
