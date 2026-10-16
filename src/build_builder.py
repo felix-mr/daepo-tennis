@@ -8,12 +8,16 @@ def build_builder(root):
     from build_character_themes import build_character_themes
     build_character_themes(root)
     themes = {path.stem: json.loads(path.read_text()) for path in (root / 'themes').glob('*.json')}
+    static_dates = set(json.loads((root / 'firebase/schedules.json').read_text()))
+    static_dates.update(path.stem for path in (root / 'data/schedules').glob('*.json')
+                        if json.loads(path.read_text()).get('display', {}).get('readOnly')
+                        and (root / path.stem / 'index.html').is_file())
     data = {
         'players': json.loads((root / 'data/players.json').read_text()),
         'memberships': json.loads((root / 'data/memberships.json').read_text()),
         'themePlans': json.loads((root / 'data/theme-plans.json').read_text()) if (root / 'data/theme-plans.json').exists() else {},
         'themes': themes,
-        'legacyDates': sorted(json.loads((root / 'firebase/schedules.json').read_text())),
+        'legacyDates': sorted(static_dates),
         'firebaseConfig': json.loads((root / 'firebase/firebase-config.json').read_text()),
     }
     source = lambda name: (root / 'src' / name).read_text()
