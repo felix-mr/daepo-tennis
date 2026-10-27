@@ -11,6 +11,24 @@ const builderStore = (() => {
     const snap = await f.getDocFromServer(f.doc(db, 'schedules', date));
     return snap.exists() ? snap.data() : null;
   }
+  // Browser snapshots are previews, never evidence that a date is still unconfirmed.
+  const canonical = value => JSON.stringify(value, (_, v) => v && typeof v === 'object' && !Array.isArray(v)
+    ? Object.fromEntries(Object.keys(v).sort().map(key => [key, v[key]])) : v);
+  function snapshotOf(state, document) {
+    if (!document || document.sourceDraftId) return null;
+    return {version: 1, state: canonical(state), document: structuredClone(document)};
+  }
+  function recoverSnapshot(snapshot, state, input, existingDates = []) {
+    try {
+      if (!snapshot || snapshot.version !== 1 || snapshot.state !== canonical(state)) return null;
+      const doc = snapshot.document;
+      if (!doc || doc.sourceDraftId || existingDates.includes(doc.date)) return null;
+      builderModel.validateDocument(doc);
+      // Recheck today's roster/config and every current editor constraint, not just its date.
+      if (Object.keys(input).some(key => canonical(input[key]) !== canonical(doc[key]))) return null;
+      return structuredClone(doc);
+    } catch { return null; }
+  }
   async function save(config, document) {
     builderModel.validateDocument(document);
     if (!navigator.onLine) throw Error('인터넷 연결 후 확정해 주세요. 초안은 유지됩니다.');
@@ -18,6 +36,9 @@ const builderStore = (() => {
     const ref = f.doc(db, 'schedules', document.date);
     const payload = { ...document, createdAt: f.serverTimestamp() };
     delete payload.searchNodes;
+    delete payload.quality;
+    delete payload.history;
+    delete payload.historyCoverage;
     const draftRef = f.doc(f.collection(db, 'scheduleDrafts'));
     const onlineStage = async action => {
       if (!navigator.onLine) throw Error('인터넷 연결 후 다시 확정해 주세요. 초안은 유지됩니다.');
@@ -94,5 +115,5 @@ const builderStore = (() => {
     }
     return date;
   }
-  return { connection, read, save, listen, watch, removalStatus, remove };
+  return { connection, read, save, listen, watch, removalStatus, remove, snapshotOf, recoverSnapshot };
 })();

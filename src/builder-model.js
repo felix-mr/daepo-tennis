@@ -39,7 +39,7 @@ const builderModel = (() => {
     if (slots % 4) throw Error('전체 출전 횟수가 4의 배수가 되도록 개인 경기 수를 맞춰 주세요.');
     return quotas;
   }
-  // Fill idle courts with one extra game for randomly chosen current members.
+  // Fill idle courts with one extra game; rotate by eligible historical opportunity.
   // Guest and manual quotas are never changed; ALL pairs move together.
   function fillCourts(input, options = {}) {
     const ids = input.players, original = { ...input.quotas };
@@ -54,6 +54,8 @@ const builderModel = (() => {
     const eligible = ids.filter(id => input.fixedPlayerIds.includes(id) && input.profiles[id].memberType === 'fixed'
       && allowed.has(id) && original[id] === 4 && input.availability[id].to - input.availability[id].from >= 5);
     const preferred = new Set(input.preferredBonusIds || []);
+    const H = typeof builderHistory !== 'undefined' ? builderHistory : require('./builder-history.js');
+    const bonusHistory = H.analyze(input, input.history).bonus;
     const ranked = eligible;
     const capacity = Array.from({length:6},(_,r)=>{
       const present = ids.filter(id => input.availability[id].from <= r && r < input.availability[id].to).length;
@@ -62,7 +64,7 @@ const builderModel = (() => {
     const genderCapacity = Object.fromEntries(['male','female'].map(gender=>[gender,
       Array.from({length:6},(_,r)=>Math.min(8,2*Math.floor(ids.filter(id=>input.profiles[id].gender===gender
         && input.availability[id].from<=r && r<input.availability[id].to).length/2))).reduce((sum,value)=>sum+value,0)]));
-    let best = original, bonus = [], score = -1, ties = 0, bestSlots = slots(original);
+    let best = original, bonus = [], score = -1, historyScore = Infinity, ties = 0, bestSlots = slots(original);
     for (let mask = 1; mask < 2 ** ranked.length; mask++) {
       const selected = ranked.filter((id,index) => mask & (1 << index));
       const quotas = { ...original };
@@ -106,9 +108,10 @@ const builderModel = (() => {
       // Reservoir sampling is uniform among equally full, equally preferred
       // valid subsets. Previous bonus members stay stable while still eligible.
       const candidateScore = selected.filter(id => preferred.has(id)).length;
-      if (count > bestSlots || candidateScore > score) {
-        best = quotas; bonus = selected; bestSlots = count; score = candidateScore; ties = 1;
-      } else if (count === bestSlots && candidateScore === score && random() < 1 / ++ties) {
+      const candidateHistory = selected.reduce((sum,id) => sum + (bonusHistory[id] || 0), 0);
+      if (count > bestSlots || candidateScore > score || (candidateScore === score && candidateHistory < historyScore - 1e-9)) {
+        best = quotas; bonus = selected; bestSlots = count; score = candidateScore; historyScore = candidateHistory; ties = 1;
+      } else if (count === bestSlots && candidateScore === score && Math.abs(candidateHistory - historyScore) < 1e-9 && random() < 1 / ++ties) {
         best = quotas; bonus = selected;
       }
     }

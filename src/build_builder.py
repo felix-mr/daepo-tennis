@@ -18,18 +18,20 @@ def build_builder(root):
         'themePlans': json.loads((root / 'data/theme-plans.json').read_text()) if (root / 'data/theme-plans.json').exists() else {},
         'themes': themes,
         'legacyDates': sorted(static_dates),
+        'staticSchedules': [json.loads(path.read_text()) for path in sorted((root / 'data/schedules').glob('*.json'))],
         'firebaseConfig': json.loads((root / 'firebase/firebase-config.json').read_text()),
     }
     source = lambda name: (root / 'src' / name).read_text()
     model, store = source('builder-model.js'), source('builder-store.js')
     deletion = source('schedule-delete.js')
-    worker = model + '\n' + source('builder-scheduler.js') + '''
+    history = source('builder-history.js')
+    worker = model + '\n' + history + '\n' + source('builder-scheduler.js') + '''
 onmessage = event => {
   try { postMessage({ document: builderScheduler.generate(event.data) }); }
   catch (error) { postMessage({ error: error.message }); }
 };
 '''
-    script = model + '\n' + store + '\n' + deletion + '\n' + source('builder.js').replace('__BUILDER_DATA__', json.dumps(data, ensure_ascii=False)).replace('__WORKER_SOURCE__', json.dumps(worker))
+    script = model + '\n' + history + '\n' + store + '\n' + deletion + '\n' + source('builder.js').replace('__BUILDER_DATA__', json.dumps(data, ensure_ascii=False)).replace('__WORKER_SOURCE__', json.dumps(worker))
     builder_dir = root / 'builder'
     builder_dir.mkdir(exist_ok=True)
     builder_dir.joinpath('index.html').write_text(source('builder.html').replace('__CSS__', source('builder.css') + '\n' + source('concept-scene.css') + '\n' + source('schedule-delete.css')).replace('__SCRIPT__', script))
