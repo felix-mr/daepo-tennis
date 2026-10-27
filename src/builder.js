@@ -3,9 +3,11 @@ const workerSource = __WORKER_SOURCE__;
 const $ = id => document.getElementById(id);
 const esc = value => String(value).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const storageKey = 'daepo-builder-draft-v1';
+const previewKey = 'daepo-builder-preview-v1';
+let liveHistoryStatus = 'loading';
 let state, draft = null, worker = null, connected = false, saving = false, unsubscribe = null;
 let confirmed = new Map(), connectionAttempt = 0, storageAvailable = true, fillCache = null;
-const fresh = () => ({ date: builderModel.nextSaturday(), theme: '', selected: [], guests: {}, availability: {}, quotas: {}, pairs: [], avoidRests: true, repeats: false, fillCourts: true, bonusIds: [] });
+const fresh = () => ({ date: builderModel.nextSaturday(), theme: '', selected: [], guests: {}, availability: {}, quotas: {}, pairs: [], avoidRests: true, repeats: false, fillCourts: true, bonusIds: [], bonusManual: false });
 function roster() {
   const period = builderModel.periodForDate(state.date, builderData.memberships);
   return period ? builderData.memberships[period].memberIds.filter(id => builderData.players[id]) : [];
@@ -13,8 +15,23 @@ function roster() {
 function profile(id) { return state.guests[id] || builderData.players[id]; }
 function selected() { return state.selected.filter(id => profile(id) && (state.guests[id] || roster().includes(id))); }
 function message(text) { $('error').hidden = !text; $('error').textContent = text || ''; }
+function historyOf() {
+  return builderHistory.combine(builderData.staticSchedules || [], [...confirmed.values()],
+    {profiles: builderData.players, targetDate: state.date, liveStatus: liveHistoryStatus, weeks: 12});
+}
+function renderHistory() {
+  const history = historyOf(), dates = history.schedules.map(doc => doc.date);
+  $('history-coverage').textContent = '최근 12주 이력 ' + dates.length + '일' + (dates.length ? ' (' + dates.join(', ') + ')' : '')
+    + ' · ' + (liveHistoryStatus === 'ready' ? '정적·웹 확정 대진 반영.' : liveHistoryStatus === 'loading' ? '웹 확정 이력 연결 중. 현재 정적 이력으로 생성 가능.' : '웹 확정 이력 연결 실패·이전 수신분만 사용. 정적 이력은 유지됩니다.')
+    + (history.coverage.ignoredDates.length ? ' 형식 확인 불가 ' + history.coverage.ignoredDates.length + '일 제외.' : '')
+    + ' 대상 날짜 이후는 제외하며, 반복은 금지가 아닌 선호 조건입니다.';
+}
 function persist() {
-  try { localStorage.setItem(storageKey, JSON.stringify(state)); }
+  try {
+    localStorage.setItem(storageKey, JSON.stringify(state));
+    const snapshot = draft && !confirmed.has(draft.date) && !builderData.legacyDates.includes(draft.date) ? builderStore.snapshotOf(state, draft) : null;
+    if (snapshot) localStorage.setItem(previewKey, JSON.stringify(snapshot)); else localStorage.removeItem(previewKey);
+  }
   catch { storageAvailable = false; $('connection').textContent = '이 브라우저에 초안을 보관할 수 없습니다. 초안 파일 저장을 이용해 주세요.'; }
 }
 function invalidate() {
@@ -29,7 +46,7 @@ function quotas() {
   try { defaultQuotas = builderModel.allocate(ids, windows); } catch { defaultQuotas = Object.fromEntries(ids.map(id => [id, 4])); }
   const base = Object.fromEntries(ids.map(id => [id, Object.hasOwn(state.quotas, id) ? state.quotas[id] : defaultQuotas[id]]));
   const members=roster();
-  const input = {date:state.date,membershipPeriod:builderModel.periodForDate(state.date,builderData.memberships),players:ids, fixedPlayerIds:ids.filter(id=>members.includes(id)), profiles:Object.fromEntries(ids.map(id=>[id,{...profile(id),memberType:members.includes(id)?'fixed':'guest'}])), quotas:base, availability:Object.fromEntries(ids.map(id=>[id,available(id)])), lockedPairs:state.pairs,eligibleIds:ids.filter(id=>!Object.hasOwn(state.quotas,id))};
+  const input = {date:state.date,membershipPeriod:builderModel.periodForDate(state.date,builderData.memberships),players:ids, fixedPlayerIds:ids.filter(id=>members.includes(id)), profiles:Object.fromEntries(ids.map(id=>[id,{...profile(id),memberType:members.includes(id)?'fixed':'guest'}])), quotas:base, availability:Object.fromEntries(ids.map(id=>[id,available(id)])), lockedPairs:state.pairs,history:historyOf(),eligibleIds:ids.filter(id=>!Object.hasOwn(state.quotas,id))};
   input.allowPartnerRepeats=state.repeats;input.avoidConsecutiveRests=state.avoidRests;
   const signature = JSON.stringify([input,state.fillCourts]);
   if (fillCache?.signature === signature) {state.bonusIds=fillCache.result.bonusIds;return fillCache.result.quotas;}
@@ -127,7 +144,7 @@ function render() {
   renderOptions(); $('fill-courts').checked=state.fillCourts;
   $('fill-summary').textContent=ids.length>=4 ? fillText() : '4명 이상 선택하면 추가 경기 대상을 추첨합니다.';
   $('redraw-bonus').hidden=!state.fillCourts || ids.length>=12 || !state.bonusIds.length;
-  updateButtons(); persist();
+  renderHistory(); updateButtons(); persist();
 }
 function inputOf() {
   const ids = selected(), members = roster();
@@ -161,20 +178,23 @@ function preview(doc) {
     const row = stats.rows[id], window = doc.availability[id];
     return '<article class="allocation-card"><strong>' + esc(doc.profiles[id].name) + '</strong><p>' + row.games + '경기 · 남복 ' + row.men + ' / 혼복 ' + row.mixed + ' / 여복 ' + row.women + '</p><p>휴식 ' + row.rests.length + '회 · 층 이동 ' + row.floorChanges + '회</p><p>' + builderModel.time(480 + window.from * 30) + '–' + builderModel.time(480 + window.to * 30) + '</p></article>';
   }).join('');
+  $('preview-quality').textContent = doc.quality ? '유효 후보 ' + doc.quality.candidates + '개 비교 · 개인별 최소치를 넘는 3연속 구간 ' + doc.quality.avoidableLongRuns + '회 · 층 이동 합계 ' + doc.quality.floorChanges + '회 · 생성 시 참고 이력 ' + (doc.quality.historyCoverage?.count || 0) + '일' + (doc.quality.historyCoverage?.liveStatus === 'ready' ? ' (웹 확정 포함)' : ' (웹 확정 연결 미완료)') + '. 최근 파트너·상대·혼복 기회를 함께 고려했습니다. 시간 제한 탐색이며, 모든 연속 출전이 공동으로 회피 가능하다는 뜻이나 전역 최적해 보장은 아닙니다.' : '';
   $('preview').hidden = false; $('editor').hidden = true; updateButtons(); $('preview').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 function generate() {
   try {
     message(''); const input = inputOf();
+    input.history = historyOf();
     if (builderData.legacyDates.includes(input.date) || confirmed.has(input.date)) throw Error('이미 확정된 날짜의 대진은 바꾸지 않습니다.');
     if (worker) worker.terminate();
-    draft = null; $('preview-warning').textContent = '새 대진을 찾는 중…'; const url = URL.createObjectURL(new Blob([workerSource], { type: 'text/javascript' }));
+    draft = null; persist(); $('preview-warning').textContent = '새 대진을 찾는 중…'; const url = URL.createObjectURL(new Blob([workerSource], { type: 'text/javascript' }));
     worker = new Worker(url); const activeWorker = worker; URL.revokeObjectURL(url); $('generate').textContent = '대진을 찾는 중…'; $('save-status').textContent = ''; updateButtons();
     worker.onmessage = event => {
       if (worker !== activeWorker) return;
       worker.terminate(); worker = null; $('generate').textContent = '대진 만들기';
+      if (confirmed.has(input.date) || builderData.legacyDates.includes(input.date)) { invalidate(); render(); return; }
       if (event.data.error) { $('editor').hidden = false; message(event.data.error); updateButtons(); return; }
-      draft = event.data.document; preview(draft);
+      draft = event.data.document; preview(draft); persist();
     };
     worker.onerror = () => { if (worker !== activeWorker) return; worker.terminate(); worker = null; $('editor').hidden = false; message('대진 생성에 실패했어요. 입력은 유지됩니다. 다시 만들어 주세요.'); updateButtons(); };
     worker.postMessage(input);
@@ -182,17 +202,24 @@ function generate() {
 }
 async function connect() {
   const attempt = ++connectionAttempt;
-  connected = false; updateButtons(); $('connection').textContent = '공유 대진 연결 중…';
+  connected = false; liveHistoryStatus = 'loading'; renderHistory(); updateButtons(); $('connection').textContent = '공유 대진 연결 중…';
   unsubscribe?.();
   try {
     const stop = await builderStore.listen(builderData.firebaseConfig, documents => {
       if (attempt !== connectionAttempt) return;
-      confirmed = new Map(documents.map(doc => [doc.date, doc])); connected = true;
+      const priorHistory = JSON.stringify(historyOf().schedules);
+      confirmed = new Map(documents.map(doc => [doc.date, doc])); connected = true; liveHistoryStatus = 'ready';
+      // Initial static-only allocation is provisional. Reconsider it when new server
+      // history arrives, but never replace a preview or an explicit user redraw.
+      if (!draft && !worker && !state.bonusManual && priorHistory !== JSON.stringify(historyOf().schedules)) state.bonusIds = [];
+      if (draft && confirmed.has(draft.date) && !saving) { invalidate(); render(); }
+      else if (!draft && !worker) { fillCache = null; render(); }
+      renderHistory();
       $('connection').textContent = storageAvailable ? '초안은 이 브라우저에 보관 · 확정 후 공유 가능' : '초안 파일을 저장해 보관해 주세요.';
       updateButtons();
-    }, () => { connected = false; $('connection').innerHTML = '공유 대진 연결 실패. 초안 만들기는 가능합니다. <button type="button" class="text-button" data-retry>다시 연결</button>'; updateButtons(); });
+    }, () => { connected = false; liveHistoryStatus = 'unavailable'; renderHistory(); $('connection').innerHTML = '공유 대진 연결 실패. 초안 만들기는 가능합니다. <button type="button" class="text-button" data-retry>다시 연결</button>'; updateButtons(); });
     if (attempt === connectionAttempt) unsubscribe = stop; else stop();
-  } catch { if (attempt === connectionAttempt) { $('connection').innerHTML = '공유 대진 연결 실패. 초안 만들기는 가능합니다. <button type="button" class="text-button" data-retry>다시 연결</button>'; updateButtons(); } }
+  } catch { if (attempt === connectionAttempt) { liveHistoryStatus = 'unavailable'; renderHistory(); $('connection').innerHTML = '공유 대진 연결 실패. 초안 만들기는 가능합니다. <button type="button" class="text-button" data-retry>다시 연결</button>'; updateButtons(); } }
 }
 async function confirm() {
   if (!draft || saving || !connected || !navigator.onLine) return;
@@ -203,6 +230,7 @@ async function confirm() {
     $('save-status').textContent = '대진 확정 완료. 점수는 확정된 대진표에서 입력하세요.';
     $('saved-link').href = '../schedule/?date=' + encodeURIComponent(date); $('saved-link').hidden = false;
     if(!confirmed.has(date))confirmed.set(date, target);
+    persist();
   } catch (error) {
     $('save-status').textContent = error.code === 'permission-denied' ? '저장 권한을 확인해 주세요. 초안은 유지됩니다.' : error.message;
   } finally { saving = false; updateButtons(); }
@@ -216,7 +244,7 @@ document.addEventListener('change', event => {
     $('schedule-delete-status').textContent='';
     const oldGuests = Object.entries(state.guests); state.date = date; state.guests = {};
     for (const [id, p] of oldGuests) { if (!roster().includes(id)) state.guests[builderData.players[id] ? id : builderModel.guestId(date, state.guests)] = p; }
-    state.selected = [...roster(), ...Object.keys(state.guests)]; state.availability = {}; state.quotas = {}; state.pairs = []; state.theme = ''; state.bonusIds=[];fillCache=null;
+    state.selected = [...roster(), ...Object.keys(state.guests)]; state.availability = {}; state.quotas = {}; state.pairs = []; state.theme = ''; state.bonusIds=[];state.bonusManual=false;fillCache=null;
   } else if (field.dataset.attendee) {
     const id = field.dataset.attendee; state.selected = field.checked ? [...new Set([...state.selected, id])] : state.selected.filter(p => p !== id);
   } else if (field.dataset.quota) state.quotas[field.dataset.quota] = Number(field.value);
@@ -233,7 +261,7 @@ document.addEventListener('change', event => {
 document.addEventListener('click', event => {
   const button = event.target.closest('button'); if (!button || saving) return;
   if (button.id === 'delete-schedule') {deletionControl.open(button);return;}
-  if (button.id === 'redraw-bonus') {state.bonusIds=[];fillCache=null;invalidate();render();return;}
+  if (button.id === 'redraw-bonus') {state.bonusManual=true;state.bonusIds=[];fillCache=null;invalidate();render();return;}
   if (button.id === 'toggle-members') { const ids = roster(), all = ids.every(id => state.selected.includes(id)); state.selected = all ? state.selected.filter(id => !ids.includes(id)) : [...new Set([...state.selected, ...ids])]; invalidate(); render(); }
   else if (button.id === 'open-guest') { $('guest-form').hidden = false; button.setAttribute('aria-expanded', 'true'); $('guest-name').focus(); }
   else if (button.id === 'cancel-guest') { $('guest-form').hidden = true; $('open-guest').setAttribute('aria-expanded', 'false'); $('open-guest').focus(); }
@@ -247,7 +275,7 @@ document.addEventListener('click', event => {
   else if (button.id === 'edit') { invalidate(); render(); $('editor').scrollIntoView({ block: 'start' }); }
   else if (button.id === 'confirm') confirm();
   else if (button.id === 'clear-draft') { state = fresh();state.selected = roster();fillCache=null;invalidate();render(); }
-  else if (button.id === 'download' && draft) { const payload = { ...draft }; delete payload.searchNodes; const url = URL.createObjectURL(new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' })); const link = document.createElement('a'); link.href = url; link.download = 'daepo-' + draft.date + '-draft.json'; link.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); }
+  else if (button.id === 'download' && draft) { const payload = { ...draft }; delete payload.searchNodes; delete payload.history; const url = URL.createObjectURL(new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' })); const link = document.createElement('a'); link.href = url; link.download = 'daepo-' + draft.date + '-draft.json'; link.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); }
   else if (button.hasAttribute('data-retry')) connect();
 });
 $('guest-form').addEventListener('submit', event => {
@@ -277,4 +305,10 @@ const deletionControl=scheduleDeletion.mount({config:builderData.firebaseConfig,
     if(!confirmed.get(removed.date)?.sourceDraftId || confirmed.get(removed.date).sourceDraftId===removed.sourceDraftId)confirmed.delete(removed.date);
     if(state.date===removed.date){invalidate();render();if(!saving && !$('generate').disabled)$('generate').focus();}
   }});
-render(); connect();
+// Read the preview before render() persists editor state and clears stale snapshots.
+let savedPreview = null;
+try { savedPreview = JSON.parse(localStorage.getItem(previewKey)); } catch {}
+render();
+try { draft = builderStore.recoverSnapshot(savedPreview, state, inputOf(), builderData.legacyDates); } catch {}
+if (draft) { preview(draft); persist(); }
+connect();

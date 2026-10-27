@@ -1,5 +1,50 @@
 const builderScheduler = (() => {
   const M = typeof builderModel !== 'undefined' ? builderModel : require('./builder-model.js');
+  const H = typeof builderHistory !== 'undefined' ? builderHistory : require('./builder-history.js');
+  // A lower tuple is better: prevent avoidable long runs before optimizing
+  // cross-week diversity, then use floor changes as the final tie-breaker.
+  function quality(doc, history = H.analyze(doc, doc.history)) {
+    let longRuns = 0, forcedLongRuns = 0, floorChanges = 0, diversity = 0;
+    const mixed = {}, partners = new Map(), opponents = new Map();
+    for (const id of doc.players) {
+      const plan = doc.floorPlan[id], window = M.effectiveWindow(doc, id);
+      const runs = bits => [0, 1, 2, 3].reduce((n, r) => n + Number(bits.slice(r, r + 3).every(Boolean)), 0);
+      const actual = runs(plan);
+      let minimum = 6;
+      for (let mask = 0; mask < 64; mask++) {
+        const bits = Array.from({length: 6}, (_, r) => Number(!!(mask & (1 << r))));
+        if (bits.reduce((a,b) => a+b, 0) !== doc.quotas[id] || bits.some((b,r) => b && (r < window.from || r >= window.to))) continue;
+        if (doc.avoidConsecutiveRests && [0,1,2,3,4].some(r => r >= window.from && r+1 < window.to && !bits[r] && !bits[r+1])) continue;
+        minimum = Math.min(minimum, runs(bits));
+      }
+      forcedLongRuns += Math.min(actual, minimum);
+      longRuns += Math.max(0, actual - minimum);
+      const floors = plan.filter(Boolean);
+      floorChanges += floors.reduce((n,f,i) => n + Number(i > 0 && floors[i-1] !== f), 0);
+    }
+    for (const match of Object.values(doc.matches)) {
+      for (const pair of [match.teamA, match.teamB]) {
+        const k = M.key(pair), prior = partners.get(k) || 0;
+        diversity += (history.partner[k] || 0) * 8 + prior * 3;
+        partners.set(k, prior + 1);
+      }
+      for (const a of match.teamA) for (const b of match.teamB) {
+        const k = M.key([a,b]), prior = opponents.get(k) || 0;
+        diversity += (history.opponent[k] || 0) * 4 + prior;
+        opponents.set(k, prior + 1);
+      }
+      if (M.type(match.teamA, match.teamB, doc.profiles) === '혼복') for (const id of [...match.teamA,...match.teamB]) {
+        diversity += (history.mixed[id] || 0) * 2 + (mixed[id] || 0) * 0.5;
+        mixed[id] = (mixed[id] || 0) + 1;
+      }
+    }
+    return { avoidableLongRuns: longRuns, forcedLongRuns, historyDiversityCost: Math.round(diversity*1000)/1000, floorChanges };
+  }
+  function better(a, b) {
+    return !b || a.avoidableLongRuns < b.avoidableLongRuns
+      || (a.avoidableLongRuns === b.avoidableLongRuns && (a.historyDiversityCost < b.historyDiversityCost
+      || (a.historyDiversityCost === b.historyDiversityCost && a.floorChanges < b.floorChanges)));
+  }
   function shuffle(list, random) {
     const out = [...list];
     for (let i = out.length - 1; i > 0; i--) { const j = Math.floor(random() * (i + 1)); [out[i], out[j]] = [out[j], out[i]]; }
@@ -49,6 +94,7 @@ const builderScheduler = (() => {
   }
   function generate(raw, options = {}) {
     const input = M.validateInput(structuredClone(raw));
+    const history = H.analyze(input, raw.history);
     const random = options.random || Math.random, budget = options.budgetMs || 3500;
     const clock = options.clock || (() => Date.now()), deadline = clock() + budget;
     const ids = input.players, slots = ids.reduce((n, id) => n + input.quotas[id], 0);
@@ -94,14 +140,15 @@ const builderScheduler = (() => {
               const wanted = targets.get(M.key(pair));
               if (wanted !== undefined && previous >= wanted) { valid = false; break; }
               cost += wanted !== undefined ? -40 : previous * 90;
+              cost += (history.partner[M.key(pair)] || 0) * 20;
             }
             for (const id of [...a, ...b]) {
               const change = Object.hasOwn(lastFloor, id) && lastFloor[id] !== floor ? 1 : 0;
               if ((moves[id] || 0) + change > 2) { valid = false; break; }
               cost += change * 12;
-              if (kind === '혼복') cost += (mixed[id] || 0) * 9;
+              if (kind === '혼복') cost += (mixed[id] || 0) * 9 + (history.mixed[id] || 0) * 5;
             }
-            for (const p of a) for (const q of b) cost += (opponents.get(M.key([p, q])) || 0) * 2;
+            for (const p of a) for (const q of b) cost += (opponents.get(M.key([p, q])) || 0) * 2 + (history.opponent[M.key([p,q])] || 0) * 10;
           }
           if (valid && input.lockedPairs.some(entry => {
             const k = M.key(entry.players), used = partnerCounts.get(k) || 0;
@@ -175,7 +222,12 @@ const builderScheduler = (() => {
             return arrange(active);
           }
           const id = ordered[index], female = input.profiles[id].gender === 'female';
-          for (const pattern of shuffle(patterns[id], random)) {
+          // Explore lower-fatigue attendance patterns first; randomize ties
+          // so repeated complete searches still compare different feasible draws.
+          const burden = bits => [0,1,2,3].reduce((n,r) => n + Number(bits.slice(r,r+3).every(Boolean)), 0);
+          const candidatePatterns = shuffle(patterns[id], random);
+          if (result) candidatePatterns.sort((a,b) => burden(a)-burden(b));
+          for (const pattern of candidatePatterns) {
             if (pattern.some((value, r) => active[r].length + value > capacities[r])) continue;
             for (let r = 0; r < 6; r++) if (pattern[r]) { active[r].push(id); femaleCounts[r] += Number(female); }
             const remaining = ordered.slice(index + 1);
@@ -196,12 +248,29 @@ const builderScheduler = (() => {
       }
       return null;
     };
-    let result = null;
-    while (!result && clock() < deadline) { result = run(); if (!vectors.length) break; }
+    let result = null, bestQuality = null, candidates = 0;
+    const maxCandidates = Math.max(1, Math.min(64, options.maxCandidates ?? 24));
+    const seen = new Set();
+    while (candidates < maxCandidates && clock() < deadline) {
+      const candidate = run();
+      if (candidate) {
+        candidates++;
+        const signature = JSON.stringify(candidate.matches);
+        if (!seen.has(signature)) {
+          seen.add(signature);
+          const score = quality(candidate, history);
+          if (better(score, bestQuality)) { result = candidate; bestQuality = score; }
+        }
+      }
+      if (!vectors.length || timedOut) break;
+    }
     if (!result) throw Error(timedOut ? '시간 안에 조건에 맞는 대진을 찾지 못했어요. 다시 만들거나 경기 수·휴식 조건을 조정해 주세요.' : '참석 시간·경기 수·성별 구성을 확인해 주세요. 이 조건으로 대진을 찾지 못했습니다.');
     result.searchNodes = nodes;
+    result.quality = { ...bestQuality, candidates: seen.size, attemptedCandidates: candidates, timedOut,
+      historyCoverage: history.coverage,
+      note: '시간 제한 안에서 찾은 유효 대진을 비교했습니다. 연속 출전 최소치·전역 최적해를 보장하지 않습니다.' };
     return result;
   }
-  return { generate };
+  return { generate, quality, better };
 })();
 if (typeof module !== 'undefined') module.exports = builderScheduler;
