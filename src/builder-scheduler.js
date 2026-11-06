@@ -1,10 +1,10 @@
 const builderScheduler = (() => {
   const M = typeof builderModel !== 'undefined' ? builderModel : require('./builder-model.js');
   const H = typeof builderHistory !== 'undefined' ? builderHistory : require('./builder-history.js');
-  // A lower tuple is better: prevent avoidable long runs before optimizing
-  // cross-week diversity, then use floor changes as the final tie-breaker.
+  // A lower tuple is better: minimize opt-in unequal courts first, then
+  // avoidable long runs, cross-week diversity, and finally floor changes.
   function quality(doc, history = H.analyze(doc, doc.history)) {
-    let longRuns = 0, forcedLongRuns = 0, floorChanges = 0, diversity = 0;
+    let unevenDoubles = 0, longRuns = 0, forcedLongRuns = 0, floorChanges = 0, diversity = 0;
     const mixed = {}, partners = new Map(), opponents = new Map();
     for (const id of doc.players) {
       const plan = doc.floorPlan[id], window = M.effectiveWindow(doc, id);
@@ -23,6 +23,7 @@ const builderScheduler = (() => {
       floorChanges += floors.reduce((n,f,i) => n + Number(i > 0 && floors[i-1] !== f), 0);
     }
     for (const match of Object.values(doc.matches)) {
+      if (M.type(match.teamA, match.teamB, doc.profiles, doc) === '잡복') unevenDoubles++;
       for (const pair of [match.teamA, match.teamB]) {
         const k = M.key(pair), prior = partners.get(k) || 0;
         diversity += (history.partner[k] || 0) * 8 + prior * 3;
@@ -38,10 +39,12 @@ const builderScheduler = (() => {
         mixed[id] = (mixed[id] || 0) + 1;
       }
     }
-    return { avoidableLongRuns: longRuns, forcedLongRuns, historyDiversityCost: Math.round(diversity*1000)/1000, floorChanges };
+    return { unevenDoubles, avoidableLongRuns: longRuns, forcedLongRuns, historyDiversityCost: Math.round(diversity*1000)/1000, floorChanges };
   }
   function better(a, b) {
-    return !b || a.avoidableLongRuns < b.avoidableLongRuns
+    if (!b) return true;
+    if ((a.unevenDoubles || 0) !== (b.unevenDoubles || 0)) return (a.unevenDoubles || 0) < (b.unevenDoubles || 0);
+    return a.avoidableLongRuns < b.avoidableLongRuns
       || (a.avoidableLongRuns === b.avoidableLongRuns && (a.historyDiversityCost < b.historyDiversityCost
       || (a.historyDiversityCost === b.historyDiversityCost && a.floorChanges < b.floorChanges)));
   }
@@ -61,7 +64,7 @@ const builderScheduler = (() => {
   function covers(ids, input, forcedPairs) {
     const out = [], seen = new Set();
     function legal(a, b) {
-      const kind = M.type(a, b, input.profiles);
+      const kind = M.type(a, b, input.profiles, input);
       if (!kind) return false;
       return true;
     }
@@ -103,7 +106,7 @@ const builderScheduler = (() => {
     const coupledGroups = input.lockedPairs.map(entry => {
       const gender = input.profiles[entry.players[0]].gender;
       const pool = input.players.filter(id => input.profiles[id].gender === gender);
-      return { ids: input.profiles[entry.players[1]].gender === gender && pool.length === 4 ? pool : entry.players, count: targets.get(M.key(entry.players)) };
+      return { ids: !input.allowFixedUnevenDoubles && input.profiles[entry.players[1]].gender === gender && pool.length === 4 ? pool : entry.players, count: targets.get(M.key(entry.players)) };
     });
     const vectors = capacityVectors(slots / 4, Math.min(2, Math.floor(ids.length / 4)), random);
     let nodes = 0, timedOut = false;
@@ -129,11 +132,12 @@ const builderScheduler = (() => {
         if (!activeRows[r].length) { output.push([[], [], [], []]); const found = round(r + 1); output.pop(); return found; }
         const candidates = [];
         for (const teams of getCovers(activeRows[r])) {
-          let cost = random() * 6, valid = true;
+          let cost = random() * 6, uneven = 0, valid = true;
           for (let floor = 0; floor < 2 && valid; floor++) {
             const a = teams[floor * 2], b = teams[floor * 2 + 1];
             if (!a.length) continue;
-            const kind = M.type(a, b, input.profiles);
+            const kind = M.type(a, b, input.profiles, input);
+            if (kind === '잡복') uneven++;
             for (const pair of [a, b]) {
               const previous = partnerCounts.get(M.key(pair)) || 0;
               if (previous && !input.allowPartnerRepeats && !(limits.has(M.key(pair)) && previous < limits.get(M.key(pair)))) { valid = false; break; }
@@ -156,9 +160,9 @@ const builderScheduler = (() => {
             const possibleLater = activeRows.slice(r + 1).filter(row => entry.players.every(id => row.includes(id))).length;
             return used + playsNow > targets.get(k) || used + playsNow + possibleLater < targets.get(k);
           })) valid = false;
-          if (valid) candidates.push({ teams, cost });
+          if (valid) candidates.push({ teams, cost, uneven });
         }
-        candidates.sort((a, b) => a.cost - b.cost);
+        candidates.sort((a, b) => a.uneven - b.uneven || a.cost - b.cost);
         for (const { teams } of candidates.slice(0, 18)) {
           nodes++;
           const before = { floor: { ...lastFloor }, moves: { ...moves }, mixed: { ...mixed } };
@@ -166,7 +170,7 @@ const builderScheduler = (() => {
           for (let floor = 0; floor < 2; floor++) {
             const a = teams[floor * 2], b = teams[floor * 2 + 1];
             if (!a.length) continue;
-            const kind = M.type(a, b, input.profiles);
+            const kind = M.type(a, b, input.profiles, input);
             for (const pair of [a, b]) { const k = M.key(pair); partnerCounts.set(k, (partnerCounts.get(k) || 0) + 1); changedPairs.push(k); }
             for (const id of [...a, ...b]) {
               moves[id] = (moves[id] || 0) + (Object.hasOwn(lastFloor, id) && lastFloor[id] !== floor ? 1 : 0);
@@ -218,7 +222,7 @@ const builderScheduler = (() => {
           if (clock() >= deadline) { timedOut = true; return null; }
           if (++assignmentNodes > 12000) return null;
           if (index === ids.length) {
-            if (active.some((row, r) => row.length !== capacities[r] || femaleCounts[r] % 2)) return null;
+            if (active.some((row, r) => row.length !== capacities[r] || (!input.allowFixedUnevenDoubles && femaleCounts[r] % 2))) return null;
             return arrange(active);
           }
           const id = ordered[index], female = input.profiles[id].gender === 'female';

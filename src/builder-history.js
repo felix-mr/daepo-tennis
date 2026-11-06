@@ -7,6 +7,7 @@ const builderHistory = (() => {
     && !Number.isNaN(Date.parse(value)) && new Date(value + 'T00:00:00Z').toISOString().slice(0, 10) === value;
   function normalizeRecord(raw, profiles = {}) {
     if (!raw || !day(raw.date) || !Array.isArray(raw.players) || new Set(raw.players).size !== raw.players.length) return null;
+    if (raw.allowFixedUnevenDoubles !== undefined && typeof raw.allowFixedUnevenDoubles !== 'boolean') return null;
     const people = { ...profiles, ...raw.guests, ...raw.profiles }, ids = raw.players;
     if (ids.some(id => typeof id !== 'string' || !['male', 'female'].includes(people[id]?.gender))) return null;
     const conditions = raw.conditions || {}, start = raw.startMinutes ?? conditions.startMinutes ?? 480;
@@ -33,11 +34,12 @@ const builderHistory = (() => {
         || m.round <= availability[id].from || m.round > availability[id].to)) return null;
       const a = m.teamA.filter(id => people[id].gender === 'female').length;
       const b = m.teamB.filter(id => people[id].gender === 'female').length;
-      if (a !== b) return null;
+      if (a !== b && !(raw.allowFixedUnevenDoubles === true && a + b === 1 && players.every(id => fixed.includes(id)))) return null;
       players.forEach(id => active[m.round - 1].add(id)); courts.add(court);
     }
     const quotas = Object.fromEntries(ids.map(id => [id, matches.filter(m => [...m.teamA, ...m.teamB].includes(id)).length]));
     return {date:raw.date, players:[...ids], profiles:Object.fromEntries(ids.map(id => [id, {...people[id]}])),
+      ...(raw.allowFixedUnevenDoubles === true ? {allowFixedUnevenDoubles:true} : {}),
       fixedPlayerIds:[...fixed], availability, quotas,
       matches:matches.map(m => ({round:m.round, floor:m.floor, teamA:[...m.teamA], teamB:[...m.teamB]}))};
   }
@@ -86,10 +88,11 @@ const builderHistory = (() => {
             const [p,q,s,t] = order.map(i => four[i]);
             const females = pair => pair.filter(id => input.profiles[id].gender === 'female').length;
             const n = females([p,q]);
-            if (n !== females([s,t])) continue;
+            const other = females([s,t]), balanced = n === other;
+            if (!balanced && !(input.allowFixedUnevenDoubles === true && n + other === 1 && four.every(id => input.fixedPlayerIds.includes(id)))) continue;
             relation('partner',p,q); relation('partner',s,t);
             for (const x of [p,q]) for (const y of [s,t]) relation('opponent',x,y);
-            if (n === 1) four.forEach(id => mixedSeen.add(id));
+            if (balanced && n === 1) four.forEach(id => mixedSeen.add(id));
           }
         }
       for (const [kind, counts] of [['partner',partner], ['opponent',opponent]]) for (const k of seen[kind]) counts[k] = (counts[k] || 0) + 1;
@@ -118,7 +121,7 @@ const builderHistory = (() => {
       for (const m of past.matches) {
         for (const pair of [m.teamA,m.teamB]) add(sums.partner,key(pair),weight);
         for (const a of m.teamA) for (const b of m.teamB) add(sums.opponent,key([a,b]),weight);
-        if (past.profiles[m.teamA[0]].gender !== past.profiles[m.teamA[1]].gender)
+        if ([m.teamA,m.teamB].every(pair => past.profiles[pair[0]].gender !== past.profiles[pair[1]].gender))
           for (const id of [...m.teamA,...m.teamB]) add(sums.mixed,id,weight);
       }
       if (past.players.length < 12) for (const id of past.fixedPlayerIds) {

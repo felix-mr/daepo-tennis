@@ -25,7 +25,8 @@ const builderStore = (() => {
       if (!doc || doc.sourceDraftId || existingDates.includes(doc.date)) return null;
       builderModel.validateDocument(doc);
       // Recheck today's roster/config and every current editor constraint, not just its date.
-      if (Object.keys(input).some(key => canonical(input[key]) !== canonical(doc[key]))) return null;
+      if ((input.allowFixedUnevenDoubles === true) !== (doc.allowFixedUnevenDoubles === true)) return null;
+      if (Object.keys(input).some(key => key !== 'allowFixedUnevenDoubles' && canonical(input[key]) !== canonical(doc[key]))) return null;
       return structuredClone(doc);
     } catch { return null; }
   }

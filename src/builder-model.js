@@ -71,19 +71,19 @@ const builderModel = (() => {
       selected.forEach(id => quotas[id] = 5);
       const count = slots(quotas);
       if (count > capacity || count % 4 || count < bestSlots) continue;
-      if (['male','female'].some(gender=>ids.filter(id=>input.profiles[id].gender===gender).reduce((sum,id)=>sum+quotas[id],0)>genderCapacity[gender])) continue;
+      if (!input.allowFixedUnevenDoubles && ['male','female'].some(gender=>ids.filter(id=>input.profiles[id].gender===gender).reduce((sum,id)=>sum+quotas[id],0)>genderCapacity[gender])) continue;
       if (!input.allowPartnerRepeats) {
         const limits=repeatLimits({...input,lockedPairs:input.lockedPairs || [],quotas});
         const pools=Object.fromEntries(['male','female'].map(gender=>[gender,ids.filter(id=>input.profiles[id].gender===gender).length]));
         if(ids.some(id=>{
           const gender=input.profiles[id].gender;
-          const partners=ids.filter(other=>other!==id && (input.profiles[other].gender===gender ? pools[gender]>=4 : pools.male>=2 && pools.female>=2));
+          const partners=ids.filter(other=>other!==id && (input.allowFixedUnevenDoubles ? ids.some(a=>a!==id && a!==other && ids.some(b=>b!==id && b!==other && b!==a && type([id,other],[a,b],input.profiles,input))) : (input.profiles[other].gender===gender ? pools[gender]>=4 : pools.male>=2 && pools.female>=2)));
           return quotas[id]>partners.reduce((sum,other)=>sum+(limits.get(key([id,other])) || 1),0);
         })) continue;
       }
       // ALL partners also rest together. Their absence can leave an odd pool;
       // the game they play consumes one court of the corresponding doubles type.
-      if ((input.lockedPairs || []).some(entry=>{
+      if (!input.allowFixedUnevenDoubles && (input.lockedPairs || []).some(entry=>{
         if(entry.games!=='all')return false;
         const pair=entry.players,target=quotas[pair[0]],same=input.profiles[pair[0]].gender===input.profiles[pair[1]].gender;
         return ['male','female'].some(gender=>{
@@ -100,7 +100,7 @@ const builderModel = (() => {
         if (entry.games !== 'all') return false;
         const pair = entry.players, target = quotas[pair[0]];
         const pool = ids.filter(id => input.profiles[id].gender === input.profiles[pair[0]].gender);
-        const group = input.profiles[pair[0]].gender === input.profiles[pair[1]].gender && pool.length === 4 ? pool : pair;
+        const group = !input.allowFixedUnevenDoubles && input.profiles[pair[0]].gender === input.profiles[pair[1]].gender && pool.length === 4 ? pool : pair;
         return quotas[pair[1]] !== target || group.some(id => quotas[id] < target)
           || Math.min(...group.map(id => input.availability[id].to)) - Math.max(...group.map(id => input.availability[id].from)) < target;
       })) continue;
@@ -118,11 +118,13 @@ const builderModel = (() => {
     return result(best, bonus);
   }
   const key = pair => [...pair].sort().join('|');
-  function type(a, b, profiles) {
+  function type(a, b, profiles, context = {}) {
     const kinds = [a, b].map(team => team.filter(id => profiles[id].gender === 'female').length);
     if (kinds[0] === 0 && kinds[1] === 0) return '남복';
     if (kinds[0] === 2 && kinds[1] === 2) return '여복';
     if (kinds[0] === 1 && kinds[1] === 1) return '혼복';
+    if (context.allowFixedUnevenDoubles === true && kinds[0] + kinds[1] === 1
+      && [...a, ...b].every(id => context.fixedPlayerIds?.includes(id))) return '잡복';
     return null;
   }
   const lockedTargets = input => new Map(input.lockedPairs.map(entry => [key(entry.players), entry.games === 'all' ? input.quotas[entry.players[0]] : entry.games]));
@@ -153,6 +155,7 @@ const builderModel = (() => {
   function validateInput(input) {
     if (!validDate(input.date) || new Date(input.date + 'T00:00:00Z').getUTCDay() !== 6) throw Error('토요일 모임 날짜를 선택해 주세요.');
     if (!input.membershipPeriod) throw Error('해당 날짜의 회원 회차 명단을 먼저 등록해 주세요.');
+    if (input.allowFixedUnevenDoubles !== undefined && typeof input.allowFixedUnevenDoubles !== 'boolean') throw Error('잡복 허용 설정을 확인해 주세요.');
     const ids = input.players;
     if (!Array.isArray(ids) || ids.length < 4 || ids.length > 16 || new Set(ids).size !== ids.length) throw Error('참석자 4~16명을 선택해 주세요.');
     const names = new Set();
@@ -171,7 +174,7 @@ const builderModel = (() => {
     const slots = ids.reduce((sum, id) => sum + input.quotas[id], 0);
     if (slots % 4 || slots > Math.min(2, Math.floor(ids.length / 4)) * 24) throw Error('전체 출전 횟수를 4의 배수, 최대 48회로 맞춰 주세요.');
     const womenSlots = ids.filter(id => input.profiles[id].gender === 'female').reduce((sum, id) => sum + input.quotas[id], 0);
-    if (womenSlots % 2) throw Error('여자 선수의 전체 출전 횟수는 짝수여야 남복·여복·혼복으로 배정할 수 있습니다. 개인 경기 수를 조정해 주세요.');
+    if (!input.allowFixedUnevenDoubles && womenSlots % 2) throw Error('여자 선수의 전체 출전 횟수는 짝수여야 남복·여복·혼복으로 배정할 수 있습니다. 개인 경기 수를 조정해 주세요.');
     if (!Array.isArray(input.lockedPairs) || input.lockedPairs.length > 8) throw Error('고정 페어는 최대 8조까지 등록할 수 있습니다.');
     const seen = new Set(), lockedCounts = {};
     for (const entry of input.lockedPairs) {
@@ -186,8 +189,9 @@ const builderModel = (() => {
       const gender = input.profiles[pair[0]].gender, same = gender === input.profiles[pair[1]].gender;
       const pool = ids.filter(id => input.profiles[id].gender === gender);
       const other = ids.filter(id => input.profiles[id].gender !== gender);
-      if ((same && pool.length < 4) || (!same && (pool.length < 2 || other.length < 2))) throw Error('고정 페어를 상대할 같은 종목의 선수가 부족합니다. 참석자 성별 구성을 확인해 주세요.');
-      if (same && pool.length === 4 && pool.every(id => input.quotas[id] === count)) {
+      const hasOpponent = ids.some(a => !pair.includes(a) && ids.some(b => b !== a && !pair.includes(b) && type(pair, [a,b], input.profiles, input)));
+      if (!hasOpponent) throw Error('고정 페어를 상대할 같은 종목의 선수가 부족합니다. 참석자 성별 구성을 확인해 주세요.');
+      if (!input.allowFixedUnevenDoubles && same && pool.length === 4 && pool.every(id => input.quotas[id] === count)) {
         const capacity = count * (other.length >= 4 ? 4 : 0) + (6 - count) * Math.min(2, Math.floor(other.length / 4)) * 4;
         if (other.reduce((sum, id) => sum + input.quotas[id], 0) > capacity) throw Error('현재 인원과 경기 수로 이 고정 페어를 배정하면 다른 선수의 경기가 부족해집니다. 고정 횟수나 개인 경기 수를 조정해 주세요.');
       }
@@ -216,6 +220,7 @@ const builderModel = (() => {
       teamKeys: Array.from({length:12},(_,i)=>matches['r'+(Math.floor(i/2)+1)+'-f'+(i%2+1)]).flatMap(m=>m?[key(m.teamA),key(m.teamB)]:['','']),
       roundParticipants: Object.fromEntries(rounds.map((row, i) => ['r' + (i + 1), Object.values(matches).filter(m => m.round === i + 1).flatMap(m => [...m.teamA, ...m.teamB])])),
       lockedPairs: input.lockedPairs.map(entry => ({players:[...entry.players].sort(),games:entry.games})), allowPartnerRepeats: !!input.allowPartnerRepeats,
+      ...(input.allowFixedUnevenDoubles === true ? {allowFixedUnevenDoubles:true} : {}),
       avoidConsecutiveRests: !!input.avoidConsecutiveRests, maxFloorChanges: 2, matches };
   }
   function validateDocument(doc, options = {}) {
@@ -229,7 +234,7 @@ const builderModel = (() => {
           || match.teamA.length !== 2 || match.teamB.length !== 2) throw Error('경기 정보를 확인해 주세요.');
       const ids = [...match.teamA, ...match.teamB];
       if (new Set(ids).size !== 4 || ids.some(id => !doc.players.includes(id))) throw Error('같은 경기의 선수가 중복됐습니다.');
-      const kind = type(match.teamA, match.teamB, doc.profiles);
+      const kind = type(match.teamA, match.teamB, doc.profiles, doc);
       if (!kind) throw Error('남복·여복·혼복 구성을 확인해 주세요.');
       for (const id of ids) {
         if (match.round <= doc.availability[id].from || match.round > doc.availability[id].to) throw Error('참석 시간 밖에 경기가 배정됐습니다.');
@@ -265,13 +270,13 @@ const builderModel = (() => {
     return doc;
   }
   function summary(doc) {
-    const rows = Object.fromEntries(doc.players.map(id => [id, { id, games: 0, men: 0, women: 0, mixed: 0, floors: [], rests: [] }]));
-    const pairs = new Map(), types = { '남복': 0, '여복': 0, '혼복': 0 };
+    const rows = Object.fromEntries(doc.players.map(id => [id, { id, games: 0, men: 0, women: 0, mixed: 0, uneven: 0, floors: [], rests: [] }]));
+    const pairs = new Map(), types = { '남복': 0, '여복': 0, '혼복': 0, '잡복': 0 };
     for (const match of Object.values(doc.matches).sort((a,b)=>a.round-b.round || a.floor-b.floor)) {
-      const kind = type(match.teamA, match.teamB, doc.profiles); types[kind]++;
+      const kind = type(match.teamA, match.teamB, doc.profiles, doc); types[kind]++;
       for (const pair of [match.teamA, match.teamB]) {
         pairs.set(key(pair), (pairs.get(key(pair)) || 0) + 1);
-        for (const id of pair) { rows[id].games++; rows[id][{ '남복': 'men', '여복': 'women', '혼복': 'mixed' }[kind]]++; rows[id].floors.push(match.floor); }
+        for (const id of pair) { rows[id].games++; rows[id][{ '남복': 'men', '여복': 'women', '혼복': 'mixed', '잡복': 'uneven' }[kind]]++; rows[id].floors.push(match.floor); }
       }
     }
     for (const row of Object.values(rows)) {

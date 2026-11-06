@@ -58,6 +58,8 @@ def render_dynamic_rules(root, legacy_dates):
       let ids = m.teamA.concat(m.teamB);
       let men = d.genderPlayers.male.toSet();
       let offset = (round-1)*4 + (floor-1)*2;
+      let aMen = m.teamA.toSet().intersection(men).size();
+      let bMen = m.teamB.toSet().intersection(men).size();
       return m.keys().hasOnly(['date', 'round', 'floor', 'teamA', 'teamB', 'teamANames', 'teamBNames', 'fixedPlayerIds'])
         && m.date == d.date && m.round == round && m.floor == floor
         && m.teamA is list && m.teamB is list && m.teamA.size() == 2 && m.teamB.size() == 2
@@ -67,7 +69,9 @@ def render_dynamic_rules(root, legacy_dates):
         && m.teamBNames == [d.profiles[m.teamB[0]].name, d.profiles[m.teamB[1]].name]
         && sameSet(m.fixedPlayerIds.toSet(), ids.toSet().intersection(d.fixedPlayerIds.toSet()))
         && m.fixedPlayerIds.size() == m.fixedPlayerIds.toSet().size()
-        && m.teamA.toSet().intersection(men).size() == m.teamB.toSet().intersection(men).size()
+        && (aMen == bMen || (d.get('allowFixedUnevenDoubles', false) == true
+          && ids.toSet().difference(d.fixedPlayerIds.toSet()).size() == 0
+          && ((aMen == 1 && bMen == 2) || (aMen == 2 && bMen == 1))))
         && d.floorPlan[ids[0]][round-1] == floor && d.floorPlan[ids[1]][round-1] == floor
         && d.floorPlan[ids[2]][round-1] == floor && d.floorPlan[ids[3]][round-1] == floor
         && d.teamKeys[offset] == pairKey(m.teamA) && d.teamKeys[offset+1] == pairKey(m.teamB);
@@ -110,10 +114,11 @@ def render_dynamic_rules(root, legacy_dates):
       let dates = browserDates();
       return !(day in browserReservedDates()) && day in dates && d.date == day && d.membershipPeriod == dates[day]
         && d.keys().hasAll(['schemaVersion', 'date', 'membershipPeriod', 'theme', 'startMinutes', 'roundMinutes', 'roundCount', 'players', 'fixedPlayerIds', 'profiles', 'quotas', 'availability', 'roundParticipants', 'lockedPairs', 'allowPartnerRepeats', 'avoidConsecutiveRests', 'maxFloorChanges', 'matches', 'floorPlan', 'genderPlayers', 'lockedPairTargets', 'lockedPairKeys', 'teamKeys', 'playerNames', 'createdAt'])
-        && d.keys().hasOnly(['schemaVersion', 'date', 'membershipPeriod', 'theme', 'startMinutes', 'roundMinutes', 'roundCount', 'players', 'fixedPlayerIds', 'profiles', 'quotas', 'availability', 'roundParticipants', 'lockedPairs', 'allowPartnerRepeats', 'avoidConsecutiveRests', 'maxFloorChanges', 'matches', 'floorPlan', 'genderPlayers', 'lockedPairTargets', 'lockedPairKeys', 'teamKeys', 'playerNames', 'createdAt'])
+        && d.keys().hasOnly(['schemaVersion', 'date', 'membershipPeriod', 'theme', 'startMinutes', 'roundMinutes', 'roundCount', 'players', 'fixedPlayerIds', 'profiles', 'quotas', 'availability', 'roundParticipants', 'lockedPairs', 'allowPartnerRepeats', 'allowFixedUnevenDoubles', 'avoidConsecutiveRests', 'maxFloorChanges', 'matches', 'floorPlan', 'genderPlayers', 'lockedPairTargets', 'lockedPairKeys', 'teamKeys', 'playerNames', 'createdAt'])
         && d.schemaVersion == 1 && d.startMinutes == 480 && d.roundMinutes == 30 && d.roundCount == 6
         && d.theme in __BROWSER_THEMES__ && d.maxFloorChanges == 2
         && d.createdAt == request.time && d.allowPartnerRepeats is bool && d.avoidConsecutiveRests is bool
+        && d.get('allowFixedUnevenDoubles', false) is bool
         && d.playerNames is list && d.playerNames.size() == d.players.size() && d.playerNames.toSet().size() == d.players.size()
         && d.players is list && d.players.size() >= 4 && d.players.size() <= 16 && d.players.toSet().size() == d.players.size();
     }

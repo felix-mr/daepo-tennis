@@ -40,6 +40,7 @@ onmessage = event => {
     mount = '\nfunction startScores(config, day, scoreMatches, sourceDraftId) {\n' + score + '\n}\n'
     live_script = model + '\n' + store + '\n' + deletion + '\n' + mount + source('live-schedule.js').replace('__LIVE_DATA__', json.dumps(data, ensure_ascii=False))
     live_css = (root / 'themes/club.css').read_text() + '\n' + source('scores.css') + '\n.lookup select{width:100%;padding:11px;border-radius:10px;border:1px solid var(--line);background:var(--paper);color:var(--ink);font:inherit}.shell>nav{margin-bottom:20px}[hidden]{display:none!important}'
+    live_css += '\n.tag-uneven{color:#654389;background:#f0e8fa}'
     live_css += '\n' + source('schedule-delete.css')
     live_dir = root / 'schedule'
     live_dir.mkdir(exist_ok=True)

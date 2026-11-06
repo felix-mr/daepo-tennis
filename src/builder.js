@@ -7,7 +7,7 @@ const previewKey = 'daepo-builder-preview-v1';
 let liveHistoryStatus = 'loading';
 let state, draft = null, worker = null, connected = false, saving = false, unsubscribe = null;
 let confirmed = new Map(), connectionAttempt = 0, storageAvailable = true, fillCache = null;
-const fresh = () => ({ date: builderModel.nextSaturday(), theme: '', selected: [], guests: {}, availability: {}, quotas: {}, pairs: [], avoidRests: true, repeats: false, fillCourts: true, bonusIds: [], bonusManual: false });
+const fresh = () => ({ date: builderModel.nextSaturday(), theme: '', selected: [], guests: {}, availability: {}, quotas: {}, pairs: [], avoidRests: true, repeats: false, allowFixedUnevenDoubles: false, fillCourts: true, bonusIds: [], bonusManual: false });
 function roster() {
   const period = builderModel.periodForDate(state.date, builderData.memberships);
   return period ? builderData.memberships[period].memberIds.filter(id => builderData.players[id]) : [];
@@ -47,7 +47,7 @@ function quotas() {
   const base = Object.fromEntries(ids.map(id => [id, Object.hasOwn(state.quotas, id) ? state.quotas[id] : defaultQuotas[id]]));
   const members=roster();
   const input = {date:state.date,membershipPeriod:builderModel.periodForDate(state.date,builderData.memberships),players:ids, fixedPlayerIds:ids.filter(id=>members.includes(id)), profiles:Object.fromEntries(ids.map(id=>[id,{...profile(id),memberType:members.includes(id)?'fixed':'guest'}])), quotas:base, availability:Object.fromEntries(ids.map(id=>[id,available(id)])), lockedPairs:state.pairs,history:historyOf(),eligibleIds:ids.filter(id=>!Object.hasOwn(state.quotas,id))};
-  input.allowPartnerRepeats=state.repeats;input.avoidConsecutiveRests=state.avoidRests;
+  input.allowFixedUnevenDoubles=state.allowFixedUnevenDoubles;input.allowPartnerRepeats=state.repeats;input.avoidConsecutiveRests=state.avoidRests;
   const signature = JSON.stringify([input,state.fillCourts]);
   if (fillCache?.signature === signature) {state.bonusIds=fillCache.result.bonusIds;return fillCache.result.quotas;}
   const result = state.fillCourts && ids.length >= 4 && ids.length < 12
@@ -140,7 +140,7 @@ function render() {
   $('guest-count').textContent = Object.keys(state.guests).length + '명';
   const ids = selected(), males = ids.filter(id => profile(id).gender === 'male').length;
   $('selection-summary').textContent = '참석 ' + ids.length + '명 · 남자 ' + males + ' · 여자 ' + (ids.length - males) + (ids.length < 4 ? ' · 4명 이상 선택해 주세요.' : ids.length > 16 ? ' · 16명 이내로 선택해 주세요.' : '');
-  $('avoid-rests').checked = state.avoidRests; $('allow-repeats').checked = state.repeats;
+  $('avoid-rests').checked = state.avoidRests; $('allow-repeats').checked = state.repeats; $('allow-fixed-uneven-doubles').checked = state.allowFixedUnevenDoubles;
   renderOptions(); $('fill-courts').checked=state.fillCourts;
   $('fill-summary').textContent=ids.length>=4 ? fillText() : '4명 이상 선택하면 추가 경기 대상을 추첨합니다.';
   $('redraw-bonus').hidden=!state.fillCourts || ids.length>=12 || !state.bonusIds.length;
@@ -152,11 +152,11 @@ function inputOf() {
     theme: $('theme').value, players: ids, fixedPlayerIds: ids.filter(id => members.includes(id)),
     profiles: Object.fromEntries(ids.map(id => [id, { name: profile(id).name, gender: profile(id).gender, memberType: members.includes(id) ? 'fixed' : 'guest' }])),
     quotas: quotas(), availability: Object.fromEntries(ids.map(id => [id, available(id)])), lockedPairs: state.pairs,
-    avoidConsecutiveRests: state.avoidRests, allowPartnerRepeats: state.repeats });
+    avoidConsecutiveRests: state.avoidRests, allowPartnerRepeats: state.repeats, allowFixedUnevenDoubles: state.allowFixedUnevenDoubles });
 }
 function preview(doc) {
   const stats = builderModel.summary(doc), matches = Object.values(doc.matches);
-  $('preview-summary').textContent = doc.date + ' · ' + builderData.themes[doc.theme].name + ' · ' + doc.players.length + '명 · ' + matches.length + '경기 · 남복 ' + stats.types['남복'] + ' / 혼복 ' + stats.types['혼복'] + ' / 여복 ' + stats.types['여복'];
+  $('preview-summary').textContent = doc.date + ' · ' + builderData.themes[doc.theme].name + ' · ' + doc.players.length + '명 · ' + matches.length + '경기 · 남복 ' + stats.types['남복'] + ' / 혼복 ' + stats.types['혼복'] + ' / 여복 ' + stats.types['여복'] + ' / 잡복 ' + (stats.types['잡복'] || 0);
   $('preview-concept').innerHTML=conceptCard(doc.theme);
   const extra=doc.players.filter(id=>doc.quotas[id]===5);
   $('preview-fill').textContent=(extra.length ? '5경기 · '+extra.map(id=>doc.profiles[id].name).join(' · ')+'. ' : '')+(matches.length===12 ? '두 코트 모두 사용.' : '빈 코트 '+(12-matches.length)+'타임. 경기 수·성별·참석 시간·고정 페어 조건 적용.');
@@ -170,13 +170,13 @@ function preview(doc) {
     const ended = doc.players.filter(id => doc.availability[id].to <= r);
     const cards = [1, 2].map(floor => {
       const m = row.find(match => match.floor === floor);
-      return '<div class="preview-match"><small>' + floor + '층 · ' + (m ? builderModel.type(m.teamA, m.teamB, doc.profiles) : '빈 코트') + '</small>' + (m ? '<strong>' + m.teamANames.map(esc).join(' · ') + '</strong><div class="preview-vs">VS</div><strong>' + m.teamBNames.map(esc).join(' · ') + '</strong>' : '<p class="hint">이 타임은 배정 없음</p>') + '</div>';
+      return '<div class="preview-match"><small>' + floor + '층 · ' + (m ? builderModel.type(m.teamA, m.teamB, doc.profiles, doc) : '빈 코트') + '</small>' + (m ? '<strong>' + m.teamANames.map(esc).join(' · ') + '</strong><div class="preview-vs">VS</div><strong>' + m.teamBNames.map(esc).join(' · ') + '</strong>' : '<p class="hint">이 타임은 배정 없음</p>') + '</div>';
     }).join('');
     return '<article class="preview-round"><div class="preview-time">' + builderModel.time(480 + r * 30) + ' — ' + builderModel.time(510 + r * 30) + '</div><div class="preview-matches">' + cards + '</div><div class="preview-rests">' + (rest.length ? '휴식 · ' + rest.map(id => esc(doc.profiles[id].name)).join(' · ') : '참석 선수 모두 출전') + (ended.length ? ' / 종료 · ' + ended.map(id => esc(doc.profiles[id].name)).join(' · ') : '') + '</div></article>';
   }).join('');
   $('preview-players').innerHTML = doc.players.map(id => {
     const row = stats.rows[id], window = doc.availability[id];
-    return '<article class="allocation-card"><strong>' + esc(doc.profiles[id].name) + '</strong><p>' + row.games + '경기 · 남복 ' + row.men + ' / 혼복 ' + row.mixed + ' / 여복 ' + row.women + '</p><p>휴식 ' + row.rests.length + '회 · 층 이동 ' + row.floorChanges + '회</p><p>' + builderModel.time(480 + window.from * 30) + '–' + builderModel.time(480 + window.to * 30) + '</p></article>';
+    return '<article class="allocation-card"><strong>' + esc(doc.profiles[id].name) + '</strong><p>' + row.games + '경기 · 남복 ' + row.men + ' / 혼복 ' + row.mixed + ' / 여복 ' + row.women + ' / 잡복 ' + (row.uneven || 0) + '</p><p>휴식 ' + row.rests.length + '회 · 층 이동 ' + row.floorChanges + '회</p><p>' + builderModel.time(480 + window.from * 30) + '–' + builderModel.time(480 + window.to * 30) + '</p></article>';
   }).join('');
   $('preview-quality').textContent = doc.quality ? '유효 후보 ' + doc.quality.candidates + '개 비교 · 개인별 최소치를 넘는 3연속 구간 ' + doc.quality.avoidableLongRuns + '회 · 층 이동 합계 ' + doc.quality.floorChanges + '회 · 생성 시 참고 이력 ' + (doc.quality.historyCoverage?.count || 0) + '일' + (doc.quality.historyCoverage?.liveStatus === 'ready' ? ' (웹 확정 포함)' : ' (웹 확정 연결 미완료)') + '. 최근 파트너·상대·혼복 기회를 함께 고려했습니다. 시간 제한 탐색이며, 모든 연속 출전이 공동으로 회피 가능하다는 뜻이나 전역 최적해 보장은 아닙니다.' : '';
   $('preview').hidden = false; $('editor').hidden = true; updateButtons(); $('preview').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -255,6 +255,7 @@ document.addEventListener('change', event => {
   else if (field.id === 'fill-courts') state.fillCourts=field.checked;
   else if (field.id === 'avoid-rests') state.avoidRests = field.checked;
   else if (field.id === 'allow-repeats') state.repeats = field.checked;
+  else if (field.id === 'allow-fixed-uneven-doubles') state.allowFixedUnevenDoubles = field.checked;
   else return;
   invalidate(); render();
 });
@@ -297,6 +298,8 @@ window.addEventListener('online', connect);
 state = fresh();
 let storedDraft = false;
 try { const saved = JSON.parse(localStorage.getItem(storageKey)); storedDraft = !!saved; if (saved && builderModel.validDate(saved.date) && Array.isArray(saved.selected) && saved.guests && typeof saved.guests === 'object' && Array.isArray(saved.pairs) && saved.pairs.every(entry=>entry && Array.isArray(entry.players))) state = { ...state, ...saved }; } catch {}
+// Only an explicit boolean opt-in permits uneven doubles in restored drafts.
+state.allowFixedUnevenDoubles = state.allowFixedUnevenDoubles === true;
 if (!storedDraft) state.selected = roster();
 const requestedDate=new URL(location.href).searchParams.get('date');
 if(builderModel.validDate(requestedDate || '') && requestedDate!==state.date){state=fresh();state.date=requestedDate;state.selected=roster();fillCache=null;}

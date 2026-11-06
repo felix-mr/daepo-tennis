@@ -141,6 +141,12 @@ schedules/{YYYY-MM-DD}/matchResults/{r타임-f층}
 
 이미 결과가 있는 날짜의 팀 구성을 변경할 때는 저장된 결과의 팀 정보와 먼저 대조해야 한다. 기존 점수를 다른 팀에 자동 이전하지 않는다.
 
+## 고정 멤버 전용 잡복
+
+웹 빌더의 `고정 멤버끼리 잡복 허용`은 기본적으로 꺼져 있다. 켜면 해당 날짜 회차의 고정 멤버 4명으로만 남녀 팀 대 남남 팀 경기를 만들 수 있다. 게스트 포함 잡복, 남남 대 여여, 여자 3명인 경기는 허용하지 않는다. 기존 혼복·남복·여복을 우선하고 잡복 출전은 별도로 표시한다. 저장 문서의 `allowFixedUnevenDoubles`가 없거나 `false`이면 이전과 같은 검증을 적용한다.
+
+잡복을 켜고 끄면 기존 미리보기가 무효화되므로 다시 생성해야 한다. 과거 대진·점수는 변경하지 않으며, 유효한 잡복은 이력의 파트너/상대 중복에는 포함하되 정규 혼복 공평성 집계와 구분한다.
+
 ## Firebase 연결
 
 웹 앱 설정은 `firebase/firebase-config.json`. 서비스 계정 키가 아닌 웹 앱 식별 설정이다. Analytics는 초기화하지 않는다. [Firebase 웹 연결 문서](https://firebase.google.com/docs/web/setup)
@@ -160,6 +166,7 @@ Firebase 프로젝트 `daepo-b3b51`의 Firestore Database → 규칙에 `firebas
 - 집계 검증: `node --test tests/*.test.cjs`
 - 게스트 전원 경기의 입력·저장 제외 검증: `python3 -m unittest discover -s tests -p 'test_*.py'`
 - 대진과 생성 검증: `python3 src/build.py`
+- 고정 전용 잡복 규칙 검증: demo-daepo 에뮬레이터 8089를 켠 뒤 `node tests/fixed-uneven-rules.cjs`. 격리된 시험 DB만 초기화한다.
 - 로컬 Firestore: `firebase emulators:start --only firestore --project demo-daepo`
 - 삭제·재생성 통합 검증: 로컬 서버 8768과 demo-daepo 에뮬레이터 8089를 켠 뒤 `node tests/delete-schedule.browser.cjs`. Playwright 경로는 `DAEPO_PLAYWRIGHT_MODULE`로 지정할 수 있다. 시험 DB를 초기화하며 실제 Firebase 쓰기는 차단한다.
 - 브라우저 검증: 로컬 에뮬레이터에서 실제 점수 저장·공유·수정·충돌, 규칙 거부, 등록 중복 방지, 모바일 화면 확인. 실제 프로젝트에 시험 데이터를 쓰지 않는다.
