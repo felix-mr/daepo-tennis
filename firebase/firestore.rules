@@ -27,7 +27,7 @@ service cloud.firestore {
     }
     match /membershipPeriods/{period} {
       function validPeriod() {
-        let periods = {"current-members": {"memberIds": ["p001", "p002", "p003", "p004", "p005", "p006", "p007", "p008", "p009", "p010", "p011"], "label": "8~10월(임시)", "startsOn": "2026-08-01", "endsBefore": "2026-11-01"}};
+        let periods = {"current-members": {"memberIds": ["p001", "p002", "p003", "p004", "p005", "p006", "p007", "p008", "p009", "p010", "p011"], "label": "8~10월(임시)", "startsOn": "2026-08-01", "endsBefore": "2026-11-01"}, "nov-2026-jan-2027": {"memberIds": ["p001", "p002", "p005", "p003", "p004", "p011", "p008", "p009", "p006", "p007"], "label": "2026년 11월~2027년 1월", "startsOn": "2026-11-01", "endsBefore": "2027-02-01"}};
         let data = request.resource.data;
         return period in periods && data.keys().hasAll(['period', 'label', 'memberIds', 'startsOn', 'endsBefore', 'updatedAt'])
           && data.keys().hasOnly(['period', 'label', 'memberIds', 'startsOn', 'endsBefore', 'updatedAt'])
@@ -83,7 +83,7 @@ service cloud.firestore {
       allow delete: if false;
     }
     function sameSet(a,b) { return a.difference(b).size() == 0 && b.difference(a).size() == 0; }
-    function browserDates() { return {"2026-08-01": "current-members", "2026-08-08": "current-members", "2026-08-15": "current-members", "2026-08-22": "current-members", "2026-08-29": "current-members", "2026-09-05": "current-members", "2026-09-12": "current-members", "2026-09-19": "current-members", "2026-09-26": "current-members", "2026-10-03": "current-members", "2026-10-10": "current-members", "2026-10-17": "current-members", "2026-10-24": "current-members", "2026-10-31": "current-members"}; }
+    function browserDates() { return {"2026-08-01": "current-members", "2026-08-08": "current-members", "2026-08-15": "current-members", "2026-08-22": "current-members", "2026-08-29": "current-members", "2026-09-05": "current-members", "2026-09-12": "current-members", "2026-09-19": "current-members", "2026-09-26": "current-members", "2026-10-03": "current-members", "2026-10-10": "current-members", "2026-10-17": "current-members", "2026-10-24": "current-members", "2026-10-31": "current-members", "2026-11-07": "nov-2026-jan-2027", "2026-11-14": "nov-2026-jan-2027", "2026-11-21": "nov-2026-jan-2027", "2026-11-28": "nov-2026-jan-2027", "2026-12-05": "nov-2026-jan-2027", "2026-12-12": "nov-2026-jan-2027", "2026-12-19": "nov-2026-jan-2027", "2026-12-26": "nov-2026-jan-2027", "2027-01-02": "nov-2026-jan-2027", "2027-01-09": "nov-2026-jan-2027", "2027-01-16": "nov-2026-jan-2027", "2027-01-23": "nov-2026-jan-2027", "2027-01-30": "nov-2026-jan-2027"}; }
     function browserNames() { return {"p001": "서명렬", "p002": "김영진", "p003": "나창은", "p004": "박세준", "p005": "이재원", "p006": "조아라", "p007": "성주은", "p008": "박정민", "p009": "정가영", "p010": "김규석", "p011": "위형종"}; }
     function browserGenders() { return {"p001": "male", "p002": "male", "p003": "male", "p004": "male", "p005": "male", "p006": "female", "p007": "female", "p008": "female", "p009": "female", "p010": "male", "p011": "male"}; }
     function browserReservedDates() { return ["2026-10-03", "2026-10-10"]; }

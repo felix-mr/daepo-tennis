@@ -58,7 +58,7 @@ test('infeasible pair counts, mismatched all quotas and availability explain fai
 });
 test('guest identities are weekly; missing club cycles and bad dates never borrow current roster', () => {
   assert.equal(M.guestId('2026-10-17', {}), 'guest-2026-10-17-01'); assert.equal(M.guestId('2026-10-24', {}), 'guest-2026-10-24-01');
-  assert.equal(M.periodForDate('2026-11-07', periods), null); assert.equal(M.periodForDate('2026-10-17', periods), 'current-members');
+  assert.equal(M.periodForDate('2027-02-06', periods), null); assert.equal(M.periodForDate('2026-10-17', periods), 'current-members');
   assert.equal(M.validDate('2026-02-31'), false); assert.equal(M.nextSaturday('2026-10-12'), '2026-10-17');
 });
 test('four guest-only players generate without member score eligibility', () => {

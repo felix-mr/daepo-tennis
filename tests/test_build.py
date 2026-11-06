@@ -26,7 +26,7 @@ class GuestOnlyMatchTest(unittest.TestCase):
                 schedule["guests"][player] = {**roster[player], "memberType": "guest"}
             schedule["fixedPlayers"] = [player for player in schedule["fixedPlayers"] if player not in guests]
             membership_path = root / "data/memberships.json"
-            memberships = json.loads(membership_path.read_text())
+            memberships = {"current-members": json.loads(membership_path.read_text())["current-members"]}
             memberships["current-members"].update(startsOn="2026-09-15", endsBefore="2026-12-15")
             memberships["current-members"]["memberIds"] = [pid for pid in memberships["current-members"]["memberIds"] if pid not in guests]
             membership_path.write_text(json.dumps(memberships))
@@ -52,7 +52,7 @@ class GuestOnlyMatchTest(unittest.TestCase):
             for name in ("src", "data", "themes", "firebase"):
                 shutil.copytree(ROOT / name, root / name)
             membership_path = root / "data/memberships.json"
-            memberships = json.loads(membership_path.read_text())
+            memberships = {"current-members": json.loads(membership_path.read_text())["current-members"]}
             memberships["current-members"].update(startsOn="2026-09-15", endsBefore="2026-12-15")
             memberships["next-members"] = {"label": "다음 회차", "startsOn": "2026-12-15", "endsBefore": "2027-03-15", "memberIds": [pid for pid in memberships["current-members"]["memberIds"] if pid != "p001"]}
             membership_path.write_text(json.dumps(memberships))
