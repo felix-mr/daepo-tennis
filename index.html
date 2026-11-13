@@ -28,6 +28,15 @@
     if (!normalized || normalized.length > 24 || /[\u0000-\u001f\u007f]/.test(normalized)) throw Error('이름은 1~24자로 입력해 주세요.');
     return normalized;
   }
+  // Display labels may repeat; identity and membership always come from IDs.
+  function displayName(id, profiles, fixedIds = []) {
+    const value = profiles[id].name;
+    const same = Object.keys(profiles).filter(key => name(profiles[key].name) === name(value));
+    if (same.length < 2) return value;
+    if (fixedIds.includes(id)) return value + ' (고정멤버)';
+    const guests = same.filter(key => !fixedIds.includes(key));
+    return value + ' (게스트' + (guests.length > 1 ? ' ' + (guests.indexOf(id) + 1) : '') + ')';
+  }
   function guestId(day, guests) {
     for (let i = 1; i <= 99; i++) {
       const id = 'guest-' + day + '-' + pad(i);
@@ -168,13 +177,11 @@
     if (input.allowFixedUnevenDoubles !== undefined && typeof input.allowFixedUnevenDoubles !== 'boolean') throw Error('잡복 허용 설정을 확인해 주세요.');
     const ids = input.players;
     if (!Array.isArray(ids) || ids.length < 4 || ids.length > 16 || new Set(ids).size !== ids.length) throw Error('참석자 4~16명을 선택해 주세요.');
-    const names = new Set();
     for (const id of ids) {
       const profile = input.profiles[id];
       if (!profile || !['male', 'female'].includes(profile.gender)) throw Error('모든 선수의 성별을 선택해 주세요.');
       const normalized = validateName(profile.name);
-      if (normalized !== profile.name || names.has(normalized)) throw Error('같은 이름의 참석자가 있습니다. 이름을 구분해 주세요.');
-      names.add(normalized);
+      if (normalized !== profile.name) throw Error('이름의 앞뒤 공백을 확인해 주세요.');
       const window = input.availability[id];
       if (!window || !Number.isInteger(window.from) || !Number.isInteger(window.to) || window.from < 0 || window.to > 6 || window.from >= window.to) throw Error(profile.name + ' 참석 시간을 확인해 주세요.');
       const quota = input.quotas[id];
@@ -297,7 +304,7 @@
     }
     return { rows, types, partnerRepeats: [...pairs.values()].reduce((n, value) => n + Math.max(0, value - 1), 0) };
   }
-  return { time, minute, today, nextSaturday, validDate, periodForDate, name, validateName, guestId, allocate, fillCourts, key, type, lockedTargets, repeatLimits, effectiveWindow, validateInput, validateDocument, documentOf, summary };
+  return { time, minute, today, nextSaturday, validDate, periodForDate, name, validateName, displayName, guestId, allocate, fillCourts, key, type, lockedTargets, repeatLimits, effectiveWindow, validateInput, validateDocument, documentOf, summary };
 })();
 if (typeof module !== 'undefined') module.exports = builderModel;
 

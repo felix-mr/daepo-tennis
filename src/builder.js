@@ -13,6 +13,10 @@ function roster() {
   return period ? builderData.memberships[period].memberIds.filter(id => builderData.players[id]) : [];
 }
 function profile(id) { return state.guests[id] || builderData.players[id]; }
+function playerLabel(id, doc) {
+  return doc ? builderModel.displayName(id, doc.profiles, doc.fixedPlayerIds)
+    : builderModel.displayName(id, {...Object.fromEntries(roster().map(key => [key, builderData.players[key]])), ...state.guests}, roster());
+}
 function selected() { return state.selected.filter(id => profile(id) && (state.guests[id] || roster().includes(id))); }
 function message(text) { $('error').hidden = !text; $('error').textContent = text || ''; }
 function historyOf() {
@@ -109,13 +113,13 @@ function renderOptions() {
     const start = Array.from({ length: 6 }, (_, i) => '<option value="' + i + '"' + (window.from === i ? ' selected' : '') + '>' + builderModel.time(480 + i * 30) + '</option>').join('');
     const end = Array.from({ length: 6 }, (_, i) => '<option value="' + (i + 1) + '"' + (window.to === i + 1 ? ' selected' : '') + '>' + builderModel.time(510 + i * 30) + '</option>').join('');
     const choices=roster().includes(id) && ids.length<12 ? [2,3,4,5] : [2,3,4];
-    return '<div class="player-option"><strong>' + esc(profile(id).name) + (state.bonusIds.includes(id) ? '<small class="bonus-label">추가 경기</small>' : '') + '</strong><label>경기 수<select data-quota="' + esc(id) + '" aria-label="' + esc(profile(id).name) + ' 경기 수">' + choices.map(n => '<option' + (q[id] === n ? ' selected' : '') + '>' + n + '</option>').join('') + '</select></label><label>시작 가능<select data-from="' + esc(id) + '" aria-label="' + esc(profile(id).name) + ' 시작 가능">' + start + '</select></label><label>종료 시간<select data-to="' + esc(id) + '" aria-label="' + esc(profile(id).name) + ' 종료 시간">' + end + '</select></label></div>';
+    return '<div class="player-option"><strong>' + esc(playerLabel(id)) + (state.bonusIds.includes(id) ? '<small class="bonus-label">추가 경기</small>' : '') + '</strong><label>경기 수<select data-quota="' + esc(id) + '" aria-label="' + esc(playerLabel(id)) + ' 경기 수">' + choices.map(n => '<option' + (q[id] === n ? ' selected' : '') + '>' + n + '</option>').join('') + '</select></label><label>시작 가능<select data-from="' + esc(id) + '" aria-label="' + esc(playerLabel(id)) + ' 시작 가능">' + start + '</select></label><label>종료 시간<select data-to="' + esc(id) + '" aria-label="' + esc(playerLabel(id)) + ' 종료 시간">' + end + '</select></label></div>';
   }).join('');
   const pairCandidates = ids;
-  const option = '<option value="">선수 선택</option>' + pairCandidates.map(id => '<option value="' + esc(id) + '">' + esc(profile(id).name) + '</option>').join('');
+  const option = '<option value="">선수 선택</option>' + pairCandidates.map(id => '<option value="' + esc(id) + '">' + esc(playerLabel(id)) + '</option>').join('');
   $('pair-a').innerHTML = option; $('pair-b').innerHTML = option;
   $('add-pair').disabled = ids.length < 4;
-  $('pairs').innerHTML = state.pairs.map((entry, i) => '<div class="pair-chip"><span>' + entry.players.map(id => esc(profile(id).name)).join(' · ') + ' · ' + (profile(entry.players[0]).gender === profile(entry.players[1]).gender ? (profile(entry.players[0]).gender === 'male' ? '남복' : '여복') : '혼복') + ' · ' + (entry.games === 'all' ? '전체 경기' : entry.games + '경기') + '</span><button type="button" class="remove-button" data-remove-pair="' + i + '" aria-label="' + entry.players.map(id => esc(profile(id).name)).join(' · ') + ' 페어 삭제">×</button></div>').join('');
+  $('pairs').innerHTML = state.pairs.map((entry, i) => '<div class="pair-chip"><span>' + entry.players.map(id => esc(playerLabel(id))).join(' · ') + ' · ' + (profile(entry.players[0]).gender === profile(entry.players[1]).gender ? (profile(entry.players[0]).gender === 'male' ? '남복' : '여복') : '혼복') + ' · ' + (entry.games === 'all' ? '전체 경기' : entry.games + '경기') + '</span><button type="button" class="remove-button" data-remove-pair="' + i + '" aria-label="' + entry.players.map(id => esc(playerLabel(id))).join(' · ') + ' 페어 삭제">×</button></div>').join('');
 }
 function tidy() {
   state.selected = selected();
@@ -126,7 +130,7 @@ function tidy() {
 }
 function card(id, fixed) {
   const p = profile(id), checked = state.selected.includes(id);
-  return '<label class="member-card"><input type="checkbox" data-attendee="' + esc(id) + '"' + (checked ? ' checked' : '') + '><span><strong>' + esc(p.name) + '</strong><small>' + (p.gender === 'male' ? '남자' : '여자') + (fixed ? '' : ' · 게스트') + '</small></span></label>';
+  return '<label class="member-card"><input type="checkbox" data-attendee="' + esc(id) + '"' + (checked ? ' checked' : '') + '><span><strong>' + esc(playerLabel(id)) + '</strong><small>' + (p.gender === 'male' ? '남자' : '여자') + (fixed ? '' : ' · 게스트') + '</small></span></label>';
 }
 function render() {
   tidy(); const period = builderModel.periodForDate(state.date, builderData.memberships), members = roster();
@@ -136,7 +140,7 @@ function render() {
   $('members').innerHTML = members.map(id => card(id, true)).join('');
   $('member-count').textContent = state.selected.filter(id => members.includes(id)).length + '명';
   $('toggle-members').textContent = members.every(id => state.selected.includes(id)) ? '전체 해제' : '전체 선택';
-  $('guests').innerHTML = Object.keys(state.guests).map(id => '<div class="guest-entry">' + card(id, false) + '<button type="button" class="remove-button" data-remove-guest="' + esc(id) + '" aria-label="' + esc(profile(id).name) + ' 게스트 삭제">×</button></div>').join('');
+  $('guests').innerHTML = Object.keys(state.guests).map(id => '<div class="guest-entry">' + card(id, false) + '<button type="button" class="remove-button" data-remove-guest="' + esc(id) + '" aria-label="' + esc(playerLabel(id)) + ' 게스트 삭제">×</button></div>').join('');
   $('guest-count').textContent = Object.keys(state.guests).length + '명';
   const ids = selected(), males = ids.filter(id => profile(id).gender === 'male').length;
   $('selection-summary').textContent = '참석 ' + ids.length + '명 · 남자 ' + males + ' · 여자 ' + (ids.length - males) + (ids.length < 4 ? ' · 4명 이상 선택해 주세요.' : ids.length > 16 ? ' · 16명 이내로 선택해 주세요.' : '');
@@ -170,13 +174,13 @@ function preview(doc) {
     const ended = doc.players.filter(id => doc.availability[id].to <= r);
     const cards = [1, 2].map(floor => {
       const m = row.find(match => match.floor === floor);
-      return '<div class="preview-match"><small>' + floor + '층 · ' + (m ? builderModel.type(m.teamA, m.teamB, doc.profiles, doc) : '빈 코트') + '</small>' + (m ? '<strong>' + m.teamANames.map(esc).join(' · ') + '</strong><div class="preview-vs">VS</div><strong>' + m.teamBNames.map(esc).join(' · ') + '</strong>' : '<p class="hint">이 타임은 배정 없음</p>') + '</div>';
+      return '<div class="preview-match"><small>' + floor + '층 · ' + (m ? builderModel.type(m.teamA, m.teamB, doc.profiles, doc) : '빈 코트') + '</small>' + (m ? '<strong>' + m.teamA.map(id => esc(playerLabel(id, doc))).join(' · ') + '</strong><div class="preview-vs">VS</div><strong>' + m.teamB.map(id => esc(playerLabel(id, doc))).join(' · ') + '</strong>' : '<p class="hint">이 타임은 배정 없음</p>') + '</div>';
     }).join('');
-    return '<article class="preview-round"><div class="preview-time">' + builderModel.time(480 + r * 30) + ' — ' + builderModel.time(510 + r * 30) + '</div><div class="preview-matches">' + cards + '</div><div class="preview-rests">' + (rest.length ? '휴식 · ' + rest.map(id => esc(doc.profiles[id].name)).join(' · ') : '참석 선수 모두 출전') + (ended.length ? ' / 종료 · ' + ended.map(id => esc(doc.profiles[id].name)).join(' · ') : '') + '</div></article>';
+    return '<article class="preview-round"><div class="preview-time">' + builderModel.time(480 + r * 30) + ' — ' + builderModel.time(510 + r * 30) + '</div><div class="preview-matches">' + cards + '</div><div class="preview-rests">' + (rest.length ? '휴식 · ' + rest.map(id => esc(playerLabel(id, doc))).join(' · ') : '참석 선수 모두 출전') + (ended.length ? ' / 종료 · ' + ended.map(id => esc(playerLabel(id, doc))).join(' · ') : '') + '</div></article>';
   }).join('');
   $('preview-players').innerHTML = doc.players.map(id => {
     const row = stats.rows[id], window = doc.availability[id];
-    return '<article class="allocation-card"><strong>' + esc(doc.profiles[id].name) + '</strong><p>' + row.games + '경기 · 남복 ' + row.men + ' / 혼복 ' + row.mixed + ' / 여복 ' + row.women + ' / 잡복 ' + (row.uneven || 0) + '</p><p>휴식 ' + row.rests.length + '회 · 층 이동 ' + row.floorChanges + '회</p><p>' + builderModel.time(480 + window.from * 30) + '–' + builderModel.time(480 + window.to * 30) + '</p></article>';
+    return '<article class="allocation-card"><strong>' + esc(playerLabel(id, doc)) + '</strong><p>' + row.games + '경기 · 남복 ' + row.men + ' / 혼복 ' + row.mixed + ' / 여복 ' + row.women + ' / 잡복 ' + (row.uneven || 0) + '</p><p>휴식 ' + row.rests.length + '회 · 층 이동 ' + row.floorChanges + '회</p><p>' + builderModel.time(480 + window.from * 30) + '–' + builderModel.time(480 + window.to * 30) + '</p></article>';
   }).join('');
   $('preview-quality').textContent = doc.quality ? '유효 후보 ' + doc.quality.candidates + '개 비교 · 개인별 최소치를 넘는 3연속 구간 ' + doc.quality.avoidableLongRuns + '회 · 층 이동 합계 ' + doc.quality.floorChanges + '회 · 생성 시 참고 이력 ' + (doc.quality.historyCoverage?.count || 0) + '일' + (doc.quality.historyCoverage?.liveStatus === 'ready' ? ' (웹 확정 포함)' : ' (웹 확정 연결 미완료)') + '. 최근 파트너·상대·혼복 기회를 함께 고려했습니다. 시간 제한 탐색이며, 모든 연속 출전이 공동으로 회피 가능하다는 뜻이나 전역 최적해 보장은 아닙니다.' : '';
   $('preview').hidden = false; $('editor').hidden = true; updateButtons(); $('preview').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -283,12 +287,8 @@ $('guest-form').addEventListener('submit', event => {
   event.preventDefault();
   try {
     const value = builderModel.validateName($('guest-name').value), gender = $('guest-gender').value;
-    const existing = Object.entries(builderData.players).find(([, p]) => p.name === value);
-    if (existing && roster().includes(existing[0])) throw Error('고정 멤버 명단에 있는 이름입니다. 참석 멤버에서 선택해 주세요.');
-    if (Object.values(state.guests).some(p => p.name === value)) throw Error('같은 게스트 이름이 이미 있습니다.');
     if (Object.keys(state.guests).length >= 8) throw Error('게스트는 모임당 최대 8명까지 추가할 수 있습니다.');
-    if (existing && existing[1].gender !== gender) throw Error('기존 회원 프로필의 성별과 다릅니다. 등록된 성별을 선택해 주세요.');
-    const id = existing ? existing[0] : builderModel.guestId(state.date, state.guests);
+    const id = builderModel.guestId(state.date, state.guests);
     state.guests[id] = { name: value, gender }; state.selected.push(id); $('guest-name').value = ''; $('guest-form').hidden = true; $('open-guest').setAttribute('aria-expanded', 'false');
     invalidate(); render(); $('open-guest').focus();
   } catch (error) { message(error.message); $('guest-name').focus(); }

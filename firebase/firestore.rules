@@ -187,7 +187,7 @@ service cloud.firestore {
         && d.theme in ["ace", "aizen", "annie", "armin", "biscuit", "byakuya", "chopper", "chrollo", "club", "eren", "erwin", "gaara", "geto", "giyu", "gojo", "gon", "hancock", "hange", "hinata", "hisoka", "historia", "ichigo", "inosuke", "itachi", "itadori", "jiraiya", "kakashi", "kenpachi", "killua", "kurapika", "law", "leorio", "levi", "luffy", "madara", "maki", "megumi", "meruem", "mikasa", "mitsuri", "muzan", "nami", "nanami", "naruto", "neferpitou", "netero", "nezuko", "nobara", "orihime", "reiner", "rengoku", "renji", "robin", "rukia", "sakura", "sanji", "sasuke", "shanks", "shinobu", "sukuna", "tanjiro", "tengen", "toji", "toshiro", "tsunade", "uryu", "yoruichi", "yuta", "zeke", "zenitsu", "zoro"] && d.maxFloorChanges == 2
         && d.createdAt == request.time && d.allowPartnerRepeats is bool && d.avoidConsecutiveRests is bool
         && d.get('allowFixedUnevenDoubles', false) is bool
-        && d.playerNames is list && d.playerNames.size() == d.players.size() && d.playerNames.toSet().size() == d.players.size()
+        && d.playerNames is list && d.playerNames.size() == d.players.size()
         && d.players is list && d.players.size() >= 4 && d.players.size() <= 16 && d.players.toSet().size() == d.players.size();
     }
 

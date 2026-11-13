@@ -119,7 +119,7 @@ def render_dynamic_rules(root, legacy_dates):
         && d.theme in __BROWSER_THEMES__ && d.maxFloorChanges == 2
         && d.createdAt == request.time && d.allowPartnerRepeats is bool && d.avoidConsecutiveRests is bool
         && d.get('allowFixedUnevenDoubles', false) is bool
-        && d.playerNames is list && d.playerNames.size() == d.players.size() && d.playerNames.toSet().size() == d.players.size()
+        && d.playerNames is list && d.playerNames.size() == d.players.size()
         && d.players is list && d.players.size() >= 4 && d.players.size() <= 16 && d.players.toSet().size() == d.players.size();
     }
 
