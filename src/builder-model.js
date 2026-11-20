@@ -136,6 +136,18 @@ const builderModel = (() => {
       && [...a, ...b].every(id => context.fixedPlayerIds?.includes(id))) return '잡복';
     return null;
   }
+  // In standard doubles, a two-woman roster can offer its women only mixed
+  // games, so they must face each other. Fixed-member uneven doubles can
+  // provide another opponent mix only to an eligible woman with three fixed men.
+  function forcedMixedOpponentKey(input) {
+    const women = input.players.filter(id => input.profiles[id].gender === 'female');
+    if (women.length !== 2) return null;
+    const fixed = input.fixedPlayerIds || [];
+    const canPlayUneven = input.allowFixedUnevenDoubles === true
+      && women.some(id => fixed.includes(id))
+      && fixed.filter(id => input.profiles[id].gender === 'male').length >= 3;
+    return canPlayUneven ? null : key(women);
+  }
   const lockedTargets = input => new Map(input.lockedPairs.map(entry => [key(entry.players), entry.games === 'all' ? input.quotas[entry.players[0]] : entry.games]));
   function repeatLimits(input) {
     const limits = lockedTargets(input);
@@ -278,9 +290,16 @@ const builderModel = (() => {
   }
   function summary(doc) {
     const rows = Object.fromEntries(doc.players.map(id => [id, { id, games: 0, men: 0, women: 0, mixed: 0, uneven: 0, floors: [], rests: [] }]));
-    const pairs = new Map(), types = { '남복': 0, '여복': 0, '혼복': 0, '잡복': 0 };
+    const pairs = new Map(), opponents = new Map();
+    const forcedMixedKey = forcedMixedOpponentKey(doc), types = { '남복': 0, '여복': 0, '혼복': 0, '잡복': 0 };
     for (const match of Object.values(doc.matches).sort((a,b)=>a.round-b.round || a.floor-b.floor)) {
       const kind = type(match.teamA, match.teamB, doc.profiles, doc); types[kind]++;
+      for (const a of match.teamA) for (const b of match.teamB) {
+        const players = [a,b].sort(), k = key(players);
+        const entry = opponents.get(k) || {players, games:0, forcedMixed:k === forcedMixedKey};
+        entry.games++;
+        opponents.set(k, entry);
+      }
       for (const pair of [match.teamA, match.teamB]) {
         pairs.set(key(pair), (pairs.get(key(pair)) || 0) + 1);
         for (const id of pair) { rows[id].games++; rows[id][{ '남복': 'men', '여복': 'women', '혼복': 'mixed', '잡복': 'uneven' }[kind]]++; rows[id].floors.push(match.floor); }
@@ -292,8 +311,10 @@ const builderModel = (() => {
         if (!Object.values(doc.matches).some(m => m.round === r + 1 && [...m.teamA, ...m.teamB].includes(row.id))) row.rests.push(r + 1);
       }
     }
-    return { rows, types, partnerRepeats: [...pairs.values()].reduce((n, value) => n + Math.max(0, value - 1), 0) };
+    return { rows, types, partnerRepeats: [...pairs.values()].reduce((n, value) => n + Math.max(0, value - 1), 0),
+      frequentOpponents: [...opponents.values()].filter(entry => entry.games >= 3)
+        .sort((a,b) => b.games - a.games || key(a.players).localeCompare(key(b.players))) };
   }
-  return { time, minute, today, nextSaturday, validDate, periodForDate, name, validateName, displayName, guestId, allocate, fillCourts, key, type, lockedTargets, repeatLimits, effectiveWindow, validateInput, validateDocument, documentOf, summary };
+  return { time, minute, today, nextSaturday, validDate, periodForDate, name, validateName, displayName, guestId, allocate, fillCourts, key, type, forcedMixedOpponentKey, lockedTargets, repeatLimits, effectiveWindow, validateInput, validateDocument, documentOf, summary };
 })();
 if (typeof module !== 'undefined') module.exports = builderModel;
