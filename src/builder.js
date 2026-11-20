@@ -168,6 +168,11 @@ function preview(doc) {
   $('preview-locks').textContent = doc.lockedPairs.map(entry => entry.players.map(id=>doc.profiles[id].name).join(' · ') + ' ' + (doc.profiles[entry.players[0]].gender===doc.profiles[entry.players[1]].gender ? (doc.profiles[entry.players[0]].gender==='male' ? '남복' : '여복') : '혼복') + ' ' + (entry.games==='all' ? '전체 '+doc.quotas[entry.players[0]] : entry.games) + '경기 고정').join(' / ');
   $('preview-locks').hidden = !doc.lockedPairs.length;
   $('preview-warning').textContent = (stats.partnerRepeats ? '같은 페어 반복 ' + stats.partnerRepeats + '회. ' : '파트너 중복 없음. ') + (forced.length ? forced.map(id => doc.profiles[id].name).join(' · ') + ' 추가 경기·시간·전체 페어 조건으로 연속 출전 예외 적용. ' : '') + (doc.avoidConsecutiveRests ? '연속 휴식 피하기 적용. ' : '') + '층 이동 개인 최대 2회.';
+  const rematches = $('preview-rematches');
+  rematches.textContent = stats.frequentOpponents.length ? '같은 상대 3회 이상 · ' + stats.frequentOpponents.map(entry =>
+    entry.players.map(id => playerLabel(id, doc)).join(' ↔ ') + ' ' + entry.games + '회' + (entry.forcedMixed ? ' (여성 2명 · 혼복 상대 고정)' : '')
+  ).join(' / ') : '';
+  rematches.hidden = !stats.frequentOpponents.length;
   $('preview-rounds').innerHTML = Array.from({ length: 6 }, (_, r) => {
     const row = matches.filter(m => m.round === r + 1), active = new Set(row.flatMap(m => [...m.teamA, ...m.teamB]));
     const rest = doc.players.filter(id => !active.has(id) && r >= doc.availability[id].from && r < doc.availability[id].to);

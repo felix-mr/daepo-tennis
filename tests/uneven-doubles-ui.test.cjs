@@ -93,3 +93,23 @@ test('live full and individual views use uneven tags and separate counts', () =>
   assert.doesNotMatch(html,/tag-mixed|tag-undefined/);
   assert.match(h.run('personal("p001")'),/혼복 0 · 여복 0 · 잡복 2/);
 });
+
+test('preview shows named 3+ opponent warning, annotates forced mixed cases and clears stale warnings', () => {
+  const h=harness(state);
+  const [a,b,c,d]=players;
+  const genders=['female','male','female','male'];
+  const input3={...input, profiles:Object.fromEntries(players.map((id,i)=>[id,{...input.profiles[id],gender:genders[i]}])),
+    quotas:Object.fromEntries(players.map(id=>[id,3])), availability:Object.fromEntries(players.map(id=>[id,{from:0,to:3}])),
+    allowFixedUnevenDoubles:false};
+  const rounds3=Array.from({length:6},(_,i)=>i<3?[[a,b],[c,d],[],[]]:[[],[],[],[]]);
+  h.context.rematchFixture=M.validateDocument(M.documentOf(M.validateInput(input3),rounds3));
+  h.context.originalFixture=doc;
+  h.run('preview(rematchFixture)');
+  const warning=h.element('preview-rematches');
+  assert.equal(warning.hidden,false);
+  assert.match(warning.textContent,/같은 상대 3회 이상/);
+  assert.match(warning.textContent,/선수0 ↔ 선수2 3회 \(여성 2명 · 혼복 상대 고정\)/);
+  h.run('preview(originalFixture)');
+  assert.equal(warning.hidden,true);
+  assert.equal(warning.textContent,'');
+});

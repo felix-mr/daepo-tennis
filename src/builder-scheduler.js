@@ -1,11 +1,18 @@
 const builderScheduler = (() => {
   const M = typeof builderModel !== 'undefined' ? builderModel : require('./builder-model.js');
   const H = typeof builderHistory !== 'undefined' ? builderHistory : require('./builder-history.js');
+  // First/second encounters keep their old cost. From the third onward
+  // concentrate the soft penalty on individuals repeatedly facing each other.
+  // Forced two-woman mixed matchups retain the previous marginal cost.
+  function rematchCost(prior, forcedMixed) {
+    return prior + (forcedMixed || prior < 2 ? 0 : (prior - 1) * (prior + 3));
+  }
   // A lower tuple is better: minimize opt-in unequal courts first, then
   // avoidable long runs, cross-week diversity, and finally floor changes.
   function quality(doc, history = H.analyze(doc, doc.history)) {
     let unevenDoubles = 0, longRuns = 0, forcedLongRuns = 0, floorChanges = 0, diversity = 0;
     const mixed = {}, partners = new Map(), opponents = new Map();
+    const forcedMixedKey = M.forcedMixedOpponentKey(doc);
     for (const id of doc.players) {
       const plan = doc.floorPlan[id], window = M.effectiveWindow(doc, id);
       const runs = bits => [0, 1, 2, 3].reduce((n, r) => n + Number(bits.slice(r, r + 3).every(Boolean)), 0);
@@ -31,7 +38,7 @@ const builderScheduler = (() => {
       }
       for (const a of match.teamA) for (const b of match.teamB) {
         const k = M.key([a,b]), prior = opponents.get(k) || 0;
-        diversity += (history.opponent[k] || 0) * 4 + prior;
+        diversity += (history.opponent[k] || 0) * 4 + rematchCost(prior, k === forcedMixedKey);
         opponents.set(k, prior + 1);
       }
       if (M.type(match.teamA, match.teamB, doc.profiles) === '혼복') for (const id of [...match.teamA,...match.teamB]) {
@@ -98,6 +105,7 @@ const builderScheduler = (() => {
   function generate(raw, options = {}) {
     const input = M.validateInput(structuredClone(raw));
     const history = H.analyze(input, raw.history);
+    const forcedMixedKey = M.forcedMixedOpponentKey(input);
     const random = options.random || Math.random, budget = options.budgetMs || 3500;
     const clock = options.clock || (() => Date.now()), deadline = clock() + budget;
     const ids = input.players, slots = ids.reduce((n, id) => n + input.quotas[id], 0);
@@ -152,7 +160,10 @@ const builderScheduler = (() => {
               cost += change * 12;
               if (kind === '혼복') cost += (mixed[id] || 0) * 9 + (history.mixed[id] || 0) * 5;
             }
-            for (const p of a) for (const q of b) cost += (opponents.get(M.key([p, q])) || 0) * 2 + (history.opponent[M.key([p,q])] || 0) * 10;
+            for (const p of a) for (const q of b) {
+              const k = M.key([p,q]);
+              cost += rematchCost(opponents.get(k) || 0, k === forcedMixedKey) * 2 + (history.opponent[k] || 0) * 10;
+            }
           }
           if (valid && input.lockedPairs.some(entry => {
             const k = M.key(entry.players), used = partnerCounts.get(k) || 0;
